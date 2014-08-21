@@ -2,7 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
- /* ES5 15.4.4.14. */
+/* ES5 15.4.4.14. */
+
 function ArrayIndexOf(searchElement/*, fromIndex*/) {
     /* Step 1. */
     var O = ToObject(this);
