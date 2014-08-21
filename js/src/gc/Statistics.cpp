@@ -451,7 +451,10 @@ Statistics::Statistics(JSRuntime *rt)
     PodArrayZero(phaseTotals);
     PodArrayZero(counts);
 
-    char *env = getenv("MOZ_GCTIMER");
+    char *env = NULL;
+#ifndef WINRT
+    env = getenv("MOZ_GCTIMER");
+#endif
     if (!env || strcmp(env, "none") == 0) {
         fp = nullptr;
         return;
