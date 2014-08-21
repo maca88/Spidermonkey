@@ -4,6 +4,7 @@
 
 /* ES5 15.4.4.14. */
 
+
 function ArrayIndexOf(searchElement/*, fromIndex*/) {
     /* Step 1. */
     var O = ToObject(this);
