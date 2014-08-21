@@ -796,7 +796,11 @@ JSRuntime::initSelfHosting(JSContext *cx)
     Value rv;
     bool ok = false;
 
+#ifdef WINRT
+        char *filename = NULL;
+#else
     char *filename = getenv("MOZ_SELFHOSTEDJS");
+#endif
     if (filename) {
         RootedScript script(cx, Compile(cx, shg, options, filename));
         if (script)
