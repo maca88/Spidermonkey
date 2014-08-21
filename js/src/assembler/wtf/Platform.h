@@ -68,6 +68,9 @@
 #elif _MSC_VER < 1600
 #define WTF_COMPILER_MSVC9_OR_LOWER 1
 #endif
+#if defined(_M_ARM)
+#define WTF_CPU_ARM_TRADITIONAL 1
+#endif
 #endif
 
 /* WTF_COMPILER_RVCT  - ARM RealView Compilation Tools */
@@ -814,8 +817,11 @@
 #define HAVE_ALIGNED_MALLOC 1
 #define HAVE_ISDEBUGGERPRESENT 1
 #endif
+#ifdef WINRT
+#define HAVE_VIRTUALALLOC 0
+#else
 #define HAVE_VIRTUALALLOC 1
-
+#endif
 #elif WTF_OS_SYMBIAN
 
 #define HAVE_ERRNO_H 1
@@ -1031,7 +1037,7 @@
 #if !defined(ENABLE_JIT) \
     && (WTF_CPU_X86 || WTF_CPU_X86_64 || WTF_CPU_ARM || WTF_CPU_SPARC32 || WTF_CPU_MIPS) \
     && (WTF_OS_DARWIN || !WTF_COMPILER_GCC || GCC_VERSION_AT_LEAST(4, 1, 0)) \
-    && !WTF_OS_WINCE
+    && !WTF_OS_WINCE && !defined(WINRT)
 #define ENABLE_JIT 1
 #endif
 
