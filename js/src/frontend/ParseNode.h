@@ -1327,6 +1327,12 @@ struct Definition : public ParseNode
         return pn_cookie.isFree();
     }
 
+#ifdef WINRT
+#ifdef CONST
+#undef CONST
+#endif
+#endif
+
     enum Kind { MISSING = 0, VAR, CONST, LET, ARG, NAMED_LAMBDA, PLACEHOLDER };
 
     bool canHaveInitializer() { return int(kind()) <= int(ARG); }
