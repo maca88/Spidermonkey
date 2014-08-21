@@ -65,7 +65,9 @@ UTCToLocalStandardOffsetSeconds()
     // Windows doesn't follow POSIX: updates to the TZ environment variable are
     // not reflected immediately on that platform as they are on other systems
     // without this call.
+#if !defined(WINRT)
     _tzset();
+#endif
 #endif
 
     // Get the current time.
@@ -178,7 +180,9 @@ js::DateTimeInfo::computeDSTOffsetMilliseconds(int64_t utcSeconds)
     // Windows does not follow POSIX. Updates to the TZ environment variable
     // are not reflected immediately on that platform as they are on UNIX
     // systems without this call.
+#if !defined(WINRT)
     _tzset();
+#endif
 #endif
 
     struct tm tm;
