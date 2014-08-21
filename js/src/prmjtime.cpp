@@ -24,7 +24,7 @@
 #ifdef XP_OS2
 #include <sys/timeb.h>
 #endif
-#ifdef XP_WIN
+#if defined XP_WIN || defined WINRT
 #include <windef.h>
 #include <winbase.h>
 #include <mmsystem.h> /* for timeBegin/EndPeriod */
@@ -112,13 +112,16 @@ NowCalibrate()
 
         /* By wrapping a timeBegin/EndPeriod pair of calls around this loop,
            the loop seems to take much less time (1 ms vs 15ms) on Vista. */
+#ifndef WINRT
         timeBeginPeriod(1);
+#endif
         GetSystemTimeAsFileTime(&ftStart);
         do {
             GetSystemTimeAsFileTime(&ft);
         } while (memcmp(&ftStart,&ft, sizeof(ft)) == 0);
-        timeEndPeriod(1);
-
+ #ifndef WINRT
+       timeEndPeriod(1);
+#endif
         /*
         calibrationDelta = (FILETIME2INT64(ft) - FILETIME2INT64(ftStart))/10;
         fprintf(stderr, "Calibration delta was %I64d us\n", calibrationDelta);
@@ -335,6 +338,7 @@ PRMJ_Now(void)
             returnedTime = calibration.last;
             MUTEX_UNLOCK(&calibration.data_lock);
 
+#ifndef WINRT
             /* Rather than assume the NT kernel ticks every 15.6ms, ask it */
             if (GetSystemTimeAdjustment(&timeAdjustment,
                                         &timeIncrement,
@@ -347,6 +351,7 @@ PRMJ_Now(void)
                     skewThreshold = timeIncrement/10.0;
                 }
             }
+#endif
 
             /* Check for clock skew */
             diff = lowresTime - highresTime;
