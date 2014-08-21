@@ -65,6 +65,13 @@ using JS::DoubleNaNValue;
 
 const JSSecurityCallbacks js::NullSecurityCallbacks = { };
 
+#ifdef WINRT
+char* getenv (const char* name)
+{
+    return NULL;
+}
+#endif
+
 PerThreadData::PerThreadData(JSRuntime *runtime)
   : PerThreadDataFriendFields(),
     runtime_(runtime),
