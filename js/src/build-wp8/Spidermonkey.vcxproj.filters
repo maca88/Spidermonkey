@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\jsalloc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsanalyze.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsarray.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsatom.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsbool.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscntxt.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscompartment.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscrashreport.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsdate.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsdtoa.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsexn.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsfriendapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsfun.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsinfer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsiter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jskwgen.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsmath.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsnum.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsobj.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\json.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsonparser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsopcode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsprf.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jspropertytree.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsproxy.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsreflect.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsscript.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsstr.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsutil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jswatchpoint.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsweakmap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsworkers.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jswrapper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\prmjtime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ArgumentsObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\CallNonGenericMethod.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\CharacterEncoding.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\DateTime.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Debugger.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ErrorObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ForkJoin.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\GlobalObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Id.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Interpreter.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\MemoryMetrics.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Monitor.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ObjectImpl.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\OldDebugAPI.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Probes.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\PropertyKey.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ProxyObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\RegExpObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\RegExpStatics.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ScopeObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\SelfHosting.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Shape.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\SPSProfiler.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Stack.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\String.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\StringBuffer.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\StructuredClone.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ThreadPool.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\TypedArrayObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Unicode.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Value.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Xdr.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ds\LifoAlloc.cpp">
+      <Filter>source\ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Eval.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Intl.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\MapObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Object.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\ParallelArray.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Profilers.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\RegExp.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\TypedObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\TypeRepresentation.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\BytecodeCompiler.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\BytecodeEmitter.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\FoldConstants.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\NameFunctions.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\ParseMaps.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\ParseNode.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\Parser.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\frontend\TokenStream.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Barrier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Iteration.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Marking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\RootMarking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\StoreBuffer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Tracer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Verifier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Zone.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Statistics.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\yarr\YarrCanonicalizeUCS2.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\yarr\YarrInterpreter.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\yarr\YarrJIT.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\yarr\YarrPattern.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\yarr\YarrSyntaxChecker.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsgc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\assembler\jit\ExecutableAllocator.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Runtime.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="..\vm\ArgumentsObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ArgumentsObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ArrayObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ArrayObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\BooleanObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\BooleanObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\CommonPropertyNames.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\DateObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\DateTime.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Debugger.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Debugger-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ErrorObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ErrorObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ForkJoin.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\GeneratorObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\GlobalObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Interpreter.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Interpreter-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Keywords.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\MatchPairs.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Monitor.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\NumberObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\NumberObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\NumericConversions.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ObjectImpl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ObjectImpl-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Probes.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Probes-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ProxyObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\RegExpObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\RegExpStatics.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\RegExpStaticsObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Runtime-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ScopeObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ScopeObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\SelfHosting.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Shape.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Shape-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\SPSProfiler.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Stack.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Stack-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\StopIterationObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\String.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\StringBuffer.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\String-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\StringObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\StringObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\ThreadPool.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\TypedArrayObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Unicode.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\WeakMapObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\WrapperObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vm\Xdr.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\BitArray.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\FixedSizeHash.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\IdValuePair.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\InlineMap.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\LifoAlloc.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\PriorityQueue.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\Sort.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ds\SplayTree.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Eval.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Intl.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\MapObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Object.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\ParallelArray.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Profilers.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\RegExp.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TypedObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TypedObjectConstants.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TypeRepresentation.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\BytecodeCompiler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\BytecodeEmitter.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\FoldConstants.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\FullParseHandler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\NameFunctions.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\ParseMaps.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\ParseMaps-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\ParseNode.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\ParseNode-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\Parser.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\Parser-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\SharedContext.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\SourceNotes.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\SyntaxParseHandler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\frontend\TokenStream.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Barrier.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Barrier-inl.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\FindSCCs.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\GCInternals.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Heap.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Marking.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Nursery-inl.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Rooting.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\StoreBuffer.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Zone.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Statistics.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{a3e66ec9-7892-4956-8ea2-4d756e1f01f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{2f8a8dfc-14c5-45e6-ab3c-ef5c437fcab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\vm">
+      <UniqueIdentifier>{a3998e98-e6ef-47a7-b607-5e810d9a50fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ds">
+      <UniqueIdentifier>{d969bfd4-cdf7-46f5-80b5-a1fe919e86c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\builtin">
+      <UniqueIdentifier>{61044ae9-2aa8-48d5-81cf-20f82b7cc066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\frontend">
+      <UniqueIdentifier>{069fc3e7-3de4-40a6-a139-49868565cf50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\gc">
+      <UniqueIdentifier>{19ad3eb3-04a3-47f3-bb6a-b8570fce825e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\yarr">
+      <UniqueIdentifier>{bcfe8150-ad96-4f46-8700-551e9e9646ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assembler">
+      <UniqueIdentifier>{403b18e3-11ea-42eb-b5f6-8fe06bcacd8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assembler\jit">
+      <UniqueIdentifier>{292ede6a-24c5-42c7-aab7-f7ed8d9bf95b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\vm\UnicodeData.txt">
+      <Filter>source\vm</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
