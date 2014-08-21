@@ -682,7 +682,7 @@ random_generateSeed()
     } seed;
     seed.u64 = 0;
 
-#if defined(XP_WIN)
+#if defined(XP_WIN) || defined(WINRT)
     /*
      * Our PRNG only uses 48 bits, so calling rand_s() twice to get 64 bits is
      * probably overkill.

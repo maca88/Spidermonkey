@@ -179,7 +179,7 @@
 #include "mozilla/Move.h"
 
 #include <string.h>     /* for memset used when DEBUG */
-#ifndef XP_WIN
+#if !defined(XP_WIN) && !defined(WINRT)
 # include <unistd.h>
 #endif
 

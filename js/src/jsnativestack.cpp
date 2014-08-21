@@ -6,7 +6,7 @@
 
 #include "jsnativestack.h"
 
-#ifdef XP_WIN
+#if defined(XP_WIN) || defined(WINRT)
 # include "jswin.h"
 
 #elif defined(XP_OS2)
