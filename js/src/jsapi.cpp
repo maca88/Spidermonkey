@@ -92,6 +92,10 @@
 #include "vm/ObjectImpl-inl.h"
 #include "vm/String-inl.h"
 
+#ifdef WINRT
+#define MOZILLA_VERSION "28.0"
+#endif
+
 using namespace js;
 using namespace js::gc;
 using namespace js::types;
