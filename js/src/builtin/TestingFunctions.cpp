@@ -1599,7 +1599,9 @@ bool
 js::DefineTestingFunctions(JSContext *cx, HandleObject obj, bool fuzzingSafe_)
 {
     fuzzingSafe = fuzzingSafe_;
+#ifndef WINRT
     if (getenv("MOZ_FUZZING_SAFE") && getenv("MOZ_FUZZING_SAFE")[0] != '0')
         fuzzingSafe = true;
+#endif
     return JS_DefineFunctionsWithHelp(cx, obj, TestingFunctions);
 }
