@@ -1155,9 +1155,15 @@ js::InitRuntimeNumberState(JSRuntime *rt)
     decimalPoint = locale->decimal_point;
     grouping = locale->grouping;
 #else
+#ifdef WINRT
+    thousandsSeparator = NULL;
+    decimalPoint = NULL;
+    grouping = NULL;
+#else 
     thousandsSeparator = getenv("LOCALE_THOUSANDS_SEP");
     decimalPoint = getenv("LOCALE_DECIMAL_POINT");
     grouping = getenv("LOCALE_GROUPING");
+#endif
 #endif
     if (!thousandsSeparator)
         thousandsSeparator = "'";
