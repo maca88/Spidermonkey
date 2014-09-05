@@ -66,7 +66,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../dist/include;../../../intl/icu/source/common;../;../../../mfbt/double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../;../dist/include;../../../intl/icu/source/common;../../../mfbt/double-conversion;$(Configuration)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
@@ -77,6 +77,10 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy   ..\..\public\*.h   $(Configuration)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -85,7 +89,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../dist/include;../../../intl/icu/source/common;../;../../../mfbt/double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../;../dist/include;../../../intl/icu/source/common;../../../mfbt/double-conversion;$(Configuration)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
     </ClCompile>
@@ -95,6 +99,10 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy   ..\..\public\*.h   $(Configuration)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
