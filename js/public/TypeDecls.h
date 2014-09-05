@@ -19,6 +19,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <mozilla/Char16.h>
 
 struct JSContext;
 class JSFunction;
