@@ -818,7 +818,9 @@ JSRuntime::initSelfHosting(JSContext *cx)
             return false;
         }
 #else
-        const char *src = rawSources;
+#pragma message("!!! WE HAVE JUST COMMENTED rawSources. WE SHOULD RESOLVE THIS ISSUE LATER")
+        const char *src = "";
+        //const char *src = rawSources;
 #endif
 
         ok = Evaluate(cx, shg, options, src, srcLen, &rv);
