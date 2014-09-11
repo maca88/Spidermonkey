@@ -263,7 +263,6 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
     <ClCompile Include="..\gc\Barrier.cpp" />
     <ClCompile Include="..\gc\Iteration.cpp" />
     <ClCompile Include="..\gc\Marking.cpp" />
-    <ClCompile Include="..\gc\Memory.cpp" />
     <ClCompile Include="..\gc\RootMarking.cpp" />
     <ClCompile Include="..\gc\Statistics.cpp" />
     <ClCompile Include="..\gc\StoreBuffer.cpp" />

@@ -308,6 +308,9 @@
     <ClCompile Include="..\vm\Runtime.cpp">
       <Filter>source\vm</Filter>
     </ClCompile>
+    <ClCompile Include="..\gc\Memory.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
