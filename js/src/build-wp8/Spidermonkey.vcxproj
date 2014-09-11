@@ -61,7 +61,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -84,7 +84,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
