@@ -101,10 +101,7 @@ gc::MarkPagesInUse(JSRuntime *rt, void *p, size_t size)
 size_t
 gc::GetPageFaultCount()
 {
-  PROCESS_MEMORY_COUNTERS pmc;
-  if (!GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc)))
-    return 0;
-  return pmc.PageFaultCount;
+  return 0;
 }
 
 #elif defined(XP_WIN)
