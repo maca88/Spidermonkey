@@ -18,7 +18,96 @@ DecommitEnabled(JSRuntime *rt)
     return rt->gcSystemPageSize == ArenaSize;
 }
 
-#if defined(XP_WIN)
+#if defined(WP8)
+#include "jswin.h"
+#include <memoryapi.h>
+
+void
+gc::InitMemorySubsystem(JSRuntime *rt)
+{
+  SYSTEM_INFO sysinfo;
+  GetNativeSystemInfo(&sysinfo);
+  rt->gcSystemPageSize = sysinfo.dwPageSize;
+  rt->gcSystemAllocGranularity = sysinfo.dwAllocationGranularity;
+}
+
+void *
+gc::MapAlignedPages(JSRuntime *rt, size_t size, size_t alignment)
+{
+  JS_ASSERT(size >= alignment);
+  JS_ASSERT(size % alignment == 0);
+  JS_ASSERT(size % rt->gcSystemPageSize == 0);
+  JS_ASSERT(alignment % rt->gcSystemAllocGranularity == 0);
+
+  /* Special case: If we want allocation alignment, no further work is needed. */
+  if (alignment == rt->gcSystemAllocGranularity) {
+    return HeapAlloc(nullptr, MEM_COMMIT | MEM_RESERVE, size);
+  }
+
+  /*
+  * Windows requires that there be a 1:1 mapping between VM allocation
+  * and deallocation operations.  Therefore, take care here to acquire the
+  * final result via one mapping operation.  This means unmapping any
+  * preliminary result that is not correctly aligned.
+  */
+  void *p = nullptr;
+  while (!p) {
+    /*
+    * Over-allocate in order to map a memory region that is definitely
+    * large enough, then deallocate and allocate again the correct size,
+    * within the over-sized mapping.
+    *
+    * Since we're going to unmap the whole thing anyway, the first
+    * mapping doesn't have to commit pages.
+    */
+    p = HeapAlloc(nullptr, MEM_RESERVE, size * 2);
+    if (!p)
+      return nullptr;
+    void *chunkStart = (void *)AlignBytes(uintptr_t(p), alignment);
+    UnmapPages(rt, p, size * 2);
+    p = HeapAlloc(chunkStart, MEM_COMMIT | MEM_RESERVE, size);
+
+    /* Failure here indicates a race with another thread, so try again. */
+  }
+
+  JS_ASSERT(uintptr_t(p) % alignment == 0);
+  return p;
+}
+
+void
+gc::UnmapPages(JSRuntime *rt, void *p, size_t size)
+{
+  JS_ALWAYS_TRUE(HeapFree(p, MEM_RELEASE, 0));
+}
+
+bool
+gc::MarkPagesUnused(JSRuntime *rt, void *p, size_t size)
+{
+  if (!DecommitEnabled(rt))
+    return true;
+
+  JS_ASSERT(uintptr_t(p) % rt->gcSystemPageSize == 0);
+  LPVOID p2 = HeapAlloc(p, MEM_RESET, size);
+  return p2 == p;
+}
+
+bool
+gc::MarkPagesInUse(JSRuntime *rt, void *p, size_t size)
+{
+  JS_ASSERT(uintptr_t(p) % rt->gcSystemPageSize == 0);
+  return true;
+}
+
+size_t
+gc::GetPageFaultCount()
+{
+  PROCESS_MEMORY_COUNTERS pmc;
+  if (!GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc)))
+    return 0;
+  return pmc.PageFaultCount;
+}
+
+#elif defined(XP_WIN)
 #include "jswin.h"
 #include <psapi.h>
 
