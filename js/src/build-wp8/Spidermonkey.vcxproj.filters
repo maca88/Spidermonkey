@@ -311,6 +311,9 @@
     <ClCompile Include="..\gc\Memory.cpp">
       <Filter>source\gc</Filter>
     </ClCompile>
+    <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

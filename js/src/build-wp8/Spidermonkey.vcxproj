@@ -244,6 +244,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\assembler\jit\ExecutableAllocator.cpp" />
+    <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp" />
     <ClCompile Include="..\builtin\Eval.cpp" />
     <ClCompile Include="..\builtin\Intl.cpp" />
     <ClCompile Include="..\builtin\MapObject.cpp" />
