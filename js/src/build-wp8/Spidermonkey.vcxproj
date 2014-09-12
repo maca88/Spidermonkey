@@ -98,6 +98,8 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mfbt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(IntDir)mfbt;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>xcopy   ..\..\public\*.h   $(Configuration)\js   /Y /I
