@@ -40,6 +40,27 @@ uintptr_t gMozillaPoisonSize;
 // from here to 'class FreeList' needs to be kept in sync with that
 // file.
 
+#ifdef WP8
+#include <apisetcconv.h>
+#include <minwindef.h>
+
+LPVOID
+  VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
+{
+  return HeapAlloc(lpAddress, flAllocationType, dwSize);
+}
+BOOL
+  VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD /*dwFreeType*/)
+{
+  return HeapFree(lpAddress, dwSize, nullptr);
+}
+VOID
+  GetSystemInfo(LPSYSTEM_INFO sinfo)
+{
+  return GetNativeSystemInfo(sinfo);
+}
+#endif
+
 #ifdef _WIN32
 static void *
 ReserveRegion(uintptr_t region, uintptr_t size)
