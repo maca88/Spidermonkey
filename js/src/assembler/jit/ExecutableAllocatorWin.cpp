@@ -23,6 +23,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifdef WP8
+#include <winbase.h>
+LPVOID
+  VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
+{
+  return HeapAlloc(lpAddress, flAllocationType, dwSize);
+}
+BOOL
+  VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD /*dwFreeType*/)
+{
+  return HeapFree(lpAddress, dwSize, nullptr);
+}
+VOID
+  GetSystemInfo(LPSYSTEM_INFO sinfo)
+{
+  return GetNativeSystemInfo(sinfo);
+}
+BOOL
+  GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
+{
+#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER")
+    if (lpVersionInformation)
+        lpVersionInformation->dwMajorVersion = 6;
+}
+#endif
+
 #include "assembler/jit/ExecutableAllocator.h"
 
 #if ENABLE_ASSEMBLER && WTF_OS_WINDOWS
