@@ -47,6 +47,13 @@ BOOL
     if (lpVersionInformation)
         lpVersionInformation->dwMajorVersion = 6;
 }
+#define PAGE_EXECUTE_READWRITE 0x40
+BOOL
+  VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
+{
+#pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER")
+  return TRUE;
+}
 #endif
 
 #include "assembler/jit/ExecutableAllocator.h"
