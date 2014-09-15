@@ -818,9 +818,12 @@ JSRuntime::initSelfHosting(JSContext *cx)
             return false;
         }
 #else
-#pragma message("!!! WE HAVE JUST COMMENTED rawSources. WE SHOULD RESOLVE THIS ISSUE LATER")
+#   ifdef WP8
+        #pragma message("!!! COMMENTED rawSources. POSSIBLY SHOULD BEEN RESOLVED " __FILE__ " : " __FUNCTION__)
         const char *src = "";
-        //const char *src = rawSources;
+#   else
+        const char *src = rawSources;
+#   endif
 #endif
 
         ok = Evaluate(cx, shg, options, src, srcLen, &rv);
