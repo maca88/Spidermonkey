@@ -314,6 +314,9 @@
     <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp">
       <Filter>source\assembler\jit</Filter>
     </ClCompile>
+    <ClCompile Include="..\yarr\OSAllocatorWin.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

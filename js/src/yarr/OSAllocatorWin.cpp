@@ -29,6 +29,10 @@
 
 #include "assembler/wtf/Platform.h"
 
+#ifdef WP8
+#include "gc/Memory.h"
+#endif
+
 #if ENABLE_ASSEMBLER && WTF_OS_WINDOWS
 
 #include <windows.h>

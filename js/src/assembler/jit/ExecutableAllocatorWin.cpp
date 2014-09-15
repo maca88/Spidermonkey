@@ -23,40 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef WP8
-#include <winbase.h>
-LPVOID
-  VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
-{
-  return HeapAlloc(lpAddress, flAllocationType, dwSize);
-}
-BOOL
-  VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD /*dwFreeType*/)
-{
-  return HeapFree(lpAddress, dwSize, nullptr);
-}
-VOID
-  GetSystemInfo(LPSYSTEM_INFO sinfo)
-{
-  return GetNativeSystemInfo(sinfo);
-}
-BOOL
-  GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
-{
-#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER")
-    if (lpVersionInformation)
-        lpVersionInformation->dwMajorVersion = 6;
-}
-#define PAGE_EXECUTE_READWRITE 0x40
-BOOL
-  VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
-{
-#pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER")
-  return TRUE;
-}
-#endif
-
 #include "assembler/jit/ExecutableAllocator.h"
+
+#ifdef WP8
+#include "gc/Memory.h"
+#endif
 
 #if ENABLE_ASSEMBLER && WTF_OS_WINDOWS
 
