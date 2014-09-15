@@ -320,6 +320,9 @@
     <ClCompile Include="..\builtin\TestingFunctions.cpp">
       <Filter>source\builtin</Filter>
     </ClCompile>
+    <ClCompile Include="..\jsnativestack.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

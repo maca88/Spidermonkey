@@ -293,6 +293,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
     <ClCompile Include="..\jsiter.cpp" />
     <ClCompile Include="..\jskwgen.cpp" />
     <ClCompile Include="..\jsmath.cpp" />
+    <ClCompile Include="..\jsnativestack.cpp" />
     <ClCompile Include="..\jsnum.cpp" />
     <ClCompile Include="..\jsobj.cpp" />
     <ClCompile Include="..\json.cpp" />
