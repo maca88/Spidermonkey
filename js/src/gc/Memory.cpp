@@ -19,94 +19,43 @@ DecommitEnabled(JSRuntime *rt)
 }
 
 #if defined(WP8)
+VOID GetSystemInfo(LPSYSTEM_INFO sinfo)
+{
+    return GetNativeSystemInfo(sinfo);
+}
+BOOL GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
+{
+#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+    if (lpVersionInformation)
+        lpVersionInformation->dwMajorVersion = 6;
+}
+BOOL GetProcessMemoryInfo(HANDLE /*Process*/, PROCESS_MEMORY_COUNTERS* ppsmemCounters, DWORD /*cb*/)
+{
+#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+    if (ppsmemCounters)
+        ppsmemCounters->PageFaultCount = 0;
+    return TRUE;
+}
+LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
+{
+    return HeapAlloc(lpAddress, flAllocationType, dwSize);
+}
+BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD /*dwFreeType*/)
+{
+    return HeapFree(lpAddress, dwSize, nullptr);
+}
+BOOL VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
+{
+#pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+    return TRUE;
+}
+#endif
+
+#if defined(XP_WIN)
 #include "jswin.h"
-#include <memoryapi.h>
-
-void
-gc::InitMemorySubsystem(JSRuntime *rt)
-{
-  SYSTEM_INFO sysinfo;
-  GetNativeSystemInfo(&sysinfo);
-  rt->gcSystemPageSize = sysinfo.dwPageSize;
-  rt->gcSystemAllocGranularity = sysinfo.dwAllocationGranularity;
-}
-
-void *
-gc::MapAlignedPages(JSRuntime *rt, size_t size, size_t alignment)
-{
-  JS_ASSERT(size >= alignment);
-  JS_ASSERT(size % alignment == 0);
-  JS_ASSERT(size % rt->gcSystemPageSize == 0);
-  JS_ASSERT(alignment % rt->gcSystemAllocGranularity == 0);
-
-  /* Special case: If we want allocation alignment, no further work is needed. */
-  if (alignment == rt->gcSystemAllocGranularity) {
-    return HeapAlloc(nullptr, MEM_COMMIT | MEM_RESERVE, size);
-  }
-
-  /*
-  * Windows requires that there be a 1:1 mapping between VM allocation
-  * and deallocation operations.  Therefore, take care here to acquire the
-  * final result via one mapping operation.  This means unmapping any
-  * preliminary result that is not correctly aligned.
-  */
-  void *p = nullptr;
-  while (!p) {
-    /*
-    * Over-allocate in order to map a memory region that is definitely
-    * large enough, then deallocate and allocate again the correct size,
-    * within the over-sized mapping.
-    *
-    * Since we're going to unmap the whole thing anyway, the first
-    * mapping doesn't have to commit pages.
-    */
-    p = HeapAlloc(nullptr, MEM_RESERVE, size * 2);
-    if (!p)
-      return nullptr;
-    void *chunkStart = (void *)AlignBytes(uintptr_t(p), alignment);
-    UnmapPages(rt, p, size * 2);
-    p = HeapAlloc(chunkStart, MEM_COMMIT | MEM_RESERVE, size);
-
-    /* Failure here indicates a race with another thread, so try again. */
-  }
-
-  JS_ASSERT(uintptr_t(p) % alignment == 0);
-  return p;
-}
-
-void
-gc::UnmapPages(JSRuntime *rt, void *p, size_t size)
-{
-  JS_ALWAYS_TRUE(HeapFree(p, MEM_RELEASE, 0));
-}
-
-bool
-gc::MarkPagesUnused(JSRuntime *rt, void *p, size_t size)
-{
-  if (!DecommitEnabled(rt))
-    return true;
-
-  JS_ASSERT(uintptr_t(p) % rt->gcSystemPageSize == 0);
-  LPVOID p2 = HeapAlloc(p, MEM_RESET, size);
-  return p2 == p;
-}
-
-bool
-gc::MarkPagesInUse(JSRuntime *rt, void *p, size_t size)
-{
-  JS_ASSERT(uintptr_t(p) % rt->gcSystemPageSize == 0);
-  return true;
-}
-
-size_t
-gc::GetPageFaultCount()
-{
-  return 0;
-}
-
-#elif defined(XP_WIN)
-#include "jswin.h"
+#ifndef WP8
 #include <psapi.h>
+#endif
 
 void
 gc::InitMemorySubsystem(JSRuntime *rt)
