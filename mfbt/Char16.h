@@ -33,9 +33,11 @@
 #  define MOZ_UTF16_HELPER(s) L##s
 #  define _CHAR16T
 #  ifdef __cplusplus
-#    pragma message("!!! WE HAVE JUST REDEFINED _CHAR16T. POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER")
-     typedef unsigned short char16_t;
-     //typedef wchar_t char16_t;
+#    ifdef WP8
+       typedef unsigned short char16_t;
+#    else
+       typedef wchar_t char16_t;
+#    endif
 #  else
      typedef unsigned short char16_t;
 #  endif
