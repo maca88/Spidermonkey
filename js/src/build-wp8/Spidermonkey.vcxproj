@@ -252,6 +252,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
     <ClCompile Include="..\builtin\ParallelArray.cpp" />
     <ClCompile Include="..\builtin\Profilers.cpp" />
     <ClCompile Include="..\builtin\RegExp.cpp" />
+    <ClCompile Include="..\builtin\TestingFunctions.cpp" />
     <ClCompile Include="..\builtin\TypedObject.cpp" />
     <ClCompile Include="..\builtin\TypeRepresentation.cpp" />
     <ClCompile Include="..\ds\LifoAlloc.cpp" />

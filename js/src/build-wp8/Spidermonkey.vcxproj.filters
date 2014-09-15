@@ -317,6 +317,9 @@
     <ClCompile Include="..\yarr\OSAllocatorWin.cpp">
       <Filter>source\yarr</Filter>
     </ClCompile>
+    <ClCompile Include="..\builtin\TestingFunctions.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
