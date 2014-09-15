@@ -366,6 +366,11 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
   <ItemGroup>
     <Text Include="..\vm\UnicodeData.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="mfbt.vcxproj">
+      <Project>{597d79ad-e555-5465-9a5c-8d57abba6ab1}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsPhone\v$(TargetPlatformVersion)\Microsoft.Cpp.WindowsPhone.$(TargetPlatformVersion).targets" />
   <ImportGroup Label="ExtensionTargets">
