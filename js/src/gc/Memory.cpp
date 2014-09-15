@@ -28,6 +28,7 @@ BOOL GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
 #pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
     if (lpVersionInformation)
         lpVersionInformation->dwMajorVersion = 6;
+    return TRUE;
 }
 BOOL GetProcessMemoryInfo(HANDLE /*Process*/, PROCESS_MEMORY_COUNTERS* ppsmemCounters, DWORD /*cb*/)
 {
