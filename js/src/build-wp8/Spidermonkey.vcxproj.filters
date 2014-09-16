@@ -290,9 +290,6 @@
     <ClCompile Include="..\yarr\YarrInterpreter.cpp">
       <Filter>source\yarr</Filter>
     </ClCompile>
-    <ClCompile Include="..\yarr\YarrJIT.cpp">
-      <Filter>source\yarr</Filter>
-    </ClCompile>
     <ClCompile Include="..\yarr\YarrPattern.cpp">
       <Filter>source\yarr</Filter>
     </ClCompile>

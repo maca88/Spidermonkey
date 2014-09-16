@@ -347,7 +347,6 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
     <ClCompile Include="..\yarr\OSAllocatorWin.cpp" />
     <ClCompile Include="..\yarr\YarrCanonicalizeUCS2.cpp" />
     <ClCompile Include="..\yarr\YarrInterpreter.cpp" />
-    <ClCompile Include="..\yarr\YarrJIT.cpp" />
     <ClCompile Include="..\yarr\YarrPattern.cpp" />
     <ClCompile Include="..\yarr\YarrSyntaxChecker.cpp" />
     <ClCompile Include="pch.cpp">
