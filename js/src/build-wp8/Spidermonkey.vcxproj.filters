@@ -320,6 +320,45 @@
     <ClCompile Include="..\jsnativestack.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\Compression.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\FloatingPoint.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\HashFunctions.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\SHA1.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\decimal\Decimal.cpp">
+      <Filter>source\mfbt\decimal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\bignum.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\bignum-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\cached-powers.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\diy-fp.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\double-conversion.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\fast-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\fixed-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mfbt\double-conversion\strtod.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -645,6 +684,15 @@
     </Filter>
     <Filter Include="source\assembler\jit">
       <UniqueIdentifier>{292ede6a-24c5-42c7-aab7-f7ed8d9bf95b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt">
+      <UniqueIdentifier>{91558e07-4a90-4f1e-baef-9b70c4fe4c8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt\decimal">
+      <UniqueIdentifier>{35b52906-f677-4d87-a295-afa3ded75ef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt\double-conversion">
+      <UniqueIdentifier>{ab2db863-9998-4b7e-b05d-293ca6021f3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

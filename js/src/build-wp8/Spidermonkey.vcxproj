@@ -61,7 +61,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -70,6 +70,7 @@
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -85,7 +86,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -93,6 +94,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,7 +112,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -118,6 +120,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +136,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;EXPORT_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -141,6 +144,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -255,6 +259,19 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\mfbt\Compression.cpp" />
+    <ClCompile Include="..\..\..\mfbt\decimal\Decimal.cpp" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\bignum-dtoa.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\bignum.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\cached-powers.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\diy-fp.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\double-conversion.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\fast-dtoa.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\fixed-dtoa.cc" />
+    <ClCompile Include="..\..\..\mfbt\double-conversion\strtod.cc" />
+    <ClCompile Include="..\..\..\mfbt\FloatingPoint.cpp" />
+    <ClCompile Include="..\..\..\mfbt\HashFunctions.cpp" />
+    <ClCompile Include="..\..\..\mfbt\SHA1.cpp" />
     <ClCompile Include="..\assembler\jit\ExecutableAllocator.cpp" />
     <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp" />
     <ClCompile Include="..\builtin\Eval.cpp" />
@@ -376,11 +393,6 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\vm\UnicodeData.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="mfbt.vcxproj">
-      <Project>{597d79ad-e555-5465-9a5c-8d57abba6ab1}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsPhone\v$(TargetPlatformVersion)\Microsoft.Cpp.WindowsPhone.$(TargetPlatformVersion).targets" />
