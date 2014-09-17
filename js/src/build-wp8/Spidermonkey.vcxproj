@@ -66,7 +66,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../;../dist/include;../../../intl/icu/source/common;../../../mfbt/double-conversion;$(Configuration)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
@@ -78,8 +78,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\public\*.h   $(Configuration)\js   /Y /I
-xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
+      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
+xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,7 +90,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../;../dist/include;../../../intl/icu/source/common;../../../mfbt/double-conversion;$(Configuration)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
     </ClCompile>
@@ -102,8 +103,9 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <AdditionalLibraryDirectories>$(IntDir)mfbt;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\public\*.h   $(Configuration)\js   /Y /I
-xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
+      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
+xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -113,7 +115,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../dist/include;../../../intl/icu/source/common;../;../../../mfbt/double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
     </ClCompile>
@@ -123,6 +125,11 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
+xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
@@ -131,7 +138,7 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>../dist/include;../../../intl/icu/source/common;../;../../../mfbt/double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
     </ClCompile>
@@ -141,6 +148,11 @@ xcopy   ..\..\..\mfbt\*.h   $(Configuration)\mozilla   /Y /I</Command>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
+xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
+xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\builtin\Eval.h" />
