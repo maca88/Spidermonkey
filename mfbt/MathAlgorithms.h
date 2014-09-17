@@ -145,7 +145,7 @@ Abs<long double>(const long double d)
 
 } // namespace mozilla
 
-#if defined(_WIN32) && (_MSC_VER >= 1300) && (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64))
+#if defined(_WIN32) && (_MSC_VER >= 1300) && (defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(_M_ARM))
 #  define MOZ_BITSCAN_WINDOWS
 
   extern "C" {
