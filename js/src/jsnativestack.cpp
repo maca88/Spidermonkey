@@ -51,6 +51,10 @@ js::GetNativeStackBaseImpl()
     PNT_TIB64 pTib = reinterpret_cast<PNT_TIB64>(NtCurrentTeb());
     return reinterpret_cast<void*>(pTib->StackBase);
 
+# elif defined(_M_ARM)
+    PNT_TIB pTib = reinterpret_cast<PNT_TIB>(NtCurrentTeb());
+    return pTib->StackBase;
+
 # elif defined(_WIN32) && defined(__GNUC__)
     NT_TIB* pTib;
     asm ("movl %%fs:0x18, %0\n" : "=r" (pTib));
