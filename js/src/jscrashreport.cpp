@@ -17,7 +17,6 @@ using namespace js::crash;
 
 #if defined(XP_WIN)
 
-
 static const int stack_snapshot_max_size = 32768;
 
 #include <windows.h>
@@ -25,10 +24,6 @@ static const int stack_snapshot_max_size = 32768;
 static bool
 GetStack(uint64_t *stack, uint64_t *stack_len, CrashRegisters *regs, char *buffer, size_t size)
 {
-#if defined(_M_ARM)
-#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
-    return false;
-#else
     /* Try to figure out how big the stack is. */
     char dummy;
     MEMORY_BASIC_INFORMATION info;
@@ -64,6 +59,9 @@ GetStack(uint64_t *stack, uint64_t *stack_len, CrashRegisters *regs, char *buffe
     regs->ip = vip;
     regs->sp = vsp;
     regs->bp = vbp;
+#elif defined(_M_ARM)
+#pragma message("!!! POSSIBLY SHOULD BEEN RESOLVED LATER " __FILE__ " : " __FUNCTION__)
+    return false;
 #else
     CONTEXT context;
     RtlCaptureContext(&context);
@@ -83,9 +81,8 @@ GetStack(uint64_t *stack, uint64_t *stack_len, CrashRegisters *regs, char *buffe
     js_memcpy(buffer, (void *)p, len);
 
     return true;
-#endif // #if defined(_M_ARM)
-
 }
+
 #elif 0
 
 #include <sys/mman.h>
