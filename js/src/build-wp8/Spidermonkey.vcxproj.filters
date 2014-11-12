@@ -359,6 +359,9 @@
     <ClCompile Include="..\..\..\mfbt\double-conversion\strtod.cc">
       <Filter>source\mfbt\double-conversion</Filter>
     </ClCompile>
+    <ClCompile Include="..\yarr\PageBlock.cpp">
+      <Filter>source\yarr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
