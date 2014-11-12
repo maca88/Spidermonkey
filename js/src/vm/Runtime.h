@@ -64,6 +64,8 @@ extern mozilla::ThreadLocal<PerThreadData*> TlsPerThreadData;
 
 struct DtoaState;
 
+char* getenv(const char* name);
+
 extern void
 js_ReportOutOfMemory(js::ThreadSafeContext *cx);
 
