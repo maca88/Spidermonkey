@@ -39,11 +39,11 @@ BOOL GetProcessMemoryInfo(HANDLE /*Process*/, PROCESS_MEMORY_COUNTERS* ppsmemCou
 }
 LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
 {
-    return HeapAlloc(lpAddress, flAllocationType, dwSize);
+    return HeapAlloc(GetProcessHeap(), flAllocationType, dwSize);
 }
-BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD /*dwFreeType*/)
+BOOL VirtualFree(LPVOID lpAddress, SIZE_T /*dwSize*/, DWORD dwFreeType)
 {
-    return HeapFree(lpAddress, dwSize, nullptr);
+    return HeapFree(GetProcessHeap(), dwFreeType, lpAddress);
 }
 BOOL VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
 {
