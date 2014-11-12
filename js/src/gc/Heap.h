@@ -276,7 +276,7 @@ struct FreeSpan
         if (thing < last) {
             /* Bump-allocate from the current span. */
             first = thing + thingSize;
-        } else if (JS_LIKELY(thing == last)) {
+        } else if (thing && JS_LIKELY(thing == last)) {
             /*
              * Move to the next span. We use JS_LIKELY as without PGO
              * compilers mis-predict == here as unlikely to succeed.
