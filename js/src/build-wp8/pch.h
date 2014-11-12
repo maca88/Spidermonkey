@@ -7,3 +7,5 @@
 
 // Windows Header Files:
 #include <windows.h>
+
+#include "js/TypeDecls.h"
