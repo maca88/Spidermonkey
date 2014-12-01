@@ -13,7 +13,6 @@
 #include "jsscript.h"
 #include "jstypes.h"
 
-#include "builtin/Module.h"
 #include "frontend/ParseMaps.h"
 #include "frontend/ParseNode.h"
 #include "frontend/TokenStream.h"
@@ -189,10 +188,8 @@ class SharedContext
 
     virtual ObjectBox *toObjectBox() = 0;
     inline bool isGlobalSharedContext() { return toObjectBox() == nullptr; }
-    inline bool isModuleBox() { return toObjectBox() && toObjectBox()->isModuleBox(); }
     inline bool isFunctionBox() { return toObjectBox() && toObjectBox()->isFunctionBox(); }
     inline GlobalSharedContext *asGlobalSharedContext();
-    inline ModuleBox *asModuleBox();
     inline FunctionBox *asFunctionBox();
 
     bool hasExplicitUseStrict()        const { return anyCxFlags.hasExplicitUseStrict; }
@@ -202,6 +199,8 @@ class SharedContext
     void setExplicitUseStrict()           { anyCxFlags.hasExplicitUseStrict        = true; }
     void setBindingsAccessedDynamically() { anyCxFlags.bindingsAccessedDynamically = true; }
     void setHasDebuggerStatement()        { anyCxFlags.hasDebuggerStatement        = true; }
+
+    inline bool allLocalsAliased();
 
     // JSOPTION_EXTRA_WARNINGS warnings or strict mode errors.
     bool needStrictChecks() {
@@ -230,24 +229,6 @@ SharedContext::asGlobalSharedContext()
 {
     JS_ASSERT(isGlobalSharedContext());
     return static_cast<GlobalSharedContext*>(this);
-}
-
-class ModuleBox : public ObjectBox, public SharedContext
-{
-  public:
-    Bindings bindings;
-
-    ModuleBox(ExclusiveContext *cx, ObjectBox *traceListHead, Module *module,
-              ParseContext<FullParseHandler> *pc, bool extraWarnings);
-    ObjectBox *toObjectBox() { return this; }
-    Module *module() const { return &object->as<Module>(); }
-};
-
-inline ModuleBox *
-SharedContext::asModuleBox()
-{
-    JS_ASSERT(isModuleBox());
-    return static_cast<ModuleBox*>(this);
 }
 
 class FunctionBox : public ObjectBox, public SharedContext
@@ -308,7 +289,7 @@ class FunctionBox : public ObjectBox, public SharedContext
                                              funCxFlags.definitelyNeedsArgsObj   = true; }
 
     bool hasDefaults() const {
-        return length != function()->nargs - function()->hasRest();
+        return length != function()->nargs() - function()->hasRest();
     }
 
     // Return whether this function has either specified "use asm" or is
@@ -328,7 +309,8 @@ class FunctionBox : public ObjectBox, public SharedContext
         // Note: this should be kept in sync with JSFunction::isHeavyweight().
         return bindings.hasAnyAliasedBindings() ||
                hasExtensibleScope() ||
-               needsDeclEnvObject();
+               needsDeclEnvObject() ||
+               isGenerator();
     }
 };
 
@@ -338,6 +320,18 @@ SharedContext::asFunctionBox()
     JS_ASSERT(isFunctionBox());
     return static_cast<FunctionBox*>(this);
 }
+
+// In generators, we treat all locals as aliased so that they get stored on the
+// heap.  This way there is less information to copy off the stack when
+// suspending, and back on when resuming.  It also avoids the need to create and
+// invalidate DebugScope proxies for unaliased locals in a generator frame, as
+// the generator frame will be copied out to the heap and released only by GC.
+inline bool
+SharedContext::allLocalsAliased()
+{
+    return bindingsAccessedDynamically() || (isFunctionBox() && asFunctionBox()->isGenerator());
+}
+
 
 /*
  * NB: If you add a new type of statement that is a scope, add it between
@@ -365,6 +359,7 @@ enum StmtType {
     STMT_FOR_IN_LOOP,           /* for/in loop statement */
     STMT_FOR_OF_LOOP,           /* for/of loop statement */
     STMT_WHILE_LOOP,            /* while loop statement */
+    STMT_SPREAD,                /* spread operator (pseudo for/of) */
     STMT_LIMIT
 };
 
@@ -395,22 +390,30 @@ enum StmtType {
 // work with both types.
 
 struct StmtInfoBase {
-    uint16_t        type;           /* statement type */
+    // Statement type (StmtType).
+    uint16_t        type;
 
-    /*
-     * True if type is STMT_BLOCK, STMT_TRY, STMT_SWITCH, or
-     * STMT_FINALLY and the block contains at least one let-declaration.
-     */
+    // True if type is STMT_BLOCK, STMT_TRY, STMT_SWITCH, or STMT_FINALLY and
+    // the block contains at least one let-declaration, or if type is
+    // STMT_CATCH.
     bool isBlockScope:1;
 
-    /* for (let ...) induced block scope */
+    // True if isBlockScope or type == STMT_WITH.
+    bool isNestedScope:1;
+
+    // for (let ...) induced block scope
     bool isForLetBlock:1;
 
-    RootedAtom      label;          /* name of LABEL */
-    Rooted<StaticBlockObject *> blockObj; /* block scope object */
+    // Block label.
+    RootedAtom      label;
 
-    StmtInfoBase(ExclusiveContext *cx)
-        : isBlockScope(false), isForLetBlock(false), label(cx), blockObj(cx)
+    // Compile-time scope chain node for this scope.  Only set if
+    // isNestedScope.
+    Rooted<NestedScopeObject *> staticScope;
+
+    explicit StmtInfoBase(ExclusiveContext *cx)
+        : isBlockScope(false), isNestedScope(false), isForLetBlock(false),
+          label(cx), staticScope(cx)
     {}
 
     bool maybeScope() const {
@@ -418,7 +421,13 @@ struct StmtInfoBase {
     }
 
     bool linksScope() const {
-        return (STMT_WITH <= type && type <= STMT_CATCH) || isBlockScope;
+        return isNestedScope;
+    }
+
+    StaticBlockObject& staticBlock() const {
+        JS_ASSERT(isNestedScope);
+        JS_ASSERT(isBlockScope);
+        return staticScope->as<StaticBlockObject>();
     }
 
     bool isLoop() const {
@@ -437,9 +446,10 @@ PushStatement(ContextT *ct, typename ContextT::StmtInfo *stmt, StmtType type)
 {
     stmt->type = type;
     stmt->isBlockScope = false;
+    stmt->isNestedScope = false;
     stmt->isForLetBlock = false;
     stmt->label = nullptr;
-    stmt->blockObj = nullptr;
+    stmt->staticScope = nullptr;
     stmt->down = ct->topStmt;
     ct->topStmt = stmt;
     if (stmt->linksScope()) {
@@ -452,13 +462,13 @@ PushStatement(ContextT *ct, typename ContextT::StmtInfo *stmt, StmtType type)
 
 template <class ContextT>
 void
-FinishPushBlockScope(ContextT *ct, typename ContextT::StmtInfo *stmt, StaticBlockObject &blockObj)
+FinishPushNestedScope(ContextT *ct, typename ContextT::StmtInfo *stmt, NestedScopeObject &staticScope)
 {
-    stmt->isBlockScope = true;
+    stmt->isNestedScope = true;
     stmt->downScope = ct->topScopeStmt;
     ct->topScopeStmt = stmt;
-    ct->blockChain = &blockObj;
-    stmt->blockObj = &blockObj;
+    ct->staticScope = &staticScope;
+    stmt->staticScope = &staticScope;
 }
 
 // Pop pc->topStmt. If the top StmtInfoPC struct is not stack-allocated, it
@@ -472,8 +482,10 @@ FinishPopStatement(ContextT *ct)
     ct->topStmt = stmt->down;
     if (stmt->linksScope()) {
         ct->topScopeStmt = stmt->downScope;
-        if (stmt->isBlockScope)
-            ct->blockChain = stmt->blockObj->enclosingBlock();
+        if (stmt->isNestedScope) {
+            JS_ASSERT(stmt->staticScope);
+            ct->staticScope = stmt->staticScope->enclosingNestedScope();
+        }
     }
 }
 

@@ -7,22 +7,19 @@
 
 #include "jsapi-tests/tests.h"
 
-/* Do the test a bunch of times, because sometimes we seem to randomly
-   miss the propcache */
-static const int expectedCount = 100;
 static int callCount = 0;
 
 static bool
-addProperty(JSContext *cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp)
+AddProperty(JSContext *cx, JS::HandleObject obj, JS::HandleId id, JS::MutableHandleValue vp)
 {
-  callCount++;
-  return true;
+    callCount++;
+    return true;
 }
 
-const JSClass addPropertyClass = {
+static const JSClass AddPropertyClass = {
     "AddPropertyTester",
     0,
-    addProperty,
+    AddProperty,
     JS_DeletePropertyStub,   /* delProperty */
     JS_PropertyStub,         /* getProperty */
     JS_StrictPropertyStub,   /* setProperty */
@@ -33,28 +30,31 @@ const JSClass addPropertyClass = {
 
 BEGIN_TEST(testAddPropertyHook)
 {
-    JS::RootedObject obj(cx, JS_NewObject(cx, nullptr, nullptr, nullptr));
+    /*
+     * Do the test a bunch of times, because sometimes we seem to randomly
+     * miss the propcache.
+     */
+    static const int ExpectedCount = 100;
+
+    JS::RootedObject obj(cx, JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr()));
     CHECK(obj);
     JS::RootedValue proto(cx, OBJECT_TO_JSVAL(obj));
-    JS_InitClass(cx, global, obj, &addPropertyClass, nullptr, 0, nullptr, nullptr, nullptr,
+    JS_InitClass(cx, global, obj, &AddPropertyClass, nullptr, 0, nullptr, nullptr, nullptr,
                  nullptr);
 
-    obj = JS_NewArrayObject(cx, 0, nullptr);
+    obj = JS_NewArrayObject(cx, 0);
     CHECK(obj);
     JS::RootedValue arr(cx, OBJECT_TO_JSVAL(obj));
 
-    CHECK(JS_DefineProperty(cx, global, "arr", arr,
-                            JS_PropertyStub, JS_StrictPropertyStub,
-                            JSPROP_ENUMERATE));
+    CHECK(JS_DefineProperty(cx, global, "arr", arr, JSPROP_ENUMERATE,
+                            JS_PropertyStub, JS_StrictPropertyStub));
 
-    for (int i = 0; i < expectedCount; ++i) {
-        obj = JS_NewObject(cx, &addPropertyClass, nullptr, nullptr);
+    JS::RootedObject arrObj(cx, &arr.toObject());
+    for (int i = 0; i < ExpectedCount; ++i) {
+        obj = JS_NewObject(cx, &AddPropertyClass, JS::NullPtr(), JS::NullPtr());
         CHECK(obj);
-        JS::RootedValue vobj(cx, OBJECT_TO_JSVAL(obj));
-        JS::RootedObject arrObj(cx, JSVAL_TO_OBJECT(arr));
-        CHECK(JS_DefineElement(cx, arrObj, i, vobj,
-                               JS_PropertyStub, JS_StrictPropertyStub,
-                               JSPROP_ENUMERATE));
+        CHECK(JS_DefineElement(cx, arrObj, i, obj, JSPROP_ENUMERATE,
+                               JS_PropertyStub, JS_StrictPropertyStub));
     }
 
     // Now add a prop to each of the objects, but make sure to do
@@ -64,7 +64,7 @@ BEGIN_TEST(testAddPropertyHook)
          "  arr[i].prop = 42;                               \n"
          );
 
-    CHECK(callCount == expectedCount);
+    CHECK(callCount == ExpectedCount);
 
     return true;
 }

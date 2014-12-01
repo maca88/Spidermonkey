@@ -5,12 +5,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 XPIDL_SOURCES += [
-    'nsICharsetConverterManager.idl',
     'nsICurrentCharsetListener.idl',
     'nsIScriptableUConv.idl',
     'nsITextToSubURI.idl',
     'nsIUTF8ConverterService.idl',
 ]
 
-MODULE = 'uconv'
+XPIDL_MODULE = 'uconv'
 

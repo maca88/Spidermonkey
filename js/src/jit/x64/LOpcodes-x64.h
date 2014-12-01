@@ -13,7 +13,7 @@
     _(UnboxFloatingPoint)           \
     _(DivI)                         \
     _(DivPowTwoI)                   \
-    _(DivSelfI)                     \
+    _(DivOrModConstantI)            \
     _(ModI)                         \
     _(ModPowTwoI)                   \
     _(PowHalfD)                     \

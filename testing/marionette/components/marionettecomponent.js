@@ -6,11 +6,13 @@ this.CC = Components.Constructor;
 this.Cc = Components.classes;
 this.Ci = Components.interfaces;
 this.Cu = Components.utils;
+this.Cr = Components.results;
 
 const MARIONETTE_CONTRACTID = "@mozilla.org/marionette;1";
 const MARIONETTE_CID = Components.ID("{786a1369-dca5-4adc-8486-33d23c88010a}");
 const MARIONETTE_ENABLED_PREF = 'marionette.defaultPrefs.enabled';
 const MARIONETTE_FORCELOCAL_PREF = 'marionette.force-local';
+const MARIONETTE_LOG_PREF = 'marionette.logging';
 
 this.ServerSocket = CC("@mozilla.org/network/server-socket;1",
                        "nsIServerSocket",
@@ -31,21 +33,20 @@ function MarionetteComponent() {
   // set up the logger
   this.logger = Log.repository.getLogger("Marionette");
   this.logger.level = Log.Level["Trace"];
-  let logf = FileUtils.getFile('ProfD', ['marionette.log']);
-
   let dumper = false;
-  let formatter = new Log.BasicFormatter();
-  this.logger.addAppender(new Log.BoundedFileAppender(logf.path, formatter));
 #ifdef DEBUG
   dumper = true;
 #endif
 #ifdef MOZ_B2G
   dumper = true;
 #endif
-  if (dumper) {
-    this.logger.addAppender(new Log.DumpAppender(formatter));
+  try {
+    if (dumper || Services.prefs.getBoolPref(MARIONETTE_LOG_PREF)) {
+      let formatter = new Log.BasicFormatter();
+      this.logger.addAppender(new Log.DumpAppender(formatter));
+    }
   }
-  this.logger.info("MarionetteComponent loaded");
+  catch(e) {}
 }
 
 MarionetteComponent.prototype = {
@@ -99,9 +100,6 @@ MarionetteComponent.prototype = {
           if (Services.appinfo.inSafeMode) {
             this.observerService.addObserver(this, "domwindowopened", false);
           }
-        }
-        else {
-          this.logger.info("marionette not enabled via pref");
         }
 #endif
         break;

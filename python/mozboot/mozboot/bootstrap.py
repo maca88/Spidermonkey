@@ -26,14 +26,16 @@ obtain a copy of the source code by running:
 
 Or, if you prefer Git:
 
-    git clone git://github.com/mozilla/mozilla-central.git
+    git clone https://git.mozilla.org/integration/gecko-dev.git
 '''
 
 
 class Bootstrapper(object):
     """Main class that performs system bootstrap."""
 
-    def bootstrap(self):
+    def __init__(self, finished=FINISHED):
+        self.instance = None
+        self.finished = finished
         cls = None
         args = {}
 
@@ -77,17 +79,22 @@ class Bootstrapper(object):
             cls = OpenBSDBootstrapper
             args['version'] = platform.uname()[2]
 
-        elif sys.platform.startswith('freebsd'):
+        elif sys.platform.startswith('dragonfly') or \
+             sys.platform.startswith('freebsd'):
             cls = FreeBSDBootstrapper
             args['version'] = platform.release()
+            args['flavor']  = platform.system()
 
         if cls is None:
             raise NotImplementedError('Bootstrap support is not yet available '
                                       'for your OS.')
 
-        instance = cls(**args)
-        instance.install_system_packages()
-        instance.ensure_mercurial_modern()
-        instance.ensure_python_modern()
+        self.instance = cls(**args)
 
-        print(FINISHED)
+
+    def bootstrap(self):
+        self.instance.install_system_packages()
+        self.instance.ensure_mercurial_modern()
+        self.instance.ensure_python_modern()
+
+        print(self.finished)

@@ -20,3 +20,8 @@ patch -p3 < add-mfbt-api-markers.patch
 patch -p3 < use-StandardInteger.patch
 patch -p3 < use-mozilla-assertions.patch
 patch -p3 < use-static_assert.patch
+patch -p3 < ToPrecision-exponential.patch
+patch -p3 < fix-gcc-warnings.patch
+
+# Merged upstream, part of 2.0.1 version
+patch -p3 < fix-aarch64-macro.patch

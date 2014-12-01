@@ -50,10 +50,10 @@ GetStack(uint64_t *stack, uint64_t *stack_len, CrashRegisters *regs, char *buffe
     /* ASM version for win2k that doesn't support RtlCaptureContext */
     uint32_t vip, vsp, vbp;
     __asm {
-    Label:
+    MyLabel:
         mov [vbp], ebp;
         mov [vsp], esp;
-        mov eax, [Label];
+        mov eax, [MyLabel];
         mov [vip], eax;
     }
     regs->ip = vip;
@@ -149,7 +149,7 @@ namespace crash {
 class Stack : private CrashStack
 {
 public:
-    Stack(uint64_t id);
+    explicit Stack(uint64_t id);
 
     bool snapshot();
 };
@@ -169,7 +169,7 @@ Stack::snapshot()
 class Ring : private CrashRing
 {
 public:
-    Ring(uint64_t id);
+    explicit Ring(uint64_t id);
 
     void push(uint64_t tag, void *data, size_t size);
 
@@ -216,31 +216,39 @@ Ring::copyBytes(void *data, size_t size)
 } /* namespace crash */
 } /* namespace js */
 
+#ifdef JS_CRASH_DIAGNOSTICS
 static bool gInitialized;
 
 static Stack gGCStack(JS_CRASH_STACK_GC);
 static Stack gErrorStack(JS_CRASH_STACK_ERROR);
 static Ring gRingBuffer(JS_CRASH_RING);
+#endif
 
 void
 js::crash::SnapshotGCStack()
 {
+#ifdef JS_CRASH_DIAGNOSTICS
     if (gInitialized)
         gGCStack.snapshot();
+#endif
 }
 
 void
 js::crash::SnapshotErrorStack()
 {
+#ifdef JS_CRASH_DIAGNOSTICS
     if (gInitialized)
         gErrorStack.snapshot();
+#endif
 }
 
 void
 js::crash::SaveCrashData(uint64_t tag, void *ptr, size_t size)
 {
+#ifdef JS_CRASH_DIAGNOSTICS
     if (gInitialized)
         gRingBuffer.push(tag, ptr, size);
+#endif
 }
 
 JS_PUBLIC_API(void)

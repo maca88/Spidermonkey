@@ -26,7 +26,7 @@ class SafepointWriter
     BitSet *frameSlots_;
 
   public:
-    bool init(uint32_t slotCount);
+    bool init(TempAllocator &alloc, uint32_t slotCount);
 
   private:
     // A safepoint entry is written in the order these functions appear.
@@ -61,7 +61,7 @@ class SafepointReader
     CompactBufferReader stream_;
     uint32_t frameSlots_;
     uint32_t currentSlotChunk_;
-    uint32_t currentSlotChunkNumber_;
+    uint32_t nextSlotChunkNumber_;
     uint32_t osiCallPointOffset_;
     GeneralRegisterSet gcSpills_;
     GeneralRegisterSet valueSpills_;

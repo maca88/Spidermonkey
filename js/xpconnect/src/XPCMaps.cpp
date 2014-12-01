@@ -1,15 +1,18 @@
-/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 4 -*-
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
+/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* vim: set ts=8 sts=4 et sw=4 tw=99: */
+/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /* Private maps (hashtables). */
 
+#include "mozilla/MathAlgorithms.h"
 #include "mozilla/MemoryReporting.h"
 #include "xpcprivate.h"
 
 #include "js/HashTable.h"
+
+using namespace mozilla;
 
 /***************************************************************************/
 // static shared...
@@ -85,7 +88,7 @@ void
 JSObject2WrappedJSMap::FindDyingJSObjects(nsTArray<nsXPCWrappedJS*>* dying)
 {
     for (Map::Range r = mTable.all(); !r.empty(); r.popFront()) {
-        nsXPCWrappedJS* wrapper = r.front().value;
+        nsXPCWrappedJS* wrapper = r.front().value();
         MOZ_ASSERT(wrapper, "found a null JS wrapper!");
 
         // walk the wrapper chain and find any whose JSObject is to be finalized
@@ -101,7 +104,7 @@ void
 JSObject2WrappedJSMap::ShutdownMarker()
 {
     for (Map::Range r = mTable.all(); !r.empty(); r.popFront()) {
-        nsXPCWrappedJS* wrapper = r.front().value;
+        nsXPCWrappedJS* wrapper = r.front().value();
         MOZ_ASSERT(wrapper, "found a null JS wrapper!");
         MOZ_ASSERT(wrapper->IsValid(), "found an invalid JS wrapper!");
         wrapper->SystemIsBeingShutDown();
@@ -464,7 +467,7 @@ IID2ThisTranslatorMap::Entry::Match(PLDHashTable *table,
 void
 IID2ThisTranslatorMap::Entry::Clear(PLDHashTable *table, PLDHashEntryHdr *entry)
 {
-    NS_IF_RELEASE(((Entry*)entry)->value);
+    static_cast<Entry*>(entry)->value = nullptr;
     memset(entry, 0, table->entrySize);
 }
 
@@ -518,7 +521,7 @@ XPCNativeScriptableSharedMap::Entry::Hash(PLDHashTable *table, const void *key)
 
     h = (PLDHashNumber) obj->GetFlags();
     for (s = (const unsigned char*) obj->GetJSClass()->name; *s != '\0'; s++)
-        h = JS_ROTATE_LEFT32(h, 4) ^ *s;
+        h = RotateLeft(h, 4) ^ *s;
     return h;
 }
 

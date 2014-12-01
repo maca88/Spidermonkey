@@ -13,6 +13,10 @@
 #include "jit/IonAnalysis.h"
 #include "jit/MIR.h"
 
+// windows.h defines those, which messes with the definitions below.
+#undef min
+#undef max
+
 namespace js {
 namespace jit {
 
@@ -46,6 +50,13 @@ struct LoopIterationBound : public TempObject
 // A symbolic upper or lower bound computed for a term.
 struct SymbolicBound : public TempObject
 {
+  private:
+    SymbolicBound(LoopIterationBound *loop, LinearSum sum)
+      : loop(loop), sum(sum)
+    {
+    }
+
+  public:
     // Any loop iteration bound from which this was derived.
     //
     // If non-nullptr, then 'sum' is only valid within the loop body, at
@@ -54,15 +65,15 @@ struct SymbolicBound : public TempObject
     // If nullptr, then 'sum' is always valid.
     LoopIterationBound *loop;
 
+    static SymbolicBound *New(TempAllocator &alloc, LoopIterationBound *loop, LinearSum sum) {
+        return new(alloc) SymbolicBound(loop, sum);
+    }
+
     // Computed symbolic bound, see above.
     LinearSum sum;
 
-    SymbolicBound(LoopIterationBound *loop, LinearSum sum)
-      : loop(loop), sum(sum)
-    {
-    }
-
     void print(Sprinter &sp) const;
+    void dump() const;
 };
 
 class RangeAnalysis
@@ -76,6 +87,8 @@ class RangeAnalysis
     MIRGenerator *mir;
     MIRGraph &graph_;
 
+    TempAllocator &alloc() const;
+
   public:
     MOZ_CONSTEXPR RangeAnalysis(MIRGenerator *mir, MIRGraph &graph) :
         mir(mir), graph_(graph) {}
@@ -83,6 +96,7 @@ class RangeAnalysis
     bool analyze();
     bool addRangeAssertions();
     bool removeBetaNodes();
+    bool prepareForUCE(bool *shouldRemoveDeadCode);
     bool truncate();
 
   private:
@@ -91,7 +105,6 @@ class RangeAnalysis
                                                   MTest *test, BranchDirection direction);
     void analyzeLoopPhi(MBasicBlock *header, LoopIterationBound *loopBound, MPhi *phi);
     bool tryHoistBoundsCheck(MBasicBlock *header, MBoundsCheck *ins);
-    bool markBlocksInLoopBody(MBasicBlock *header, MBasicBlock *current);
 };
 
 class Range : public TempObject {
@@ -107,10 +120,10 @@ class Range : public TempObject {
     // Maximal exponenent under which we have no precission loss on double
     // operations. Double has 52 bits of mantissa, so 2^52+1 cannot be
     // represented without loss.
-    static const uint16_t MaxTruncatableExponent = mozilla::DoubleExponentShift;
+    static const uint16_t MaxTruncatableExponent = mozilla::FloatingPoint<double>::kExponentShift;
 
     // Maximum exponent for finite values.
-    static const uint16_t MaxFiniteExponent = mozilla::DoubleExponentBias;
+    static const uint16_t MaxFiniteExponent = mozilla::FloatingPoint<double>::kExponentBias;
 
     // An special exponent value representing all non-NaN values. This
     // includes finite values and the infinities.
@@ -263,12 +276,17 @@ class Range : public TempObject {
     // Given an exponent value and pointers to the lower and upper bound values,
     // this function refines the lower and upper bound values to the tighest
     // bound for integer values implied by the exponent.
-    static void refineInt32BoundsByExponent(uint16_t e, int32_t *l, int32_t *h) {
+    static void refineInt32BoundsByExponent(uint16_t e,
+                                            int32_t *l, bool *lb,
+                                            int32_t *h, bool *hb)
+    {
        if (e < MaxInt32Exponent) {
            // pow(2, max_exponent_+1)-1 to compute a maximum absolute value.
            int32_t limit = (uint32_t(1) << (e + 1)) - 1;
            *h = Min(*h, limit);
            *l = Max(*l, -limit);
+           *hb = true;
+           *lb = true;
        }
     }
 
@@ -347,29 +365,30 @@ class Range : public TempObject {
     // Construct a range from the given MDefinition. This differs from the
     // MDefinition's range() method in that it describes the range of values
     // *after* any bailout checks.
-    Range(const MDefinition *def);
+    explicit Range(const MDefinition *def);
 
-    static Range *NewInt32Range(int32_t l, int32_t h) {
-        return new Range(l, h, false, MaxInt32Exponent);
+    static Range *NewInt32Range(TempAllocator &alloc, int32_t l, int32_t h) {
+        return new(alloc) Range(l, h, false, MaxInt32Exponent);
     }
 
-    static Range *NewUInt32Range(uint32_t l, uint32_t h) {
+    static Range *NewUInt32Range(TempAllocator &alloc, uint32_t l, uint32_t h) {
         // For now, just pass them to the constructor as int64_t values.
         // They'll become unbounded if they're not in the int32_t range.
-        return new Range(l, h, false, MaxUInt32Exponent);
+        return new(alloc) Range(l, h, false, MaxUInt32Exponent);
     }
 
-    static Range *NewDoubleRange(double l, double h) {
+    static Range *NewDoubleRange(TempAllocator &alloc, double l, double h) {
         if (mozilla::IsNaN(l) && mozilla::IsNaN(h))
             return nullptr;
 
-        Range *r = new Range();
+        Range *r = new(alloc) Range();
         r->setDouble(l, h);
         return r;
     }
 
     void print(Sprinter &sp) const;
     void dump(FILE *fp) const;
+    void dump() const;
     bool update(const Range *other);
 
     // Unlike the other operations, unionWith is an in-place
@@ -377,23 +396,26 @@ class Range : public TempObject {
     // copying when chaining together unions when handling Phi
     // nodes.
     void unionWith(const Range *other);
-    static Range * intersect(const Range *lhs, const Range *rhs, bool *emptyRange);
-    static Range * add(const Range *lhs, const Range *rhs);
-    static Range * sub(const Range *lhs, const Range *rhs);
-    static Range * mul(const Range *lhs, const Range *rhs);
-    static Range * and_(const Range *lhs, const Range *rhs);
-    static Range * or_(const Range *lhs, const Range *rhs);
-    static Range * xor_(const Range *lhs, const Range *rhs);
-    static Range * not_(const Range *op);
-    static Range * lsh(const Range *lhs, int32_t c);
-    static Range * rsh(const Range *lhs, int32_t c);
-    static Range * ursh(const Range *lhs, int32_t c);
-    static Range * lsh(const Range *lhs, const Range *rhs);
-    static Range * rsh(const Range *lhs, const Range *rhs);
-    static Range * ursh(const Range *lhs, const Range *rhs);
-    static Range * abs(const Range *op);
-    static Range * min(const Range *lhs, const Range *rhs);
-    static Range * max(const Range *lhs, const Range *rhs);
+    static Range *intersect(TempAllocator &alloc, const Range *lhs, const Range *rhs,
+                             bool *emptyRange);
+    static Range *add(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *sub(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *mul(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *and_(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *or_(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *xor_(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *not_(TempAllocator &alloc, const Range *op);
+    static Range *lsh(TempAllocator &alloc, const Range *lhs, int32_t c);
+    static Range *rsh(TempAllocator &alloc, const Range *lhs, int32_t c);
+    static Range *ursh(TempAllocator &alloc, const Range *lhs, int32_t c);
+    static Range *lsh(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *rsh(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *ursh(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *abs(TempAllocator &alloc, const Range *op);
+    static Range *min(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *max(TempAllocator &alloc, const Range *lhs, const Range *rhs);
+    static Range *floor(TempAllocator &alloc, const Range *op);
+    static Range *ceil(TempAllocator &alloc, const Range *op);
 
     static bool negativeZeroMul(const Range *lhs, const Range *rhs);
 
@@ -435,9 +457,14 @@ class Range : public TempObject {
         return canHaveFractionalPart() || max_exponent_ >= MaxTruncatableExponent;
     }
 
+    // Test if an integer x belongs to the range.
+    bool contains(int32_t x) const {
+        return x >= lower_ && x <= upper_;
+    }
+
     // Test whether the range contains zero.
     bool canBeZero() const {
-        return lower_ <= 0 && upper_ >= 0;
+        return contains(0);
     }
 
     // Test whether the range contains NaN values.

@@ -6,7 +6,6 @@
 
 #include "frontend/ParseNode-inl.h"
 
-#include "builtin/Module.h"
 #include "frontend/Parser.h"
 
 #include "jscntxtinlines.h"
@@ -171,6 +170,7 @@ PushNodeChildren(ParseNode *pn, NodeStack *stack)
         stack->pushUnlessNull(pn->pn_kid3);
         break;
       case PN_BINARY:
+      case PN_BINARY_OBJ:
         if (pn->pn_left != pn->pn_right)
             stack->pushUnlessNull(pn->pn_left);
         stack->pushUnlessNull(pn->pn_right);
@@ -280,26 +280,10 @@ ParseNode::append(ParseNodeKind kind, JSOp op, ParseNode *left, ParseNode *right
         if (!list)
             return nullptr;
         list->append(pn2);
-        if (kind == PNK_ADD) {
-            if (pn1->isKind(PNK_STRING))
-                list->pn_xflags |= PNX_STRCAT;
-            else if (!pn1->isKind(PNK_NUMBER))
-                list->pn_xflags |= PNX_CANTFOLD;
-            if (pn2->isKind(PNK_STRING))
-                list->pn_xflags |= PNX_STRCAT;
-            else if (!pn2->isKind(PNK_NUMBER))
-                list->pn_xflags |= PNX_CANTFOLD;
-        }
     }
 
     list->append(right);
     list->pn_pos.end = right->pn_pos.end;
-    if (kind == PNK_ADD) {
-        if (right->isKind(PNK_STRING))
-            list->pn_xflags |= PNX_STRCAT;
-        else if (!right->isKind(PNK_NUMBER))
-            list->pn_xflags |= PNX_CANTFOLD;
-    }
 
     return list;
 }
@@ -326,24 +310,6 @@ ParseNode::newBinaryOrAppend(ParseNodeKind kind, JSOp op, ParseNode *left, Parse
     if (left->isKind(kind) && left->isOp(op) && (js_CodeSpec[op].format & JOF_LEFTASSOC))
         return append(kind, op, left, right, handler);
 
-    /*
-     * Fold constant addition immediately, to conserve node space and, what's
-     * more, so js::FoldConstants never sees mixed addition and concatenation
-     * operations with more than one leading non-string operand in a PN_LIST
-     * generated for expressions such as 1 + 2 + "pt" (which should evaluate
-     * to "3pt", not "12pt").
-     */
-    if (kind == PNK_ADD &&
-        left->isKind(PNK_NUMBER) &&
-        right->isKind(PNK_NUMBER) &&
-        foldConstants)
-    {
-        left->pn_dval += right->pn_dval;
-        left->pn_pos.end = right->pn_pos.end;
-        handler->freeTree(right);
-        return left;
-    }
-
     return handler->new_<BinaryNode>(kind, op, left, right);
 }
 
@@ -360,8 +326,6 @@ Definition::kindString(Kind kind)
 
 namespace js {
 namespace frontend {
-
-#if JS_HAS_DESTRUCTURING
 
 /*
  * This function assumes the cloned tree is for use in the same statement and
@@ -385,9 +349,6 @@ Parser<FullParseHandler>::cloneParseTree(ParseNode *opn)
 #define NULLCHECK(e)    JS_BEGIN_MACRO if (!(e)) return nullptr; JS_END_MACRO
 
       case PN_CODE:
-        if (pn->getKind() == PNK_MODULE) {
-            MOZ_ASSUME_UNREACHABLE("module nodes cannot be cloned");
-        }
         NULLCHECK(pn->pn_funbox = newFunctionBox(pn, opn->pn_funbox->function(), pc,
                                                  Directives(/* strict = */ opn->pn_funbox->strict),
                                                  opn->pn_funbox->generatorKind()));
@@ -422,9 +383,17 @@ Parser<FullParseHandler>::cloneParseTree(ParseNode *opn)
         pn->pn_iflags = opn->pn_iflags;
         break;
 
+      case PN_BINARY_OBJ:
+        NULLCHECK(pn->pn_left = cloneParseTree(opn->pn_left));
+        if (opn->pn_right != opn->pn_left)
+            NULLCHECK(pn->pn_right = cloneParseTree(opn->pn_right));
+        else
+            pn->pn_right = pn->pn_left;
+        pn->pn_binary_obj = opn->pn_binary_obj;
+        break;
+
       case PN_UNARY:
         NULLCHECK(pn->pn_kid = cloneParseTree(opn->pn_kid));
-        pn->pn_hidden = opn->pn_hidden;
         break;
 
       case PN_NAME:
@@ -462,8 +431,6 @@ Parser<FullParseHandler>::cloneParseTree(ParseNode *opn)
     return pn;
 }
 
-#endif /* JS_HAS_DESTRUCTURING */
-
 /*
  * Used by Parser::forStatement and comprehensionTail to clone the TARGET in
  *   for (var/const/let TARGET in EXPR)
@@ -486,7 +453,6 @@ Parser<FullParseHandler>::cloneLeftHandSide(ParseNode *opn)
     pn->setDefn(opn->isDefn());
     pn->setUsed(opn->isUsed());
 
-#if JS_HAS_DESTRUCTURING
     if (opn->isArity(PN_LIST)) {
         JS_ASSERT(opn->isKind(PNK_ARRAY) || opn->isKind(PNK_OBJECT));
         pn->makeEmpty();
@@ -494,7 +460,7 @@ Parser<FullParseHandler>::cloneLeftHandSide(ParseNode *opn)
             ParseNode *pn2;
             if (opn->isKind(PNK_OBJECT)) {
                 JS_ASSERT(opn2->isArity(PN_BINARY));
-                JS_ASSERT(opn2->isKind(PNK_COLON));
+                JS_ASSERT(opn2->isKind(PNK_COLON) || opn2->isKind(PNK_SHORTHAND));
 
                 ParseNode *tag = cloneParseTree(opn2->pn_left);
                 if (!tag)
@@ -503,7 +469,7 @@ Parser<FullParseHandler>::cloneLeftHandSide(ParseNode *opn)
                 if (!target)
                     return nullptr;
 
-                pn2 = handler.new_<BinaryNode>(PNK_COLON, JSOP_INITPROP, opn2->pn_pos, tag, target);
+                pn2 = handler.new_<BinaryNode>(opn2->getKind(), JSOP_INITPROP, opn2->pn_pos, tag, target);
             } else if (opn2->isArity(PN_NULLARY)) {
                 JS_ASSERT(opn2->isKind(PNK_ELISION));
                 pn2 = cloneParseTree(opn2);
@@ -518,7 +484,6 @@ Parser<FullParseHandler>::cloneLeftHandSide(ParseNode *opn)
         pn->pn_xflags = opn->pn_xflags;
         return pn;
     }
-#endif
 
     JS_ASSERT(opn->isArity(PN_NAME));
     JS_ASSERT(opn->isKind(PNK_NAME));
@@ -593,6 +558,9 @@ ParseNode::dump(int indent)
       case PN_BINARY:
         ((BinaryNode *) this)->dump(indent);
         break;
+      case PN_BINARY_OBJ:
+        ((BinaryObjNode *) this)->dump(indent);
+        break;
       case PN_TERNARY:
         ((TernaryNode *) this)->dump(indent);
         break;
@@ -633,7 +601,7 @@ NullaryNode::dump()
       }
 
       case PNK_STRING:
-        JSString::dumpChars(pn_atom->chars(), pn_atom->length());
+        pn_atom->dumpCharsNoNewline();
         break;
 
       default:
@@ -653,6 +621,18 @@ UnaryNode::dump(int indent)
 
 void
 BinaryNode::dump(int indent)
+{
+    const char *name = parseNodeNames[getKind()];
+    fprintf(stderr, "(%s ", name);
+    indent += strlen(name) + 2;
+    DumpParseTree(pn_left, indent);
+    IndentNewLine(indent);
+    DumpParseTree(pn_right, indent);
+    fprintf(stderr, ")");
+}
+
+void
+BinaryObjNode::dump(int indent)
 {
     const char *name = parseNodeNames[getKind()];
     fprintf(stderr, "(%s ", name);
@@ -705,6 +685,24 @@ ListNode::dump(int indent)
     fprintf(stderr, "])");
 }
 
+template <typename CharT>
+static void
+DumpName(const CharT *s, size_t len)
+{
+    if (len == 0)
+        fprintf(stderr, "#<zero-length name>");
+
+    for (size_t i = 0; i < len; i++) {
+        jschar c = s[i];
+        if (c > 32 && c < 127)
+            fputc(c, stderr);
+        else if (c <= 255)
+            fprintf(stderr, "\\x%02x", unsigned(c));
+        else
+            fprintf(stderr, "\\u%04x", unsigned(c));
+    }
+}
+
 void
 NameNode::dump(int indent)
 {
@@ -715,18 +713,11 @@ NameNode::dump(int indent)
         if (!pn_atom) {
             fprintf(stderr, "#<null name>");
         } else {
-            const jschar *s = pn_atom->chars();
-            size_t len = pn_atom->length();
-            if (len == 0)
-                fprintf(stderr, "#<zero-length name>");
-            for (size_t i = 0; i < len; i++) {
-                if (s[i] > 32 && s[i] < 127)
-                    fputc(s[i], stderr);
-                else if (s[i] <= 255)
-                    fprintf(stderr, "\\x%02x", (unsigned int) s[i]);
-                else
-                    fprintf(stderr, "\\u%04x", (unsigned int) s[i]);
-            }
+            JS::AutoCheckCannotGC nogc;
+            if (pn_atom->hasLatin1Chars())
+                DumpName(pn_atom->latin1Chars(nogc), pn_atom->length());
+            else
+                DumpName(pn_atom->twoByteChars(nogc), pn_atom->length());
         }
 
         if (isKind(PNK_DOT)) {
@@ -767,26 +758,11 @@ ObjectBox::ObjectBox(JSFunction *function, ObjectBox* traceLink)
     JS_ASSERT(asFunctionBox()->function() == function);
 }
 
-ModuleBox *
-ObjectBox::asModuleBox()
-{
-    JS_ASSERT(isModuleBox());
-    return static_cast<ModuleBox *>(this);
-}
-
 FunctionBox *
 ObjectBox::asFunctionBox()
 {
     JS_ASSERT(isFunctionBox());
     return static_cast<FunctionBox *>(this);
-}
-
-ObjectBox::ObjectBox(Module *module, ObjectBox* traceLink)
-  : object(module),
-    traceLink(traceLink),
-    emitLink(nullptr)
-{
-    JS_ASSERT(object->is<Module>());
 }
 
 void
@@ -795,8 +771,6 @@ ObjectBox::trace(JSTracer *trc)
     ObjectBox *box = this;
     while (box) {
         MarkObjectRoot(trc, &box->object, "parser.object");
-        if (box->isModuleBox())
-            box->asModuleBox()->bindings.trace(trc);
         if (box->isFunctionBox())
             box->asFunctionBox()->bindings.trace(trc);
         box = box->traceLink;

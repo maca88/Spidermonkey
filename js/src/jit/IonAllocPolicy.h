@@ -8,6 +8,7 @@
 #define jit_IonAllocPolicy_h
 
 #include "mozilla/GuardObjects.h"
+#include "mozilla/TypeTraits.h"
 
 #include "jscntxt.h"
 
@@ -26,21 +27,30 @@ class TempAllocator
     CompilerRootNode *rootList_;
 
   public:
-    TempAllocator(LifoAlloc *lifoAlloc)
+    explicit TempAllocator(LifoAlloc *lifoAlloc)
       : lifoScope_(lifoAlloc),
         rootList_(nullptr)
     { }
 
     void *allocateInfallible(size_t bytes)
     {
-        void *p = lifoScope_.alloc().allocInfallible(bytes);
-        JS_ASSERT(p);
-        return p;
+        return lifoScope_.alloc().allocInfallible(bytes);
     }
 
     void *allocate(size_t bytes)
     {
         void *p = lifoScope_.alloc().alloc(bytes);
+        if (!ensureBallast())
+            return nullptr;
+        return p;
+    }
+
+    template <size_t ElemSize>
+    void *allocateArray(size_t n)
+    {
+        if (n & mozilla::tl::MulOverflowMask<ElemSize>::value)
+            return nullptr;
+        void *p = lifoScope_.alloc().alloc(n * ElemSize);
         if (!ensureBallast())
             return nullptr;
         return p;
@@ -64,17 +74,17 @@ class TempAllocator
 };
 
 // Stack allocated rooter for all roots associated with a TempAllocator
-class AutoTempAllocatorRooter : private AutoGCRooter
+class AutoTempAllocatorRooter : private JS::AutoGCRooter
 {
   public:
     explicit AutoTempAllocatorRooter(JSContext *cx, TempAllocator *temp
                                      MOZ_GUARD_OBJECT_NOTIFIER_PARAM)
-      : AutoGCRooter(cx, IONALLOC), temp(temp)
+      : JS::AutoGCRooter(cx, IONALLOC), temp(temp)
     {
         MOZ_GUARD_OBJECT_NOTIFIER_INIT;
     }
 
-    friend void AutoGCRooter::trace(JSTracer *trc);
+    friend void JS::AutoGCRooter::trace(JSTracer *trc);
     void trace(JSTracer *trc);
 
   private:
@@ -84,7 +94,41 @@ class AutoTempAllocatorRooter : private AutoGCRooter
 
 class IonAllocPolicy
 {
+    TempAllocator &alloc_;
+
   public:
+    MOZ_IMPLICIT IonAllocPolicy(TempAllocator &alloc)
+      : alloc_(alloc)
+    {}
+    void *malloc_(size_t bytes) {
+        return alloc_.allocate(bytes);
+    }
+    void *calloc_(size_t bytes) {
+        void *p = alloc_.allocate(bytes);
+        if (p)
+            memset(p, 0, bytes);
+        return p;
+    }
+    void *realloc_(void *p, size_t oldBytes, size_t bytes) {
+        void *n = malloc_(bytes);
+        if (!n)
+            return n;
+        memcpy(n, p, Min(oldBytes, bytes));
+        return n;
+    }
+    void free_(void *p) {
+    }
+    void reportAllocOverflow() const {
+    }
+};
+
+// Deprecated. Don't use this. Will be removed after everything has been
+// converted to IonAllocPolicy.
+class OldIonAllocPolicy
+{
+  public:
+    OldIonAllocPolicy()
+    {}
     void *malloc_(size_t bytes) {
         return GetIonContext()->temp->allocate(bytes);
     }
@@ -130,12 +174,13 @@ class AutoIonContextAlloc
 
 struct TempObject
 {
-    inline void *operator new(size_t nbytes) {
-        return GetIonContext()->temp->allocateInfallible(nbytes);
+    inline void *operator new(size_t nbytes, TempAllocator &alloc) {
+        return alloc.allocateInfallible(nbytes);
     }
-
-  public:
-    inline void *operator new(size_t nbytes, void *pos) {
+    template <class T>
+    inline void *operator new(size_t nbytes, T *pos) {
+        static_assert(mozilla::IsConvertible<T*, TempObject*>::value,
+                      "Placement new argument type must inherit from TempObject");
         return pos;
     }
 };
@@ -143,12 +188,21 @@ struct TempObject
 template <typename T>
 class TempObjectPool
 {
+    TempAllocator *alloc_;
     InlineForwardList<T> freed_;
 
   public:
+    TempObjectPool()
+      : alloc_(nullptr)
+    {}
+    void setAllocator(TempAllocator &alloc) {
+        JS_ASSERT(freed_.empty());
+        alloc_ = &alloc;
+    }
     T *allocate() {
+        JS_ASSERT(alloc_);
         if (freed_.empty())
-            return new T();
+            return new(*alloc_) T();
         return freed_.popFront();
     }
     void free(T *obj) {

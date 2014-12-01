@@ -83,7 +83,7 @@ int RunGTestFunc()
 
   PR_SetEnv("XPCOM_DEBUG_BREAK=stack-and-abort");
 
-  ScopedXPCOM xpcom("AsyncPanZoomController");
+  ScopedXPCOM xpcom("GTest");
 
 #ifdef MOZ_CRASHREPORTER
   nsCOMPtr<nsICrashReporter> crashreporter;
@@ -101,7 +101,7 @@ int RunGTestFunc()
       nsresult rv = dirsvc->Get(NS_OS_CURRENT_WORKING_DIR,
                        NS_GET_IID(nsIFile),
                        getter_AddRefs(cwd));
-      MOZ_ASSERT(NS_SUCCEEDED(rv));
+      MOZ_RELEASE_ASSERT(NS_SUCCEEDED(rv));
       crashreporter->SetEnabled(true);
       crashreporter->SetMinidumpPath(cwd);
     }
@@ -112,7 +112,7 @@ int RunGTestFunc()
 }
 
 // We use a static var 'RunGTest' defined in nsAppRunner.cpp.
-// RunGTest is initialized to NULL but if GTest (this file)
+// RunGTest is initialized to nullptr but if GTest (this file)
 // is linked in then RunGTest will be set here indicating
 // GTest is supported.
 class _InitRunGTest {

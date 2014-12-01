@@ -26,6 +26,9 @@ class LinearScanVirtualRegister : public VirtualRegister
     bool finished_ : 1;
 
   public:
+    explicit LinearScanVirtualRegister(TempAllocator &alloc)
+      : VirtualRegister(alloc)
+    {}
     void setCanonicalSpill(LAllocation *alloc) {
         canonicalSpill_ = alloc;
     }
@@ -56,7 +59,8 @@ class LinearScanVirtualRegister : public VirtualRegister
     }
 };
 
-class LinearScanAllocator : public LiveRangeAllocator<LinearScanVirtualRegister>
+class LinearScanAllocator
+  : private LiveRangeAllocator<LinearScanVirtualRegister, /* forLSRA = */ true>
 {
     friend class C1Spewer;
     friend class JSONSpewer;
@@ -99,7 +103,7 @@ class LinearScanAllocator : public LiveRangeAllocator<LinearScanVirtualRegister>
 
     uint32_t allocateSlotFor(const LiveInterval *interval);
     bool splitInterval(LiveInterval *interval, CodePosition pos);
-    bool splitBlockingIntervals(LAllocation allocation);
+    bool splitBlockingIntervals(AnyRegister allocatedReg);
     bool assign(LAllocation allocation);
     bool spill();
     void freeAllocation(LiveInterval *interval, LAllocation *alloc);
@@ -107,7 +111,7 @@ class LinearScanAllocator : public LiveRangeAllocator<LinearScanVirtualRegister>
     AnyRegister::Code findBestFreeRegister(CodePosition *freeUntil);
     AnyRegister::Code findBestBlockedRegister(CodePosition *nextUsed);
     bool canCoexist(LiveInterval *a, LiveInterval *b);
-    bool moveInputAlloc(CodePosition pos, LAllocation *from, LAllocation *to);
+    bool moveInputAlloc(CodePosition pos, LAllocation *from, LAllocation *to, LDefinition::Type type);
     void setIntervalRequirement(LiveInterval *interval);
     bool isSpilledAt(LiveInterval *interval, CodePosition pos);
 
@@ -121,7 +125,7 @@ class LinearScanAllocator : public LiveRangeAllocator<LinearScanVirtualRegister>
 
   public:
     LinearScanAllocator(MIRGenerator *mir, LIRGenerator *lir, LIRGraph &graph)
-      : LiveRangeAllocator<LinearScanVirtualRegister>(mir, lir, graph, /* forLSRA = */ true)
+      : LiveRangeAllocator<LinearScanVirtualRegister, /* forLSRA = */ true>(mir, lir, graph)
     {
     }
 

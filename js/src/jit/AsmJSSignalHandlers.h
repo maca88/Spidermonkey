@@ -11,7 +11,7 @@ struct JSRuntime;
 
 #ifdef XP_MACOSX
 # include <mach/mach.h>
-# include <pthread.h>
+# include "jslock.h"
 #endif
 
 namespace js {
@@ -22,9 +22,9 @@ bool
 EnsureAsmJSSignalHandlersInstalled(JSRuntime *rt);
 
 // Force any currently-executing asm.js code to call
-// js_HandleExecutionInterrupt.
+// js::HandleExecutionInterrupt.
 extern void
-TriggerOperationCallbackForAsmJSCode(JSRuntime *rt);
+RequestInterruptForAsmJSCode(JSRuntime *rt, int interruptMode);
 
 // On OSX we are forced to use the lower-level Mach exception mechanism instead
 // of Unix signals. Mach exceptions are not handled on the victim's stack but
@@ -36,7 +36,7 @@ TriggerOperationCallbackForAsmJSCode(JSRuntime *rt);
 class AsmJSMachExceptionHandler
 {
     bool installed_;
-    pthread_t thread_;
+    PRThread *thread_;
     mach_port_t port_;
 
     void uninstall();

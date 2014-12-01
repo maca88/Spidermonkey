@@ -73,13 +73,13 @@ XPC_MSG_DEF(NS_ERROR_ALREADY_INITIALIZED           , "Component already initiali
 XPC_MSG_DEF(NS_ERROR_NOT_IMPLEMENTED               , "Method not implemented")
 XPC_MSG_DEF(NS_NOINTERFACE                         , "Component does not have requested interface")
 XPC_MSG_DEF(NS_ERROR_NO_INTERFACE                  , "Component does not have requested interface")
+XPC_MSG_DEF(NS_ERROR_ILLEGAL_VALUE                 , "Illegal value")
 XPC_MSG_DEF(NS_ERROR_INVALID_POINTER               , "Invalid pointer")
 XPC_MSG_DEF(NS_ERROR_NULL_POINTER                  , "Null pointer")
 XPC_MSG_DEF(NS_ERROR_ABORT                         , "Abort")
 XPC_MSG_DEF(NS_ERROR_FAILURE                       , "Failure")
 XPC_MSG_DEF(NS_ERROR_UNEXPECTED                    , "Unexpected error")
 XPC_MSG_DEF(NS_ERROR_OUT_OF_MEMORY                 , "Out of Memory")
-XPC_MSG_DEF(NS_ERROR_ILLEGAL_VALUE                 , "Illegal value")
 XPC_MSG_DEF(NS_ERROR_INVALID_ARG                   , "Invalid argument")
 XPC_MSG_DEF(NS_ERROR_NO_AGGREGATION                , "Component does not support aggregation")
 XPC_MSG_DEF(NS_ERROR_NOT_AVAILABLE                 , "Component is not available")
@@ -150,6 +150,7 @@ XPC_MSG_DEF(NS_ERROR_OFFLINE                        , "The requested action coul
 XPC_MSG_DEF(NS_ERROR_PORT_ACCESS_NOT_ALLOWED        , "Establishing a connection to an unsafe or otherwise banned port was prohibited")
 XPC_MSG_DEF(NS_ERROR_NET_RESET                      , "The connection was established, but no data was ever received")
 XPC_MSG_DEF(NS_ERROR_NET_INTERRUPT                  , "The connection was established, but the data transfer was interrupted")
+XPC_MSG_DEF(NS_ERROR_NET_PARTIAL_TRANSFER           , "A transfer was only partially done when it completed")
 XPC_MSG_DEF(NS_ERROR_NOT_RESUMABLE                  , "This request is not resumable, but it was tried to resume it, or to request resume-specific data")
 XPC_MSG_DEF(NS_ERROR_ENTITY_CHANGED                 , "It was attempted to resume the request, but the entity has changed in the meantime")
 XPC_MSG_DEF(NS_ERROR_REDIRECT_LOOP                  , "The request failed as a result of a detected redirection loop")
@@ -210,8 +211,6 @@ XPC_MSG_DEF(NS_ERROR_GFX_PRINTER_STARTDOC             , "Printing failed while s
 XPC_MSG_DEF(NS_ERROR_GFX_PRINTER_ENDDOC               , "Printing failed while completing the print job.")
 XPC_MSG_DEF(NS_ERROR_GFX_PRINTER_STARTPAGE            , "Printing failed while starting a new page.")
 XPC_MSG_DEF(NS_ERROR_GFX_PRINTER_DOC_IS_BUSY          , "Cannot print this document yet, it is still being loaded.")
-XPC_MSG_DEF(NS_ERROR_GFX_PRINTER_NO_XUL               , "Printing XUL documents is not supported.") // bugs 136185 & 240490
 
 /* Codes related to content */
 XPC_MSG_DEF(NS_ERROR_CONTENT_CRASHED                  , "The process that hosted this content has crashed.")
-

@@ -67,6 +67,9 @@ class LUnbox : public LInstructionHelper<1, 2, 0>
     const LAllocation *type() {
         return getOperand(1);
     }
+    const char *extraName() const {
+        return StringFromMIRType(mir()->type());
+    }
 };
 
 class LUnboxFloatingPoint : public LInstructionHelper<1, 2, 0>
@@ -136,25 +139,27 @@ class LDivI : public LBinaryMath<1>
 // LSoftDivI is a software divide for ARM cores that don't support a hardware
 // divide instruction.
 //
-// It is implemented as a proper C function so it trashes r0, r1, r2 and r3.  The
-// call also trashes lr, and has the ability to trash ip. The function also
+// It is implemented as a proper C function so it trashes r0, r1, r2 and r3.
+// The call also trashes lr, and has the ability to trash ip. The function also
 // takes two arguments (dividend in r0, divisor in r1). The LInstruction gets
 // encoded such that the divisor and dividend are passed in their apropriate
-// registers, and are marked as copy so we can modify them (and the function
-// will).  The other thre registers that can be trashed are marked as such. For
-// the time being, the link register is not marked as trashed because we never
-// allocate to the link register.
-class LSoftDivI : public LBinaryMath<2>
+// registers and end their life at the start of the instruction by the use of
+// useFixedAtStart. The result is returned in r0 and the other three registers
+// that can be trashed are marked as temps. For the time being, the link
+// register is not marked as trashed because we never allocate to the link
+// register. The FP registers are not trashed.
+class LSoftDivI : public LBinaryMath<3>
 {
   public:
     LIR_HEADER(SoftDivI);
 
     LSoftDivI(const LAllocation &lhs, const LAllocation &rhs,
-              const LDefinition &temp1, const LDefinition &temp2) {
+              const LDefinition &temp1, const LDefinition &temp2, const LDefinition &temp3) {
         setOperand(0, lhs);
         setOperand(1, rhs);
         setTemp(0, temp1);
         setTemp(1, temp2);
+        setTemp(2, temp3);
     }
 
     MDiv *mir() const {
@@ -201,25 +206,34 @@ class LModI : public LBinaryMath<1>
         setTemp(0, callTemp);
     }
 
+    const LDefinition *callTemp() {
+        return getTemp(0);
+    }
+
     MMod *mir() const {
         return mir_->toMod();
     }
 };
 
-class LSoftModI : public LBinaryMath<3>
+class LSoftModI : public LBinaryMath<4>
 {
   public:
     LIR_HEADER(SoftModI);
 
     LSoftModI(const LAllocation &lhs, const LAllocation &rhs,
-              const LDefinition &temp1, const LDefinition &temp2,
+              const LDefinition &temp1, const LDefinition &temp2, const LDefinition &temp3,
               const LDefinition &callTemp)
     {
         setOperand(0, lhs);
         setOperand(1, rhs);
         setTemp(0, temp1);
         setTemp(1, temp2);
-        setTemp(2, callTemp);
+        setTemp(2, temp3);
+        setTemp(3, callTemp);
+    }
+
+    const LDefinition *callTemp() {
+        return getTemp(3);
     }
 
     MMod *mir() const {
@@ -249,18 +263,20 @@ class LModPowTwoI : public LInstructionHelper<1, 1, 0>
     }
 };
 
-class LModMaskI : public LInstructionHelper<1, 1, 1>
+class LModMaskI : public LInstructionHelper<1, 1, 2>
 {
     const int32_t shift_;
 
   public:
     LIR_HEADER(ModMaskI);
 
-    LModMaskI(const LAllocation &lhs, const LDefinition &temp1, int32_t shift)
+    LModMaskI(const LAllocation &lhs, const LDefinition &temp1, const LDefinition &temp2,
+              int32_t shift)
       : shift_(shift)
     {
         setOperand(0, lhs);
         setTemp(0, temp1);
+        setTemp(1, temp2);
     }
 
     int32_t shift() const {
@@ -288,7 +304,7 @@ class LPowHalfD : public LInstructionHelper<1, 1, 0>
     }
 };
 
-// Takes a tableswitch with an integer to decide
+// Takes a tableswitch with an integer to decide.
 class LTableSwitch : public LInstructionHelper<0, 1, 1>
 {
   public:
@@ -316,7 +332,7 @@ class LTableSwitch : public LInstructionHelper<0, 1, 1>
     }
 };
 
-// Takes a tableswitch with an integer to decide
+// Takes a tableswitch with an integer to decide.
 class LTableSwitchV : public LInstructionHelper<0, BOX_PIECES, 2>
 {
   public:
@@ -381,12 +397,6 @@ class LGuardObjectType : public LInstructionHelper<0, 1, 1>
     }
 };
 
-class LInterruptCheck : public LInstructionHelper<0, 0, 0>
-{
-  public:
-    LIR_HEADER(InterruptCheck);
-};
-
 class LMulI : public LBinaryMath<0>
 {
   public:
@@ -401,30 +411,34 @@ class LUDiv : public LBinaryMath<0>
 {
   public:
     LIR_HEADER(UDiv);
+
+    MDiv *mir() {
+        return mir_->toDiv();
+    }
 };
 
 class LUMod : public LBinaryMath<0>
 {
   public:
     LIR_HEADER(UMod);
+
+    MMod *mir() {
+        return mir_->toMod();
+    }
 };
 
-// This class performs a simple x86 'div', yielding either a quotient or remainder depending on
-// whether this instruction is defined to output eax (quotient) or edx (remainder).
-class LSoftUDivOrMod : public LBinaryMath<2>
+class LSoftUDivOrMod : public LBinaryMath<3>
 {
   public:
     LIR_HEADER(SoftUDivOrMod);
 
-    LSoftUDivOrMod(const LAllocation &lhs, const LAllocation &rhs, const LDefinition &temp1, const LDefinition &temp2) {
+    LSoftUDivOrMod(const LAllocation &lhs, const LAllocation &rhs, const LDefinition &temp1,
+                   const LDefinition &temp2, const LDefinition &temp3) {
         setOperand(0, lhs);
         setOperand(1, rhs);
         setTemp(0, temp1);
         setTemp(1, temp2);
-    }
-    // this is incorrect, it is returned in r1, getTemp(0) is r2.
-    const LDefinition *remainder() {
-        return getTemp(0);
+        setTemp(2, temp3);
     }
 };
 

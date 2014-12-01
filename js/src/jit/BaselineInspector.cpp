@@ -226,8 +226,26 @@ BaselineInspector::expectedCompareType(jsbytecode *pc)
     if (!first && !dimorphicStub(pc, &first, &second))
         return MCompare::Compare_Unknown;
 
-    if (CanUseInt32Compare(first->kind()) && (!second || CanUseInt32Compare(second->kind())))
+    if (ICStub *fallback = second ? second->next() : first->next()) {
+        JS_ASSERT(fallback->isFallback());
+        if (fallback->toCompare_Fallback()->hadUnoptimizableAccess())
+            return MCompare::Compare_Unknown;
+    }
+
+    if (CanUseInt32Compare(first->kind()) && (!second || CanUseInt32Compare(second->kind()))) {
+        ICCompare_Int32WithBoolean *coerce =
+            first->isCompare_Int32WithBoolean()
+            ? first->toCompare_Int32WithBoolean()
+            : ((second && second->isCompare_Int32WithBoolean())
+               ? second->toCompare_Int32WithBoolean()
+               : nullptr);
+        if (coerce) {
+            return coerce->lhsIsInt32()
+                   ? MCompare::Compare_Int32MaybeCoerceRHS
+                   : MCompare::Compare_Int32MaybeCoerceLHS;
+        }
         return MCompare::Compare_Int32;
+    }
 
     if (CanUseDoubleCompare(first->kind()) && (!second || CanUseDoubleCompare(second->kind()))) {
         ICCompare_NumberWithUndefined *coerce =
@@ -292,6 +310,9 @@ TryToSpecializeBinaryArithOp(ICStub **stubs,
 MIRType
 BaselineInspector::expectedBinaryArithSpecialization(jsbytecode *pc)
 {
+    if (!hasBaselineScript())
+        return MIRType_None;
+
     MIRType result;
     ICStub *stubs[2];
 
@@ -405,6 +426,8 @@ BaselineInspector::getTemplateObject(jsbytecode *pc)
             return stub->toNewArray_Fallback()->templateObject();
           case ICStub::NewObject_Fallback:
             return stub->toNewObject_Fallback()->templateObject();
+          case ICStub::Rest_Fallback:
+            return stub->toRest_Fallback()->templateObject();
           case ICStub::Call_Scripted:
             if (JSObject *obj = stub->toCall_Scripted()->templateObject())
                 return obj;
@@ -435,6 +458,9 @@ BaselineInspector::getTemplateObjectForNative(jsbytecode *pc, Native native)
 DeclEnvObject *
 BaselineInspector::templateDeclEnvObject()
 {
+    if (!hasBaselineScript())
+        return nullptr;
+
     JSObject *res = &templateCallObject()->as<ScopeObject>().enclosingScope();
     JS_ASSERT(res);
 
@@ -444,8 +470,50 @@ BaselineInspector::templateDeclEnvObject()
 CallObject *
 BaselineInspector::templateCallObject()
 {
+    if (!hasBaselineScript())
+        return nullptr;
+
     JSObject *res = baselineScript()->templateScope();
     JS_ASSERT(res);
 
     return &res->as<CallObject>();
+}
+
+JSObject *
+BaselineInspector::commonGetPropFunction(jsbytecode *pc, Shape **lastProperty, JSFunction **commonGetter)
+{
+    if (!hasBaselineScript())
+        return nullptr;
+
+    const ICEntry &entry = icEntryFromPC(pc);
+    for (ICStub *stub = entry.firstStub(); stub; stub = stub->next()) {
+        if (stub->isGetProp_CallScripted()  ||
+            stub->isGetProp_CallNative()    ||
+            stub->isGetProp_CallNativePrototype())
+        {
+            ICGetPropCallGetter *nstub = static_cast<ICGetPropCallGetter *>(stub);
+            *lastProperty = nstub->holderShape();
+            *commonGetter = nstub->getter();
+            return nstub->holder();
+        }
+    }
+    return nullptr;
+}
+
+JSObject *
+BaselineInspector::commonSetPropFunction(jsbytecode *pc, Shape **lastProperty, JSFunction **commonSetter)
+{
+    if (!hasBaselineScript())
+        return nullptr;
+
+    const ICEntry &entry = icEntryFromPC(pc);
+    for (ICStub *stub = entry.firstStub(); stub; stub = stub->next()) {
+        if (stub->isSetProp_CallScripted() || stub->isSetProp_CallNative()) {
+            ICSetPropCallSetter *nstub = static_cast<ICSetPropCallSetter *>(stub);
+            *lastProperty = nstub->holderShape();
+            *commonSetter = nstub->setter();
+            return nstub->holder();
+        }
+    }
+    return nullptr;
 }

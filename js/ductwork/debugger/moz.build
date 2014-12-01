@@ -8,7 +8,7 @@ XPIDL_SOURCES += [
     'IJSDebugger.idl',
 ]
 
-MODULE = 'jsdebugger'
+XPIDL_MODULE = 'jsdebugger'
 
 XPCSHELL_TESTS_MANIFESTS += ['tests/xpcshell.ini']
 
@@ -16,13 +16,10 @@ SOURCES += [
     'JSDebugger.cpp',
 ]
 
-LIBRARY_NAME = 'jsdebugger'
-
 EXTRA_JS_MODULES += [
     'jsdebugger.jsm',
 ]
 
-LIBXUL_LIBRARY = True
+FINAL_LIBRARY = 'xul'
 
-EXPORT_LIBRARY = True
-
+FAIL_ON_WARNINGS = True

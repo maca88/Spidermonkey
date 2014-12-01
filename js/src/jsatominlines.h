@@ -49,6 +49,11 @@ ValueToIdPure(const Value &v, jsid *id)
         return true;
     }
 
+    if (v.isSymbol()) {
+        *id = SYMBOL_TO_JSID(v.toSymbol());
+        return true;
+    }
+
     if (!v.isString() || !v.toString()->isAtom())
         return false;
 
@@ -64,6 +69,11 @@ ValueToId(JSContext* cx, typename MaybeRooted<Value, allowGC>::HandleType v,
     int32_t i;
     if (ValueFitsInInt32(v, &i) && INT_FITS_IN_JSID(i)) {
         idp.set(INT_TO_JSID(i));
+        return true;
+    }
+
+    if (v.isSymbol()) {
+        idp.set(SYMBOL_TO_JSID(v.toSymbol()));
         return true;
     }
 
@@ -104,51 +114,27 @@ BackfillIndexInCharBuffer(uint32_t index, mozilla::RangedPtr<T> end)
     return end;
 }
 
-template <AllowGC allowGC>
 bool
-IndexToIdSlow(ExclusiveContext *cx, uint32_t index,
-              typename MaybeRooted<jsid, allowGC>::MutableHandleType idp);
+IndexToIdSlow(ExclusiveContext *cx, uint32_t index, MutableHandleId idp);
 
 inline bool
 IndexToId(ExclusiveContext *cx, uint32_t index, MutableHandleId idp)
 {
-    MaybeCheckStackRoots(cx);
-
     if (index <= JSID_INT_MAX) {
         idp.set(INT_TO_JSID(index));
         return true;
     }
 
-    return IndexToIdSlow<CanGC>(cx, index, idp);
+    return IndexToIdSlow(cx, index, idp);
 }
 
-inline bool
-IndexToIdPure(uint32_t index, jsid *idp)
-{
-    if (index <= JSID_INT_MAX) {
-        *idp = INT_TO_JSID(index);
-        return true;
-    }
-
-    return false;
-}
-
-inline bool
-IndexToIdNoGC(JSContext *cx, uint32_t index, jsid *idp)
-{
-    if (IndexToIdPure(index, idp))
-        return true;
-
-    return IndexToIdSlow<NoGC>(cx, index, idp);
-}
-
-static JS_ALWAYS_INLINE JSFlatString *
+static MOZ_ALWAYS_INLINE JSFlatString *
 IdToString(JSContext *cx, jsid id)
 {
     if (JSID_IS_STRING(id))
         return JSID_TO_ATOM(id);
 
-    if (JS_LIKELY(JSID_IS_INT(id)))
+    if (MOZ_LIKELY(JSID_IS_INT(id)))
         return Int32ToString<CanGC>(cx, JSID_TO_INT(id));
 
     RootedValue idv(cx, IdToValue(id));
@@ -161,8 +147,16 @@ IdToString(JSContext *cx, jsid id)
 
 inline
 AtomHasher::Lookup::Lookup(const JSAtom *atom)
-  : chars(atom->chars()), length(atom->length()), atom(atom)
-{}
+  : isLatin1(atom->hasLatin1Chars()), length(atom->length()), atom(atom)
+{
+    if (isLatin1) {
+        latin1Chars = atom->latin1Chars(nogc);
+        hash = mozilla::HashString(latin1Chars, length);
+    } else {
+        twoByteChars = atom->twoByteChars(nogc);
+        hash = mozilla::HashString(twoByteChars, length);
+    }
+}
 
 inline bool
 AtomHasher::match(const AtomStateEntry &entry, const Lookup &lookup)
@@ -172,18 +166,29 @@ AtomHasher::match(const AtomStateEntry &entry, const Lookup &lookup)
         return lookup.atom == key;
     if (key->length() != lookup.length)
         return false;
-    return mozilla::PodEqual(key->chars(), lookup.chars, lookup.length);
+
+    if (key->hasLatin1Chars()) {
+        const Latin1Char *keyChars = key->latin1Chars(lookup.nogc);
+        if (lookup.isLatin1)
+            return mozilla::PodEqual(keyChars, lookup.latin1Chars, lookup.length);
+        return EqualChars(keyChars, lookup.twoByteChars, lookup.length);
+    }
+
+    const jschar *keyChars = key->twoByteChars(lookup.nogc);
+    if (lookup.isLatin1)
+        return EqualChars(lookup.latin1Chars, keyChars, lookup.length);
+    return mozilla::PodEqual(keyChars, lookup.twoByteChars, lookup.length);
 }
 
 inline Handle<PropertyName*>
-TypeName(JSType type, JSRuntime *rt)
+TypeName(JSType type, const JSAtomState &names)
 {
     JS_ASSERT(type < JSTYPE_LIMIT);
     JS_STATIC_ASSERT(offsetof(JSAtomState, undefined) +
-                     JSTYPE_LIMIT * sizeof(FixedHeapPtr<PropertyName>) <=
+                     JSTYPE_LIMIT * sizeof(ImmutablePropertyNamePtr) <=
                      sizeof(JSAtomState));
     JS_STATIC_ASSERT(JSTYPE_VOID == 0);
-    return (&rt->atomState.undefined)[type];
+    return (&names.undefined)[type];
 }
 
 inline Handle<PropertyName*>
@@ -191,7 +196,7 @@ ClassName(JSProtoKey key, JSAtomState &atomState)
 {
     JS_ASSERT(key < JSProto_LIMIT);
     JS_STATIC_ASSERT(offsetof(JSAtomState, Null) +
-                     JSProto_LIMIT * sizeof(FixedHeapPtr<PropertyName>) <=
+                     JSProto_LIMIT * sizeof(ImmutablePropertyNamePtr) <=
                      sizeof(JSAtomState));
     JS_STATIC_ASSERT(JSProto_Null == 0);
     return (&atomState.Null)[key];
@@ -200,7 +205,7 @@ ClassName(JSProtoKey key, JSAtomState &atomState)
 inline Handle<PropertyName*>
 ClassName(JSProtoKey key, JSRuntime *rt)
 {
-    return ClassName(key, rt->atomState);
+    return ClassName(key, *rt->commonNames);
 }
 
 inline Handle<PropertyName*>

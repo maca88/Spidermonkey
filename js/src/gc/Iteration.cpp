@@ -11,6 +11,7 @@
 #include "js/HashTable.h"
 #include "vm/Runtime.h"
 
+#include "jscntxtinlines.h"
 #include "jsgcinlines.h"
 
 using namespace js;
@@ -21,8 +22,10 @@ js::TraceRuntime(JSTracer *trc)
 {
     JS_ASSERT(!IS_GC_MARKING_TRACER(trc));
 
-    AutoPrepareForTracing prep(trc->runtime);
-    MarkRuntime(trc);
+    JSRuntime *rt = trc->runtime();
+    MinorGC(rt, JS::gcreason::EVICT_NURSERY);
+    AutoPrepareForTracing prep(rt, WithAtoms);
+    rt->gc.markRuntime(trc);
 }
 
 static void
@@ -41,7 +44,7 @@ IterateCompartmentsArenasCells(JSRuntime *rt, Zone *zone, void *data,
         for (ArenaIter aiter(zone, AllocKind(thingKind)); !aiter.done(); aiter.next()) {
             ArenaHeader *aheader = aiter.get();
             (*arenaCallback)(rt, data, aheader->getArena(), traceKind, thingSize);
-            for (CellIterUnderGC iter(aheader); !iter.done(); iter.next())
+            for (ArenaCellIterUnderGC iter(aheader); !iter.done(); iter.next())
                 (*cellCallback)(rt, data, iter.getCell(), traceKind, thingSize);
         }
     }
@@ -54,9 +57,9 @@ js::IterateZonesCompartmentsArenasCells(JSRuntime *rt, void *data,
                                         IterateArenaCallback arenaCallback,
                                         IterateCellCallback cellCallback)
 {
-    AutoPrepareForTracing prop(rt);
+    AutoPrepareForTracing prop(rt, WithAtoms);
 
-    for (ZonesIter zone(rt); !zone.done(); zone.next()) {
+    for (ZonesIter zone(rt, WithAtoms); !zone.done(); zone.next()) {
         (*zoneCallback)(rt, data, zone);
         IterateCompartmentsArenasCells(rt, zone, data,
                                        compartmentCallback, arenaCallback, cellCallback);
@@ -70,7 +73,7 @@ js::IterateZoneCompartmentsArenasCells(JSRuntime *rt, Zone *zone, void *data,
                                        IterateArenaCallback arenaCallback,
                                        IterateCellCallback cellCallback)
 {
-    AutoPrepareForTracing prop(rt);
+    AutoPrepareForTracing prop(rt, WithAtoms);
 
     (*zoneCallback)(rt, data, zone);
     IterateCompartmentsArenasCells(rt, zone, data,
@@ -80,9 +83,9 @@ js::IterateZoneCompartmentsArenasCells(JSRuntime *rt, Zone *zone, void *data,
 void
 js::IterateChunks(JSRuntime *rt, void *data, IterateChunkCallback chunkCallback)
 {
-    AutoPrepareForTracing prep(rt);
+    AutoPrepareForTracing prep(rt, SkipAtoms);
 
-    for (js::GCChunkSet::Range r = rt->gcChunkSet.all(); !r.empty(); r.popFront())
+    for (js::GCChunkSet::Range r = rt->gc.allChunks(); !r.empty(); r.popFront())
         chunkCallback(rt, data, r.front());
 }
 
@@ -90,17 +93,18 @@ void
 js::IterateScripts(JSRuntime *rt, JSCompartment *compartment,
                    void *data, IterateScriptCallback scriptCallback)
 {
-    AutoPrepareForTracing prep(rt);
+    MinorGC(rt, JS::gcreason::EVICT_NURSERY);
+    AutoPrepareForTracing prep(rt, SkipAtoms);
 
     if (compartment) {
-        for (CellIterUnderGC i(compartment->zone(), gc::FINALIZE_SCRIPT); !i.done(); i.next()) {
+        for (ZoneCellIterUnderGC i(compartment->zone(), gc::FINALIZE_SCRIPT); !i.done(); i.next()) {
             JSScript *script = i.get<JSScript>();
             if (script->compartment() == compartment)
                 scriptCallback(rt, data, script);
         }
     } else {
-        for (ZonesIter zone(rt); !zone.done(); zone.next()) {
-            for (CellIterUnderGC i(zone, gc::FINALIZE_SCRIPT); !i.done(); i.next())
+        for (ZonesIter zone(rt, SkipAtoms); !zone.done(); zone.next()) {
+            for (ZoneCellIterUnderGC i(zone, gc::FINALIZE_SCRIPT); !i.done(); i.next())
                 scriptCallback(rt, data, i.get<JSScript>());
         }
     }
@@ -109,10 +113,11 @@ js::IterateScripts(JSRuntime *rt, JSCompartment *compartment,
 void
 js::IterateGrayObjects(Zone *zone, GCThingCallback cellCallback, void *data)
 {
-    AutoPrepareForTracing prep(zone->runtimeFromMainThread());
+    MinorGC(zone->runtimeFromMainThread(), JS::gcreason::EVICT_NURSERY);
+    AutoPrepareForTracing prep(zone->runtimeFromMainThread(), SkipAtoms);
 
     for (size_t finalizeKind = 0; finalizeKind <= FINALIZE_OBJECT_LAST; finalizeKind++) {
-        for (CellIterUnderGC i(zone, AllocKind(finalizeKind)); !i.done(); i.next()) {
+        for (ZoneCellIterUnderGC i(zone, AllocKind(finalizeKind)); !i.done(); i.next()) {
             JSObject *obj = i.get<JSObject>();
             if (obj->isMarked(GRAY))
                 cellCallback(data, obj);
@@ -126,9 +131,8 @@ JS_IterateCompartments(JSRuntime *rt, void *data,
 {
     JS_ASSERT(!rt->isHeapBusy());
 
-    AutoPauseWorkersForTracing pause(rt);
     AutoTraceSession session(rt);
 
-    for (CompartmentsIter c(rt); !c.done(); c.next())
+    for (CompartmentsIter c(rt, WithAtoms); !c.done(); c.next())
         (*compartmentCallback)(rt, data, c);
 }

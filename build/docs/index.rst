@@ -1,21 +1,15 @@
-==================================
-Mozilla Build System Documentation
-==================================
-
-Overview
-========
-
-.. toctree::
-   :maxdepth: 1
-
-   glossary
+============
+Build System
+============
 
 Important Concepts
 ==================
 .. toctree::
    :maxdepth: 1
 
+   glossary
    build-overview
+   supported-configurations
    Mozconfig Files <mozconfigs>
    mozbuild-files
    mozbuild-symbols
@@ -29,6 +23,15 @@ Important Concepts
    preprocessor
    jar-manifests
 
+integrated development environment (IDE)
+========================================
+.. toctree::
+   :maxdepth: 1
+
+   androideclipse
+   cppeclipse
+   visualstudio
+
 mozbuild
 ========
 
@@ -40,24 +43,3 @@ Mozilla build system.
 
    mozbuild/index
    mozbuild/dumbmake
-
-Python Packages
-===============
-
-.. toctree::
-   :maxdepth: 2
-
-   python/codegen
-   python/makeutils
-   python/mozbuild
-   python/mozpack
-   python/mozversioncontrol
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

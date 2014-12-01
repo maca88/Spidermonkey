@@ -73,7 +73,7 @@ We recommend the following tools for installing Python:
 
 
 # Upgrade Mercurial older than this.
-MODERN_MERCURIAL_VERSION = StrictVersion('2.5')
+MODERN_MERCURIAL_VERSION = StrictVersion('3.0')
 
 # Upgrade Python older than this.
 MODERN_PYTHON_VERSION = StrictVersion('2.7.3')
@@ -136,6 +136,17 @@ class BaseBootstrapper(object):
 
         self.run_as_root(command)
 
+    def apt_update(self):
+        command = ['apt-get', 'update']
+
+        self.run_as_root(command)
+
+    def apt_add_architecture(self, arch):
+        command = ['dpkg', '--add-architecture']
+        command.extend(arch)
+
+        self.run_as_root(command)
+
     def check_output(self, *args, **kwargs):
         """Run subprocess.check_output even if Python doesn't provide it."""
         fn = getattr(subprocess, 'check_output', BaseBootstrapper._check_output)
@@ -189,13 +200,24 @@ class BaseBootstrapper(object):
         This should be defined in child classes.
         """
 
+    def _hgplain_env(self):
+        """ Returns a copy of the current environment updated with the HGPLAIN
+        environment variable.
+
+        HGPLAIN prevents Mercurial from applying locale variations to the output
+        making it suitable for use in scripts.
+        """
+        env = os.environ.copy()
+        env['HGPLAIN'] = '1'
+        return env
+
     def is_mercurial_modern(self):
         hg = self.which('hg')
         if not hg:
             print(NO_MERCURIAL)
             return False, False, None
 
-        info = self.check_output([hg, '--version']).splitlines()[0]
+        info = self.check_output([hg, '--version'], env=self._hgplain_env()).splitlines()[0]
 
         match = re.search('version ([^\+\)]+)', info)
         if not match:

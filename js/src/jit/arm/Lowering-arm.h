@@ -35,6 +35,8 @@ class LIRGeneratorARM : public LIRGeneratorShared
         return LDefinition::BogusTemp();
     }
 
+    bool needTempForPostBarrier() { return false; }
+
     // x64 has a scratch register, so no need for another temp for dispatch
     // ICs.
     LDefinition tempForDispatchCache(MIRType outputType = MIRType_None) {
@@ -65,12 +67,10 @@ class LIRGeneratorARM : public LIRGeneratorShared
     bool lowerDivI(MDiv *div);
     bool lowerModI(MMod *mod);
     bool lowerMulI(MMul *mul, MDefinition *lhs, MDefinition *rhs);
-    bool lowerUDiv(MInstruction *div);
-    bool lowerUMod(MInstruction *mod);
+    bool lowerUDiv(MDiv *div);
+    bool lowerUMod(MMod *mod);
     bool visitPowHalf(MPowHalf *ins);
     bool visitAsmJSNeg(MAsmJSNeg *ins);
-    bool visitAsmJSUDiv(MAsmJSUDiv *ins);
-    bool visitAsmJSUMod(MAsmJSUMod *ins);
 
     LTableSwitch *newLTableSwitch(const LAllocation &in, const LDefinition &inputCopy,
                                   MTableSwitch *ins);
@@ -90,10 +90,7 @@ class LIRGeneratorARM : public LIRGeneratorShared
     bool visitAsmJSStoreHeap(MAsmJSStoreHeap *ins);
     bool visitAsmJSLoadFuncPtr(MAsmJSLoadFuncPtr *ins);
     bool visitStoreTypedArrayElementStatic(MStoreTypedArrayElementStatic *ins);
-
-    static bool allowFloat32Optimizations() {
-        return true;
-    }
+    bool visitForkJoinGetSlice(MForkJoinGetSlice *ins);
 };
 
 typedef LIRGeneratorARM LIRGeneratorSpecific;

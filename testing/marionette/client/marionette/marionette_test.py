@@ -14,8 +14,16 @@ import unittest
 import weakref
 import warnings
 
-from errors import *
+from errors import (
+        ErrorCodes, MarionetteException, InstallGeckoError, TimeoutException, InvalidResponseException,
+        JavascriptException, NoSuchElementException, XPathLookupException, NoSuchWindowException,
+        StaleElementException, ScriptTimeoutException, ElementNotVisibleException,
+        NoSuchFrameException, InvalidElementStateException, NoAlertPresentException,
+        InvalidCookieDomainException, UnableToSetCookieException, InvalidSelectorException,
+        MoveTargetOutOfBoundsException, FrameSendNotInitializedError, FrameSendFailureError
+        )
 from marionette import Marionette
+from mozlog.structured.structuredlog import get_default_logger
 
 class SkipTest(Exception):
     """
@@ -99,6 +107,18 @@ class CommonTestCase(unittest.TestCase):
             result.addSuccess(self)
 
     def run(self, result=None):
+        # Bug 967566 suggests refactoring run, which would hopefully
+        # mean getting rid of this inner function, which only sits
+        # here to reduce code duplication:
+        def expected_failure(result, exc_info):
+            addExpectedFailure = getattr(result, "addExpectedFailure", None)
+            if addExpectedFailure is not None:
+                addExpectedFailure(self, exc_info)
+            else:
+                warnings.warn("TestResult has no addExpectedFailure method, "
+                              "reporting as passes", RuntimeWarning)
+                result.addSuccess(self)
+
         self.start_time = time.time()
         orig_result = result
         if result is None:
@@ -124,11 +144,19 @@ class CommonTestCase(unittest.TestCase):
         try:
             success = False
             try:
-                self.setUp()
+                if self.expected == "fail":
+                    try:
+                        self.setUp()
+                    except Exception:
+                        raise _ExpectedFailure(sys.exc_info())
+                else:
+                    self.setUp()
             except SkipTest as e:
                 self._addSkip(result, str(e))
             except KeyboardInterrupt:
                 raise
+            except _ExpectedFailure as e:
+                expected_failure(result, e.exc_info)
             except:
                 result.addError(self, sys.exc_info())
             else:
@@ -136,7 +164,7 @@ class CommonTestCase(unittest.TestCase):
                     if self.expected == 'fail':
                         try:
                             testMethod()
-                        except Exception:
+                        except:
                             raise _ExpectedFailure(sys.exc_info())
                         raise _UnexpectedSuccess
                     else:
@@ -145,16 +173,8 @@ class CommonTestCase(unittest.TestCase):
                     result.addFailure(self, sys.exc_info())
                 except KeyboardInterrupt:
                     raise
-                except self.failureException:
-                    result.addFailure(self, sys.exc_info())
                 except _ExpectedFailure as e:
-                    addExpectedFailure = getattr(result, 'addExpectedFailure', None)
-                    if addExpectedFailure is not None:
-                        addExpectedFailure(self, e.exc_info)
-                    else:
-                        warnings.warn("TestResult has no addExpectedFailure method, reporting as passes",
-                                      RuntimeWarning)
-                        result.addSuccess(self)
+                    expected_failure(result, e.exc_info)
                 except _UnexpectedSuccess:
                     addUnexpectedSuccess = getattr(result, 'addUnexpectedSuccess', None)
                     if addUnexpectedSuccess is not None:
@@ -170,9 +190,17 @@ class CommonTestCase(unittest.TestCase):
                 else:
                     success = True
                 try:
-                    self.tearDown()
+                    if self.expected == "fail":
+                        try:
+                            self.tearDown()
+                        except:
+                            raise _ExpectedFailure(sys.exc_info())
+                    else:
+                        self.tearDown()
                 except KeyboardInterrupt:
                     raise
+                except _ExpectedFailure as e:
+                    expected_failure(result, e.exc_info)
                 except:
                     result.addError(self, sys.exc_info())
                     success = False
@@ -217,6 +245,13 @@ class CommonTestCase(unittest.TestCase):
                                     self.__class__.__name__,
                                     self._testMethodName)
 
+    def id(self):
+        # TBPL starring requires that the "test name" field of a failure message
+        # not differ over time. The test name to be used is passed to
+        # mozlog.structured via the test id, so this is overriden to maintain
+        # consistency.
+        return self.test_name
+
     def set_up_test_page(self, emulator, url="test.html", permissions=None):
         emulator.set_context("content")
         url = emulator.absolute_url(url)
@@ -253,7 +288,7 @@ permissions.forEach(function (perm) {
             self.marionette.timeouts(self.marionette.TIMEOUT_PAGE, 30000)
 
     def tearDown(self):
-        pass  # bug 874599
+        pass
 
     def cleanTest(self):
         self._deleteSession()
@@ -269,7 +304,7 @@ permissions.forEach(function (perm) {
                     self.loglines = [['Error getting log: %s' % inst]]
                 try:
                     self.marionette.delete_session()
-                except (socket.error, MarionetteException):
+                except (socket.error, MarionetteException, IOError):
                     # Gecko has crashed?
                     self.marionette.session = None
                     try:
@@ -315,6 +350,7 @@ class MarionetteTestCase(CommonTestCase):
                                        (self.filepath.replace('\\', '\\\\'), self.methodName))
 
     def tearDown(self):
+        self.marionette.check_for_crash()
         self.marionette.set_context("content")
         self.marionette.execute_script("log('TEST-END: %s:%s')" %
                                        (self.filepath.replace('\\', '\\\\'), self.methodName))
@@ -354,16 +390,17 @@ class MarionetteJSTestCase(CommonTestCase):
     inactivity_timeout_re = re.compile(r"MARIONETTE_INACTIVITY_TIMEOUT(\s*)=(\s*)(\d+);")
     match_re = re.compile(r"test_(.*)\.js$")
 
-    def __init__(self, marionette_weakref, methodName='runTest', jsFile=None):
+    def __init__(self, marionette_weakref, methodName='runTest', jsFile=None, **kwargs):
         assert(jsFile)
         self.jsFile = jsFile
         self._marionette_weakref = marionette_weakref
         self.marionette = None
+        self.oop = kwargs.pop('oop')
         CommonTestCase.__init__(self, methodName)
 
     @classmethod
     def add_tests_to_suite(cls, mod_name, filepath, suite, testloader, marionette, testvars, **kwargs):
-        suite.addTest(cls(weakref.ref(marionette), jsFile=filepath))
+        suite.addTest(cls(weakref.ref(marionette), jsFile=filepath, **kwargs))
 
     def runTest(self):
         if self.marionette.session is None:
@@ -394,6 +431,54 @@ class MarionetteJSTestCase(CommonTestCase):
                 head_js = head_js.group(3)
                 head = open(os.path.join(os.path.dirname(self.jsFile), head_js), 'r')
                 js = head.read() + js;
+
+        if self.oop:
+            print 'running oop'
+            frame = None
+            try:
+                frame = self.marionette.find_element(
+                    'css selector',
+                    'iframe[src*="app://test-container.gaiamobile.org/index.html"]'
+                )
+            except NoSuchElementException:
+                result = self.marionette.execute_async_script("""
+let setReq = navigator.mozSettings.createLock().set({'lockscreen.enabled': false});
+setReq.onsuccess = function() {
+    let appsReq = navigator.mozApps.mgmt.getAll();
+    appsReq.onsuccess = function() {
+        let apps = appsReq.result;
+        for (let i = 0; i < apps.length; i++) {
+            let app = apps[i];
+            if (app.manifest.name === 'Test Container') {
+                app.launch();
+                window.addEventListener('apploadtime', function apploadtime(){
+                    window.removeEventListener('apploadtime', apploadtime);
+                    marionetteScriptFinished(true);
+                });
+                return;
+            }
+        }
+        marionetteScriptFinished(false);
+    }
+    appsReq.onerror = function() {
+        marionetteScriptFinished(false);
+    }
+}
+setReq.onerror = function() {
+    marionetteScriptFinished(false);
+}""", script_timeout=60000)
+                self.assertTrue(result)
+
+                frame = self.marionette.find_element(
+                    'css selector',
+                    'iframe[src*="app://test-container.gaiamobile.org/index.html"]'
+                )
+
+            self.marionette.switch_to_frame(frame)
+            main_process = self.marionette.execute_script("""
+                return SpecialPowers.isMainProcess();
+                """)
+            self.assertFalse(main_process)
 
         context = self.context_re.search(js)
         if context:
@@ -426,14 +511,14 @@ class MarionetteJSTestCase(CommonTestCase):
                 self.assertTrue(results['failed'] > 0,
                                 "expected test failures didn't occur")
             else:
-                fails = []
+                logger = get_default_logger()
                 for failure in results['failures']:
-                    diag = "" if failure.get('diag') is None else "| %s " % failure['diag']
+                    diag = "" if failure.get('diag') is None else failure['diag']
                     name = "got false, expected true" if failure.get('name') is None else failure['name']
-                    fails.append('TEST-UNEXPECTED-FAIL | %s %s| %s' %
-                                 (os.path.basename(self.jsFile), diag, name))
+                    logger.test_status(self.test_name, name, 'FAIL',
+                                       message=diag)
                 self.assertEqual(0, results['failed'],
-                                 '%d tests failed:\n%s' % (results['failed'], '\n'.join(fails)))
+                                 '%d tests failed' % (results['failed']))
 
             self.assertTrue(results['passed'] + results['failed'] > 0,
                             'no tests run')
@@ -445,6 +530,9 @@ class MarionetteJSTestCase(CommonTestCase):
             else:
                 self.loglines = self.marionette.get_logs()
                 raise
+
+        if self.oop:
+            self.marionette.switch_to_frame()
 
         self.marionette.execute_script("log('TEST-END: %s');" % self.jsFile.replace('\\', '\\\\'))
         self.marionette.test_name = None

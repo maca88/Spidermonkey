@@ -5,21 +5,22 @@
 #include "js/Class.h"
 #include "jsapi-tests/tests.h"
 
-int count = 0;
+static int iterCount = 0;
 
 static bool
 IterNext(JSContext *cx, unsigned argc, jsval *vp)
 {
-    if (count++ == 100)
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    if (iterCount++ == 100)
         return JS_ThrowStopIteration(cx);
-    JS_SET_RVAL(cx, vp, INT_TO_JSVAL(count));
+    args.rval().setInt32(iterCount);
     return true;
 }
 
 static JSObject *
 IterHook(JSContext *cx, JS::HandleObject obj, bool keysonly)
 {
-    JS::RootedObject iterObj(cx, JS_NewObject(cx, nullptr, nullptr, nullptr));
+    JS::RootedObject iterObj(cx, JS_NewObject(cx, nullptr, JS::NullPtr(), JS::NullPtr()));
     if (!iterObj)
         return nullptr;
     if (!JS_DefineFunction(cx, iterObj, "next", IterNext, 0, 0))
@@ -38,11 +39,11 @@ const js::Class HasCustomIterClass = {
     JS_ResolveStub,
     JS_ConvertStub,
     nullptr,
-    nullptr, /* checkAccess */
     nullptr, /* call */
     nullptr, /* hasInstance */
     nullptr, /* construct */
     nullptr, /* mark */
+    JS_NULL_CLASS_SPEC,
     {
         nullptr,     /* outerObject */
         nullptr,     /* innerObject */
@@ -51,30 +52,31 @@ const js::Class HasCustomIterClass = {
     }
 };
 
-bool
+static bool
 IterClassConstructor(JSContext *cx, unsigned argc, jsval *vp)
 {
-    JSObject *obj = JS_NewObjectForConstructor(cx, Jsvalify(&HasCustomIterClass), vp);
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JSObject *obj = JS_NewObjectForConstructor(cx, Jsvalify(&HasCustomIterClass), args);
     if (!obj)
         return false;
-    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(obj));
+    args.rval().setObject(*obj);
     return true;
 }
 
 BEGIN_TEST(testCustomIterator_bug612523)
 {
-    CHECK(JS_InitClass(cx, global, nullptr, Jsvalify(&HasCustomIterClass),
+    CHECK(JS_InitClass(cx, global, js::NullPtr(), Jsvalify(&HasCustomIterClass),
                        IterClassConstructor, 0, nullptr, nullptr, nullptr, nullptr));
 
     JS::RootedValue result(cx);
     EVAL("var o = new HasCustomIter(); \n"
          "var j = 0; \n"
          "for (var i in o) { ++j; }; \n"
-         "j;", result.address());
+         "j;", &result);
 
-    CHECK(JSVAL_IS_INT(result));
-    CHECK_EQUAL(JSVAL_TO_INT(result), 100);
-    CHECK_EQUAL(count, 101);
+    CHECK(result.isInt32());
+    CHECK_EQUAL(result.toInt32(), 100);
+    CHECK_EQUAL(iterCount, 101);
 
     return true;
 }

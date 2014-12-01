@@ -124,16 +124,20 @@ JOBS = { 'dbs':
               'allFunctions.txt'),
 
          'hazards':
-             (generate_hazards, 'rootingHazards.txt')
-         }
+             (generate_hazards, 'rootingHazards.txt'),
 
+         'explain':
+             (('python', '%(analysis_scriptdir)s/explain.py',
+               '%(hazards)s', '%(gcFunctions)s',
+               '[explained_hazards]', '[unnecessary]', '[refs]'),
+              ('hazards.txt', 'unnecessary.txt', 'refs.txt'))
+         }
 
 def out_indexes(command):
     for i in range(len(command)):
         m = re.match(r'^\[(.*)\]$', command[i])
         if m:
             yield (i, m.group(1))
-
 
 def run_job(name, config):
     cmdspec, outfiles = JOBS[name]
@@ -205,6 +209,8 @@ parser.add_argument('--buildcommand', '--build', '-b', type=str, nargs='?',
                     help='command to build the tree being analyzed')
 parser.add_argument('--tag', '-t', type=str, nargs='?',
                     help='name of job, also sets build command to "build.<tag>"')
+parser.add_argument('--expect-file', type=str, nargs='?',
+                    help='deprecated option, temporarily still present for backwards compatibility')
 
 args = parser.parse_args()
 for k,v in vars(args).items():
@@ -213,6 +219,11 @@ for k,v in vars(args).items():
 
 if args.tag and not args.buildcommand:
     args.buildcommand="build.%s" % args.tag
+
+if args.jobs is not None:
+    data['jobs'] = args.jobs
+if not data.get('jobs'):
+    data['jobs'] = subprocess.check_output(['nproc', '--ignore=1'])
 
 if args.buildcommand:
     data['buildcommand'] = args.buildcommand
@@ -226,13 +237,17 @@ if 'ANALYZED_OBJDIR' in os.environ:
 
 if 'SOURCE' in os.environ:
     data['source'] = os.environ['SOURCE']
+if not data.get('source') and data.get('sixgill_bin'):
+    path = subprocess.check_output(['sh', '-c', data['sixgill_bin'] + '/xdbkeys file_source.xdb | grep jsapi.cpp'])
+    data['source'] = path.replace("/js/src/jsapi.cpp", "")
 
 steps = [ 'dbs',
           'callgraph',
           'gcTypes',
           'gcFunctions',
           'allFunctions',
-          'hazards' ]
+          'hazards',
+          'explain' ]
 
 if args.list:
     for step in steps:
@@ -252,7 +267,7 @@ for step in steps:
         for (i, name) in out_indexes(command):
             data[name] = outfiles[outfile]
             outfile += 1
-        assert len(outfiles) == outfile, 'step %s: mismatched number of output files and params' % step
+        assert len(outfiles) == outfile, 'step \'%s\': mismatched number of output files and params' % step
 
 if args.step:
     steps = steps[steps.index(args.step):]

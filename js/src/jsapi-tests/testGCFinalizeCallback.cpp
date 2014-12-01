@@ -4,30 +4,20 @@
 
 #include "jsapi-tests/tests.h"
 
-const unsigned BufferSize = 20;
+static const unsigned BufferSize = 20;
 static unsigned FinalizeCalls = 0;
 static JSFinalizeStatus StatusBuffer[BufferSize];
 static bool IsCompartmentGCBuffer[BufferSize];
 
-static void
-FinalizeCallback(JSFreeOp *fop, JSFinalizeStatus status, bool isCompartmentGC)
-{
-    if (FinalizeCalls < BufferSize) {
-        StatusBuffer[FinalizeCalls] = status;
-        IsCompartmentGCBuffer[FinalizeCalls] = isCompartmentGC;
-    }
-    ++FinalizeCalls;
-}
-
 BEGIN_TEST(testGCFinalizeCallback)
 {
     JS_SetGCParameter(rt, JSGC_MODE, JSGC_MODE_INCREMENTAL);
-    JS_SetFinalizeCallback(rt, FinalizeCallback);
+    JS_AddFinalizeCallback(rt, FinalizeCallback, nullptr);
 
     /* Full GC, non-incremental. */
     FinalizeCalls = 0;
     JS_GC(rt);
-    CHECK(rt->gcIsFull);
+    CHECK(rt->gc.isFullGc());
     CHECK(checkSingleGroup());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(false));
@@ -36,8 +26,8 @@ BEGIN_TEST(testGCFinalizeCallback)
     FinalizeCalls = 0;
     JS::PrepareForFullGC(rt);
     JS::IncrementalGC(rt, JS::gcreason::API, 1000000);
-    CHECK(rt->gcIncrementalState == js::gc::NO_INCREMENTAL);
-    CHECK(rt->gcIsFull);
+    CHECK(rt->gc.state() == js::gc::NO_INCREMENTAL);
+    CHECK(rt->gc.isFullGc());
     CHECK(checkMultipleGroups());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(false));
@@ -53,7 +43,7 @@ BEGIN_TEST(testGCFinalizeCallback)
     FinalizeCalls = 0;
     JS::PrepareZoneForGC(global1->zone());
     JS::GCForReason(rt, JS::gcreason::API);
-    CHECK(!rt->gcIsFull);
+    CHECK(!rt->gc.isFullGc());
     CHECK(checkSingleGroup());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(true));
@@ -64,7 +54,7 @@ BEGIN_TEST(testGCFinalizeCallback)
     JS::PrepareZoneForGC(global2->zone());
     JS::PrepareZoneForGC(global3->zone());
     JS::GCForReason(rt, JS::gcreason::API);
-    CHECK(!rt->gcIsFull);
+    CHECK(!rt->gc.isFullGc());
     CHECK(checkSingleGroup());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(true));
@@ -73,8 +63,8 @@ BEGIN_TEST(testGCFinalizeCallback)
     FinalizeCalls = 0;
     JS::PrepareZoneForGC(global1->zone());
     JS::IncrementalGC(rt, JS::gcreason::API, 1000000);
-    CHECK(rt->gcIncrementalState == js::gc::NO_INCREMENTAL);
-    CHECK(!rt->gcIsFull);
+    CHECK(rt->gc.state() == js::gc::NO_INCREMENTAL);
+    CHECK(!rt->gc.isFullGc());
     CHECK(checkSingleGroup());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(true));
@@ -85,8 +75,8 @@ BEGIN_TEST(testGCFinalizeCallback)
     JS::PrepareZoneForGC(global2->zone());
     JS::PrepareZoneForGC(global3->zone());
     JS::IncrementalGC(rt, JS::gcreason::API, 1000000);
-    CHECK(rt->gcIncrementalState == js::gc::NO_INCREMENTAL);
-    CHECK(!rt->gcIsFull);
+    CHECK(rt->gc.state() == js::gc::NO_INCREMENTAL);
+    CHECK(!rt->gc.isFullGc());
     CHECK(checkMultipleGroups());
     CHECK(checkFinalizeStatus());
     CHECK(checkFinalizeIsCompartmentGC(true));
@@ -99,13 +89,13 @@ BEGIN_TEST(testGCFinalizeCallback)
     JS_SetGCZeal(cx, 9, 1000000);
     JS::PrepareForFullGC(rt);
     js::GCDebugSlice(rt, true, 1);
-    CHECK(rt->gcIncrementalState == js::gc::MARK);
-    CHECK(rt->gcIsFull);
+    CHECK(rt->gc.state() == js::gc::MARK);
+    CHECK(rt->gc.isFullGc());
 
     JS::RootedObject global4(cx, createGlobal());
     js::GCDebugSlice(rt, true, 1);
-    CHECK(rt->gcIncrementalState == js::gc::NO_INCREMENTAL);
-    CHECK(!rt->gcIsFull);
+    CHECK(rt->gc.state() == js::gc::NO_INCREMENTAL);
+    CHECK(!rt->gc.isFullGc());
     CHECK(checkMultipleGroups());
     CHECK(checkFinalizeStatus());
 
@@ -126,7 +116,7 @@ BEGIN_TEST(testGCFinalizeCallback)
     CHECK(JS_IsGlobalObject(global2));
     CHECK(JS_IsGlobalObject(global3));
 
-    JS_SetFinalizeCallback(rt, nullptr);
+    JS_RemoveFinalizeCallback(rt, FinalizeCallback);
     return true;
 }
 
@@ -171,4 +161,13 @@ bool checkFinalizeIsCompartmentGC(bool isCompartmentGC)
     return true;
 }
 
+static void
+FinalizeCallback(JSFreeOp *fop, JSFinalizeStatus status, bool isCompartmentGC, void *data)
+{
+    if (FinalizeCalls < BufferSize) {
+        StatusBuffer[FinalizeCalls] = status;
+        IsCompartmentGCBuffer[FinalizeCalls] = isCompartmentGC;
+    }
+    ++FinalizeCalls;
+}
 END_TEST(testGCFinalizeCallback)

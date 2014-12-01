@@ -16,18 +16,24 @@
 using namespace js;
 using namespace js::jit;
 
-MIRGenerator::MIRGenerator(JSCompartment *compartment,
-                           TempAllocator *temp, MIRGraph *graph, CompileInfo *info)
+MIRGenerator::MIRGenerator(CompileCompartment *compartment, const JitCompileOptions &options,
+                           TempAllocator *alloc, MIRGraph *graph, CompileInfo *info,
+                           const OptimizationInfo *optimizationInfo)
   : compartment(compartment),
     info_(info),
-    temp_(temp),
+    optimizationInfo_(optimizationInfo),
+    alloc_(alloc),
     graph_(graph),
+    abortReason_(AbortReason_NoAbort),
     error_(false),
-    cancelBuild_(0),
+    pauseBuild_(nullptr),
+    cancelBuild_(false),
     maxAsmJSStackArgBytes_(0),
-    performsAsmJSCall_(false),
+    performsCall_(false),
+    needsInitialStackAlignment_(false),
     minAsmJSHeapLength_(AsmJSAllocationGranularity),
-    modifiesFrameArguments_(false)
+    modifiesFrameArguments_(false),
+    options(options)
 { }
 
 bool
@@ -77,9 +83,6 @@ MIRGraph::removeBlocksAfter(MBasicBlock *start)
         if (block->id() <= start->id())
             continue;
 
-        // removeBlock will not remove the resumepoints, since
-        // it can be shared with outer blocks. So remove them now.
-        block->discardAllResumePoints();
         removeBlock(block);
     }
 }
@@ -87,23 +90,22 @@ MIRGraph::removeBlocksAfter(MBasicBlock *start)
 void
 MIRGraph::removeBlock(MBasicBlock *block)
 {
-    // Remove a block from the graph. It will also cleanup the block,
-    // except for removing the resumepoints, since multiple blocks can
-    // share the same resumepoints and we cannot distinguish between them.
+    // Remove a block from the graph. It will also cleanup the block.
 
     if (block == osrBlock_)
         osrBlock_ = nullptr;
 
-    if (exitAccumulator_) {
+    if (returnAccumulator_) {
         size_t i = 0;
-        while (i < exitAccumulator_->length()) {
-            if ((*exitAccumulator_)[i] == block)
-                exitAccumulator_->erase(exitAccumulator_->begin() + i);
+        while (i < returnAccumulator_->length()) {
+            if ((*returnAccumulator_)[i] == block)
+                returnAccumulator_->erase(returnAccumulator_->begin() + i);
             else
                 i++;
         }
     }
 
+    block->discardAllResumePoints();
     block->discardAllInstructions();
 
     // Note: phis are disconnected from the rest of the graph, but are not
@@ -118,6 +120,15 @@ MIRGraph::removeBlock(MBasicBlock *block)
 }
 
 void
+MIRGraph::removeBlockIncludingPhis(MBasicBlock *block)
+{
+    // removeBlock doesn't clear phis because of IonBuilder constraints. Here,
+    // we want to totally clear everything.
+    removeBlock(block);
+    block->discardAllPhis();
+}
+
+void
 MIRGraph::unmarkBlocks()
 {
     for (MBasicBlockIterator i(blocks_.begin()); i != blocks_.end(); i++)
@@ -125,47 +136,47 @@ MIRGraph::unmarkBlocks()
 }
 
 MDefinition *
-MIRGraph::forkJoinSlice()
+MIRGraph::forkJoinContext()
 {
-    // Search the entry block to find a par slice instruction.  If we do not
-    // find one, add one after the Start instruction.
+    // Search the entry block to find a ForkJoinContext instruction. If we do
+    // not find one, add one after the Start instruction.
     //
     // Note: the original design used a field in MIRGraph to cache the
-    // forkJoinSlice rather than searching for it again.  However, this could
-    // become out of date due to DCE.  Given that we do not generally have to
-    // search very far to find the par slice instruction if it exists, and
-    // that we don't look for it that often, I opted to simply eliminate the
-    // cache and search anew each time, so that it is that much easier to keep
-    // the IR coherent. - nmatsakis
+    // forkJoinContext rather than searching for it again.  However, this
+    // could become out of date due to DCE.  Given that we do not generally
+    // have to search very far to find the ForkJoinContext instruction if it
+    // exists, and that we don't look for it that often, I opted to simply
+    // eliminate the cache and search anew each time, so that it is that much
+    // easier to keep the IR coherent. - nmatsakis
 
     MBasicBlock *entry = entryBlock();
     JS_ASSERT(entry->info().executionMode() == ParallelExecution);
 
     MInstruction *start = nullptr;
     for (MInstructionIterator ins(entry->begin()); ins != entry->end(); ins++) {
-        if (ins->isForkJoinSlice())
+        if (ins->isForkJoinContext())
             return *ins;
         else if (ins->isStart())
             start = *ins;
     }
     JS_ASSERT(start);
 
-    MForkJoinSlice *slice = new MForkJoinSlice();
-    entry->insertAfter(start, slice);
-    return slice;
+    MForkJoinContext *cx = MForkJoinContext::New(alloc());
+    entry->insertAfter(start, cx);
+    return cx;
 }
 
 MBasicBlock *
 MBasicBlock::New(MIRGraph &graph, BytecodeAnalysis *analysis, CompileInfo &info,
-                 MBasicBlock *pred, jsbytecode *entryPc, Kind kind)
+                 MBasicBlock *pred, const BytecodeSite &site, Kind kind)
 {
-    JS_ASSERT(entryPc != nullptr);
+    JS_ASSERT(site.pc() != nullptr);
 
-    MBasicBlock *block = new MBasicBlock(graph, info, entryPc, kind);
+    MBasicBlock *block = new(graph.alloc()) MBasicBlock(graph, info, site, kind);
     if (!block->init())
         return nullptr;
 
-    if (!block->inherit(analysis, pred, 0))
+    if (!block->inherit(graph.alloc(), analysis, pred, 0))
         return nullptr;
 
     return block;
@@ -173,13 +184,13 @@ MBasicBlock::New(MIRGraph &graph, BytecodeAnalysis *analysis, CompileInfo &info,
 
 MBasicBlock *
 MBasicBlock::NewPopN(MIRGraph &graph, CompileInfo &info,
-                     MBasicBlock *pred, jsbytecode *entryPc, Kind kind, uint32_t popped)
+                     MBasicBlock *pred, const BytecodeSite &site, Kind kind, uint32_t popped)
 {
-    MBasicBlock *block = new MBasicBlock(graph, info, entryPc, kind);
+    MBasicBlock *block = new(graph.alloc()) MBasicBlock(graph, info, site, kind);
     if (!block->init())
         return nullptr;
 
-    if (!block->inherit(nullptr, pred, popped))
+    if (!block->inherit(graph.alloc(), nullptr, pred, popped))
         return nullptr;
 
     return block;
@@ -187,10 +198,10 @@ MBasicBlock::NewPopN(MIRGraph &graph, CompileInfo &info,
 
 MBasicBlock *
 MBasicBlock::NewWithResumePoint(MIRGraph &graph, CompileInfo &info,
-                                MBasicBlock *pred, jsbytecode *entryPc,
+                                MBasicBlock *pred, const BytecodeSite &site,
                                 MResumePoint *resumePoint)
 {
-    MBasicBlock *block = new MBasicBlock(graph, info, entryPc, NORMAL);
+    MBasicBlock *block = new(graph.alloc()) MBasicBlock(graph, info, site, NORMAL);
 
     resumePoint->block_ = block;
     block->entryResumePoint_ = resumePoint;
@@ -206,43 +217,34 @@ MBasicBlock::NewWithResumePoint(MIRGraph &graph, CompileInfo &info,
 
 MBasicBlock *
 MBasicBlock::NewPendingLoopHeader(MIRGraph &graph, CompileInfo &info,
-                                  MBasicBlock *pred, jsbytecode *entryPc)
+                                  MBasicBlock *pred, const BytecodeSite &site,
+                                  unsigned stackPhiCount)
 {
-    return MBasicBlock::New(graph, nullptr, info, pred, entryPc, PENDING_LOOP_HEADER);
+    JS_ASSERT(site.pc() != nullptr);
+
+    MBasicBlock *block = new(graph.alloc()) MBasicBlock(graph, info, site, PENDING_LOOP_HEADER);
+    if (!block->init())
+        return nullptr;
+
+    if (!block->inherit(graph.alloc(), nullptr, pred, 0, stackPhiCount))
+        return nullptr;
+
+    return block;
 }
 
 MBasicBlock *
 MBasicBlock::NewSplitEdge(MIRGraph &graph, CompileInfo &info, MBasicBlock *pred)
 {
     return pred->pc()
-           ? MBasicBlock::New(graph, nullptr, info, pred, pred->pc(), SPLIT_EDGE)
+           ? MBasicBlock::New(graph, nullptr, info, pred,
+                              BytecodeSite(pred->trackedTree(), pred->pc()), SPLIT_EDGE)
            : MBasicBlock::NewAsmJS(graph, info, pred, SPLIT_EDGE);
-}
-
-MBasicBlock *
-MBasicBlock::NewAbortPar(MIRGraph &graph, CompileInfo &info,
-                         MBasicBlock *pred, jsbytecode *entryPc,
-                         MResumePoint *resumePoint)
-{
-    MBasicBlock *block = new MBasicBlock(graph, info, entryPc, NORMAL);
-
-    resumePoint->block_ = block;
-    block->entryResumePoint_ = resumePoint;
-
-    if (!block->init())
-        return nullptr;
-
-    if (!block->addPredecessorWithoutPhis(pred))
-        return nullptr;
-
-    block->end(new MAbortPar());
-    return block;
 }
 
 MBasicBlock *
 MBasicBlock::NewAsmJS(MIRGraph &graph, CompileInfo &info, MBasicBlock *pred, Kind kind)
 {
-    MBasicBlock *block = new MBasicBlock(graph, info, /* entryPC = */ nullptr, kind);
+    MBasicBlock *block = new(graph.alloc()) MBasicBlock(graph, info, BytecodeSite(), kind);
     if (!block->init())
         return nullptr;
 
@@ -250,15 +252,24 @@ MBasicBlock::NewAsmJS(MIRGraph &graph, CompileInfo &info, MBasicBlock *pred, Kin
         block->stackPosition_ = pred->stackPosition_;
 
         if (block->kind_ == PENDING_LOOP_HEADER) {
-            for (size_t i = 0; i < block->stackPosition_; i++) {
+            size_t nphis = block->stackPosition_;
+
+            TempAllocator &alloc = graph.alloc();
+            MPhi *phis = (MPhi*)alloc.allocateArray<sizeof(MPhi)>(nphis);
+            if (!phis)
+                return nullptr;
+
+            // Note: Phis are inserted in the same order as the slots.
+            for (size_t i = 0; i < nphis; i++) {
                 MDefinition *predSlot = pred->getSlot(i);
 
                 JS_ASSERT(predSlot->type() != MIRType_Value);
-                MPhi *phi = MPhi::New(i, predSlot->type());
+                MPhi *phi = new(phis + i) MPhi(alloc, predSlot->type());
 
                 JS_ALWAYS_TRUE(phi->reserveLength(2));
                 phi->addInput(predSlot);
 
+                // Add append Phis in the block.
                 block->addPhi(phi);
                 block->setSlot(i, phi);
             }
@@ -273,25 +284,24 @@ MBasicBlock::NewAsmJS(MIRGraph &graph, CompileInfo &info, MBasicBlock *pred, Kin
     return block;
 }
 
-MBasicBlock::MBasicBlock(MIRGraph &graph, CompileInfo &info, jsbytecode *pc, Kind kind)
-    : earlyAbort_(false),
+MBasicBlock::MBasicBlock(MIRGraph &graph, CompileInfo &info, const BytecodeSite &site, Kind kind)
+  : unreachable_(false),
     graph_(graph),
     info_(info),
+    predecessors_(graph.alloc()),
     stackPosition_(info_.firstStackSlot()),
-    lastIns_(nullptr),
-    pc_(pc),
+    numDominated_(0),
+    pc_(site.pc()),
     lir_(nullptr),
-    start_(nullptr),
     entryResumePoint_(nullptr),
     successorWithPhis_(nullptr),
     positionInPhiSuccessor_(0),
-    kind_(kind),
     loopDepth_(0),
+    kind_(kind),
     mark_(false),
+    immediatelyDominated_(graph.alloc()),
     immediateDominator_(nullptr),
-    numDominated_(0),
-    loopHeader_(nullptr),
-    trackedPc_(pc)
+    trackedSite_(site)
 #if defined (JS_ION_PERF)
     , lineno_(0u),
     columnIndex_(0u)
@@ -302,13 +312,24 @@ MBasicBlock::MBasicBlock(MIRGraph &graph, CompileInfo &info, jsbytecode *pc, Kin
 bool
 MBasicBlock::init()
 {
-    return slots_.init(info_.nslots());
+    return slots_.init(graph_.alloc(), info_.nslots());
 }
 
 bool
 MBasicBlock::increaseSlots(size_t num)
 {
-    return slots_.growBy(num);
+    return slots_.growBy(graph_.alloc(), num);
+}
+
+bool
+MBasicBlock::ensureHasSlots(size_t num)
+{
+    size_t depth = stackDepth() + num;
+    if (depth > nslots()) {
+        if (!increaseSlots(depth - nslots()))
+            return false;
+    }
+    return true;
 }
 
 void
@@ -321,7 +342,8 @@ MBasicBlock::copySlots(MBasicBlock *from)
 }
 
 bool
-MBasicBlock::inherit(BytecodeAnalysis *analysis, MBasicBlock *pred, uint32_t popped)
+MBasicBlock::inherit(TempAllocator &alloc, BytecodeAnalysis *analysis, MBasicBlock *pred,
+                     uint32_t popped, unsigned stackPhiCount)
 {
     if (pred) {
         stackPosition_ = pred->stackPosition_;
@@ -343,8 +365,8 @@ MBasicBlock::inherit(BytecodeAnalysis *analysis, MBasicBlock *pred, uint32_t pop
     MResumePoint *callerResumePoint = pred ? pred->callerResumePoint() : nullptr;
 
     // Create a resume point using our initial stack state.
-    entryResumePoint_ = new MResumePoint(this, pc(), callerResumePoint, MResumePoint::ResumeAt);
-    if (!entryResumePoint_->init())
+    entryResumePoint_ = new(alloc) MResumePoint(this, pc(), callerResumePoint, MResumePoint::ResumeAt);
+    if (!entryResumePoint_->init(alloc))
         return false;
 
     if (pred) {
@@ -352,17 +374,39 @@ MBasicBlock::inherit(BytecodeAnalysis *analysis, MBasicBlock *pred, uint32_t pop
             return false;
 
         if (kind_ == PENDING_LOOP_HEADER) {
-            for (size_t i = 0; i < stackDepth(); i++) {
-                MPhi *phi = MPhi::New(i);
+            size_t i = 0;
+            for (i = 0; i < info().firstStackSlot(); i++) {
+                MPhi *phi = MPhi::New(alloc);
                 if (!phi->addInputSlow(pred->getSlot(i)))
                     return false;
                 addPhi(phi);
                 setSlot(i, phi);
-                entryResumePoint()->setOperand(i, phi);
+                entryResumePoint()->initOperand(i, phi);
+            }
+
+            JS_ASSERT(stackPhiCount <= stackDepth());
+            JS_ASSERT(info().firstStackSlot() <= stackDepth() - stackPhiCount);
+
+            // Avoid creating new phis for stack values that aren't part of the
+            // loop.  Note that for loop headers that can OSR, all values on the
+            // stack are part of the loop.
+            for (; i < stackDepth() - stackPhiCount; i++) {
+                MDefinition *val = pred->getSlot(i);
+                setSlot(i, val);
+                entryResumePoint()->initOperand(i, val);
+            }
+
+            for (; i < stackDepth(); i++) {
+                MPhi *phi = MPhi::New(alloc);
+                if (!phi->addInputSlow(pred->getSlot(i)))
+                    return false;
+                addPhi(phi);
+                setSlot(i, phi);
+                entryResumePoint()->initOperand(i, phi);
             }
         } else {
             for (size_t i = 0; i < stackDepth(); i++)
-                entryResumePoint()->setOperand(i, getSlot(i));
+                entryResumePoint()->initOperand(i, getSlot(i));
         }
     } else {
         /*
@@ -402,10 +446,11 @@ MBasicBlock::inheritSlots(MBasicBlock *parent)
 }
 
 bool
-MBasicBlock::initEntrySlots()
+MBasicBlock::initEntrySlots(TempAllocator &alloc)
 {
     // Create a resume point using our initial stack state.
-    entryResumePoint_ = MResumePoint::New(this, pc(), callerResumePoint(), MResumePoint::ResumeAt);
+    entryResumePoint_ = MResumePoint::New(alloc, this, pc(), callerResumePoint(),
+                                          MResumePoint::ResumeAt);
     if (!entryResumePoint_)
         return false;
     return true;
@@ -423,7 +468,7 @@ MBasicBlock::initSlot(uint32_t slot, MDefinition *ins)
 {
     slots_[slot] = ins;
     if (entryResumePoint())
-        entryResumePoint()->setOperand(slot, ins);
+        entryResumePoint()->initOperand(slot, ins);
 }
 
 void
@@ -628,9 +673,7 @@ MBasicBlock::peek(int32_t depth)
 void
 MBasicBlock::discardLastIns()
 {
-    JS_ASSERT(lastIns_);
-    discard(lastIns_);
-    lastIns_ = nullptr;
+    discard(lastIns());
 }
 
 void
@@ -654,7 +697,9 @@ MBasicBlock::moveBefore(MInstruction *at, MInstruction *ins)
 
     // Insert into new block, which may be distinct.
     // Uses and operands are untouched.
-    at->block()->insertBefore(at, ins);
+    ins->setBlock(at->block());
+    at->block()->instructions_.insertBefore(at, ins);
+    ins->setTrackedSite(at->trackedSite());
 }
 
 static inline void
@@ -713,22 +758,26 @@ MBasicBlock::discardDefAt(MDefinitionIterator &old)
 void
 MBasicBlock::discardAllInstructions()
 {
-    for (MInstructionIterator iter = begin(); iter != end(); ) {
+    MInstructionIterator iter = begin();
+    discardAllInstructionsStartingAt(iter);
+
+}
+
+void
+MBasicBlock::discardAllInstructionsStartingAt(MInstructionIterator &iter)
+{
+    while (iter != end()) {
         for (size_t i = 0, e = iter->numOperands(); i < e; i++)
             iter->discardOperand(i);
         iter = instructions_.removeAt(iter);
     }
-    lastIns_ = nullptr;
 }
 
 void
 MBasicBlock::discardAllPhiOperands()
 {
-    for (MPhiIterator iter = phisBegin(); iter != phisEnd(); iter++) {
-        MPhi *phi = *iter;
-        for (size_t i = 0, e = phi->numOperands(); i < e; i++)
-            phi->discardOperand(i);
-    }
+    for (MPhiIterator iter = phisBegin(); iter != phisEnd(); iter++)
+        iter->removeAllOperands();
 
     for (MBasicBlock **pred = predecessors_.begin(); pred != predecessors_.end(); pred++)
         (*pred)->setSuccessorWithPhis(nullptr, 0);
@@ -753,43 +802,46 @@ MBasicBlock::discardAllResumePoints(bool discardEntry)
             iter = resumePoints_.removeAt(iter);
         }
     }
+    if (discardEntry)
+        clearEntryResumePoint();
 }
 
 void
 MBasicBlock::insertBefore(MInstruction *at, MInstruction *ins)
 {
+    JS_ASSERT(at->block() == this);
     ins->setBlock(this);
     graph().allocDefinitionId(ins);
     instructions_.insertBefore(at, ins);
-    ins->setTrackedPc(at->trackedPc());
+    ins->setTrackedSite(at->trackedSite());
 }
 
 void
 MBasicBlock::insertAfter(MInstruction *at, MInstruction *ins)
 {
+    JS_ASSERT(at->block() == this);
     ins->setBlock(this);
     graph().allocDefinitionId(ins);
     instructions_.insertAfter(at, ins);
-    ins->setTrackedPc(at->trackedPc());
+    ins->setTrackedSite(at->trackedSite());
 }
 
 void
 MBasicBlock::add(MInstruction *ins)
 {
-    JS_ASSERT(!lastIns_);
+    JS_ASSERT(!hasLastIns());
     ins->setBlock(this);
     graph().allocDefinitionId(ins);
     instructions_.pushBack(ins);
-    ins->setTrackedPc(trackedPc_);
+    ins->setTrackedSite(trackedSite_);
 }
 
 void
 MBasicBlock::end(MControlInstruction *ins)
 {
-    JS_ASSERT(!lastIns_); // Existing control instructions should be removed first.
+    JS_ASSERT(!hasLastIns()); // Existing control instructions should be removed first.
     JS_ASSERT(ins);
     add(ins);
-    lastIns_ = ins;
 }
 
 void
@@ -805,8 +857,7 @@ MBasicBlock::discardPhiAt(MPhiIterator &at)
 {
     JS_ASSERT(!phis_.empty());
 
-    for (size_t i = 0, e = at->numOperands(); i < e; i++)
-        at->discardOperand(i);
+    at->removeAllOperands();
 
     MPhiIterator result = phis_.removeAt(at);
 
@@ -818,19 +869,19 @@ MBasicBlock::discardPhiAt(MPhiIterator &at)
 }
 
 bool
-MBasicBlock::addPredecessor(MBasicBlock *pred)
+MBasicBlock::addPredecessor(TempAllocator &alloc, MBasicBlock *pred)
 {
-    return addPredecessorPopN(pred, 0);
+    return addPredecessorPopN(alloc, pred, 0);
 }
 
 bool
-MBasicBlock::addPredecessorPopN(MBasicBlock *pred, uint32_t popped)
+MBasicBlock::addPredecessorPopN(TempAllocator &alloc, MBasicBlock *pred, uint32_t popped)
 {
     JS_ASSERT(pred);
     JS_ASSERT(predecessors_.length() > 0);
 
     // Predecessors must be finished, and at the correct stack depth.
-    JS_ASSERT(pred->lastIns_);
+    JS_ASSERT(pred->hasLastIns());
     JS_ASSERT(pred->stackPosition_ == stackPosition_ + popped);
 
     for (uint32_t i = 0; i < stackPosition_; i++) {
@@ -849,9 +900,9 @@ MBasicBlock::addPredecessorPopN(MBasicBlock *pred, uint32_t popped)
                 // Otherwise, create a new phi node.
                 MPhi *phi;
                 if (mine->type() == other->type())
-                    phi = MPhi::New(i, mine->type());
+                    phi = MPhi::New(alloc, mine->type());
                 else
-                    phi = MPhi::New(i);
+                    phi = MPhi::New(alloc);
                 addPhi(phi);
 
                 // Prime the phi for each predecessor, so input(x) comes from
@@ -879,7 +930,7 @@ bool
 MBasicBlock::addPredecessorWithoutPhis(MBasicBlock *pred)
 {
     // Predecessors must be finished.
-    JS_ASSERT(pred && pred->lastIns_);
+    JS_ASSERT(pred && pred->hasLastIns());
     return predecessors_.append(pred);
 }
 
@@ -887,6 +938,20 @@ bool
 MBasicBlock::addImmediatelyDominatedBlock(MBasicBlock *child)
 {
     return immediatelyDominated_.append(child);
+}
+
+void
+MBasicBlock::removeImmediatelyDominatedBlock(MBasicBlock *child)
+{
+    for (size_t i = 0; ; ++i) {
+        MOZ_ASSERT(i < immediatelyDominated_.length(),
+                   "Dominated block to remove not present");
+        if (immediatelyDominated_[i] == child) {
+            immediatelyDominated_[i] = immediatelyDominated_.back();
+            immediatelyDominated_.popBack();
+            return;
+        }
+    }
 }
 
 void
@@ -900,20 +965,12 @@ MBasicBlock::assertUsesAreNotWithin(MUseIterator use, MUseIterator end)
 #endif
 }
 
-bool
-MBasicBlock::dominates(MBasicBlock *other)
-{
-    uint32_t high = domIndex() + numDominated();
-    uint32_t low  = domIndex();
-    return other->domIndex() >= low && other->domIndex() <= high;
-}
-
 AbortReason
 MBasicBlock::setBackedge(MBasicBlock *pred)
 {
     // Predecessors must be finished, and at the correct stack depth.
-    JS_ASSERT(lastIns_);
-    JS_ASSERT(pred->lastIns_);
+    JS_ASSERT(hasLastIns());
+    JS_ASSERT(pred->hasLastIns());
     JS_ASSERT(pred->stackDepth() == entryResumePoint()->stackDepth());
 
     // We must be a pending loop header
@@ -922,34 +979,8 @@ MBasicBlock::setBackedge(MBasicBlock *pred)
     bool hadTypeChange = false;
 
     // Add exit definitions to each corresponding phi at the entry.
-    for (MPhiIterator phi = phisBegin(); phi != phisEnd(); phi++) {
-        MPhi *entryDef = *phi;
-        MDefinition *exitDef = pred->slots_[entryDef->slot()];
-
-        // Assert that we already placed phis for each slot.
-        JS_ASSERT(entryDef->block() == this);
-
-        if (entryDef == exitDef) {
-            // If the exit def is the same as the entry def, make a redundant
-            // phi. Since loop headers have exactly two incoming edges, we
-            // know that that's just the first input.
-            //
-            // Note that we eliminate later rather than now, to avoid any
-            // weirdness around pending continue edges which might still hold
-            // onto phis.
-            exitDef = entryDef->getOperand(0);
-        }
-
-        bool typeChange = false;
-
-        if (!entryDef->addInputSlow(exitDef, &typeChange))
-            return AbortReason_Alloc;
-
-        hadTypeChange |= typeChange;
-
-        JS_ASSERT(entryDef->slot() < pred->stackDepth());
-        setSlot(entryDef->slot(), entryDef);
-    }
+    if (!inheritPhisFromBackedge(pred, &hadTypeChange))
+        return AbortReason_Alloc;
 
     if (hadTypeChange) {
         for (MPhiIterator phi = phisBegin(); phi != phisEnd(); phi++)
@@ -970,17 +1001,20 @@ bool
 MBasicBlock::setBackedgeAsmJS(MBasicBlock *pred)
 {
     // Predecessors must be finished, and at the correct stack depth.
-    JS_ASSERT(lastIns_);
-    JS_ASSERT(pred->lastIns_);
+    JS_ASSERT(hasLastIns());
+    JS_ASSERT(pred->hasLastIns());
     JS_ASSERT(stackDepth() == pred->stackDepth());
 
     // We must be a pending loop header
     JS_ASSERT(kind_ == PENDING_LOOP_HEADER);
 
     // Add exit definitions to each corresponding phi at the entry.
-    for (MPhiIterator phi = phisBegin(); phi != phisEnd(); phi++) {
+    // Note: Phis are inserted in the same order as the slots. (see
+    // MBasicBlock::NewAsmJS)
+    size_t slot = 0;
+    for (MPhiIterator phi = phisBegin(); phi != phisEnd(); phi++, slot++) {
         MPhi *entryDef = *phi;
-        MDefinition *exitDef = pred->getSlot(entryDef->slot());
+        MDefinition *exitDef = pred->getSlot(slot);
 
         // Assert that we already placed phis for each slot.
         JS_ASSERT(entryDef->block() == this);
@@ -1003,8 +1037,8 @@ MBasicBlock::setBackedgeAsmJS(MBasicBlock *pred)
         // MBasicBlock::NewAsmJS calls reserveLength(2) for loop header phis.
         entryDef->addInput(exitDef);
 
-        JS_ASSERT(entryDef->slot() < pred->stackDepth());
-        setSlot(entryDef->slot(), entryDef);
+        MOZ_ASSERT(slot < pred->stackDepth());
+        setSlot(slot, entryDef);
     }
 
     // We are now a loop header proper
@@ -1088,7 +1122,9 @@ MBasicBlock::clearDominatorInfo()
 void
 MBasicBlock::removePredecessor(MBasicBlock *pred)
 {
-    JS_ASSERT(numPredecessors() >= 2);
+    // If we're removing the last backedge, this is no longer a loop.
+    if (isLoopHeader() && hasUniqueBackedge() && backedge() == pred)
+        clearLoopHeader();
 
     for (size_t i = 0; i < numPredecessors(); i++) {
         if (getPredecessor(i) != pred)
@@ -1101,6 +1137,7 @@ MBasicBlock::removePredecessor(MBasicBlock *pred)
             JS_ASSERT(pred->positionInPhiSuccessor() == i);
             for (MPhiIterator iter = phisBegin(); iter != phisEnd(); iter++)
                 iter->removeOperand(i);
+            pred->setSuccessorWithPhis(nullptr, 0);
             for (size_t j = i+1; j < numPredecessors(); j++)
                 getPredecessor(j)->setSuccessorWithPhis(this, j - 1);
         }
@@ -1117,13 +1154,23 @@ MBasicBlock::removePredecessor(MBasicBlock *pred)
 void
 MBasicBlock::inheritPhis(MBasicBlock *header)
 {
-    for (MPhiIterator iter = header->phisBegin(); iter != header->phisEnd(); iter++) {
-        MPhi *phi = *iter;
-        JS_ASSERT(phi->numOperands() == 2);
+    MResumePoint *headerRp = header->entryResumePoint();
+    size_t stackDepth = headerRp->numOperands();
+    for (size_t slot = 0; slot < stackDepth; slot++) {
+        MDefinition *exitDef = getSlot(slot);
+        MDefinition *loopDef = headerRp->getOperand(slot);
+        if (loopDef->block() != header) {
+            MOZ_ASSERT(loopDef->block()->id() < header->id());
+            MOZ_ASSERT(loopDef == exitDef);
+            continue;
+        }
+
+        // Phis are allocated by NewPendingLoopHeader.
+        MPhi *phi = loopDef->toPhi();
+        MOZ_ASSERT(phi->numOperands() == 2);
 
         // The entry definition is always the leftmost input to the phi.
         MDefinition *entryDef = phi->getOperand(0);
-        MDefinition *exitDef = getSlot(phi->slot());
 
         if (entryDef != exitDef)
             continue;
@@ -1131,17 +1178,69 @@ MBasicBlock::inheritPhis(MBasicBlock *header)
         // If the entryDef is the same as exitDef, then we must propagate the
         // phi down to this successor. This chance was missed as part of
         // setBackedge() because exits are not captured in resume points.
-        setSlot(phi->slot(), phi);
+        setSlot(slot, phi);
     }
 }
 
-void
+bool
+MBasicBlock::inheritPhisFromBackedge(MBasicBlock *backedge, bool *hadTypeChange)
+{
+    // We must be a pending loop header
+    MOZ_ASSERT(kind_ == PENDING_LOOP_HEADER);
+
+    size_t stackDepth = entryResumePoint()->numOperands();
+    for (size_t slot = 0; slot < stackDepth; slot++) {
+        // Get the value stack-slot of the back edge.
+        MDefinition *exitDef = backedge->getSlot(slot);
+
+        // Get the value of the loop header.
+        MDefinition *loopDef = entryResumePoint()->getOperand(slot);
+        if (loopDef->block() != this) {
+            // If we are finishing a pending loop header, then we need to ensure
+            // that all operands are phis. This is usualy the case, except for
+            // object/arrays build with generators, in which case we share the
+            // same allocations across all blocks.
+            MOZ_ASSERT(loopDef->block()->id() < id());
+            MOZ_ASSERT(loopDef == exitDef);
+            continue;
+        }
+
+        // Phis are allocated by NewPendingLoopHeader.
+        MPhi *entryDef = loopDef->toPhi();
+        MOZ_ASSERT(entryDef->block() == this);
+
+        if (entryDef == exitDef) {
+            // If the exit def is the same as the entry def, make a redundant
+            // phi. Since loop headers have exactly two incoming edges, we
+            // know that that's just the first input.
+            //
+            // Note that we eliminate later rather than now, to avoid any
+            // weirdness around pending continue edges which might still hold
+            // onto phis.
+            exitDef = entryDef->getOperand(0);
+        }
+
+        bool typeChange = false;
+
+        if (!entryDef->addInputSlow(exitDef, &typeChange))
+            return false;
+
+        *hadTypeChange |= typeChange;
+        setSlot(slot, entryDef);
+    }
+
+    return true;
+}
+
+bool
 MBasicBlock::specializePhis()
 {
     for (MPhiIterator iter = phisBegin(); iter != phisEnd(); iter++) {
         MPhi *phi = *iter;
-        phi->specializeType();
+        if (!phi->specializeType())
+            return false;
     }
+    return true;
 }
 
 void
@@ -1190,7 +1289,6 @@ MIRGraph::dump(FILE *fp)
 {
 #ifdef DEBUG
     for (MBasicBlockIterator iter(begin()); iter != end(); iter++) {
-        fprintf(fp, "block%d:\n", iter->id());
         iter->dump(fp);
         fprintf(fp, "\n");
     }
@@ -1198,9 +1296,19 @@ MIRGraph::dump(FILE *fp)
 }
 
 void
+MIRGraph::dump()
+{
+    dump(stderr);
+}
+
+void
 MBasicBlock::dump(FILE *fp)
 {
 #ifdef DEBUG
+    fprintf(fp, "block%u:\n", id());
+    if (MResumePoint *resume = entryResumePoint()) {
+        resume->dump();
+    }
     for (MPhiIterator iter(phisBegin()); iter != phisEnd(); iter++) {
         iter->dump(fp);
     }
@@ -1208,4 +1316,10 @@ MBasicBlock::dump(FILE *fp)
         iter->dump(fp);
     }
 #endif
+}
+
+void
+MBasicBlock::dump()
+{
+    dump(stderr);
 }
