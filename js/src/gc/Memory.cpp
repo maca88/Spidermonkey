@@ -11,7 +11,11 @@
 #include "js/HeapAPI.h"
 #include "vm/Runtime.h"
 
-#if defined(XP_WIN)
+#if defined(WP8)
+
+#include "jswin.h"
+
+#elif defined(XP_WIN)
 
 #include "jswin.h"
 #include <psapi.h>
@@ -30,6 +34,40 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#endif
+
+#if defined(WP8)
+
+VOID GetSystemInfo(LPSYSTEM_INFO sinfo)
+{
+	return GetNativeSystemInfo(sinfo);
+}
+BOOL GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
+{
+#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+	if (lpVersionInformation)
+		lpVersionInformation->dwMajorVersion = 6;
+	return TRUE;
+}
+BOOL VerifyVersionInfo(LPOSVERSIONINFOEX /*lpVersionInformation*/, DWORD /*dwTypeMask*/, DWORDLONG /*dwlConditionMask*/)
+{
+#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+    return TRUE;
+}
+LPVOID VirtualAlloc(LPVOID /*lpAddress*/, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
+{
+	return HeapAlloc(GetProcessHeap(), flAllocationType, dwSize);
+}
+BOOL VirtualFree(LPVOID lpAddress, SIZE_T /*dwSize*/, DWORD dwFreeType)
+{
+	return HeapFree(GetProcessHeap(), dwFreeType, lpAddress);
+}
+BOOL VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
+{
+#pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
+	return TRUE;
+}
 
 #endif
 
@@ -90,8 +128,183 @@ TestMapAlignedPagesLastDitch(size_t size, size_t alignment)
     return MapAlignedPagesLastDitch(size, alignment);
 }
 
+#if defined(WP8)
 
-#if defined(XP_WIN)
+void
+InitMemorySubsystem()
+{
+    if (pageSize == 0) {
+        SYSTEM_INFO sysinfo;
+        GetSystemInfo(&sysinfo);
+        pageSize = sysinfo.dwPageSize;
+        allocGranularity = sysinfo.dwAllocationGranularity;
+    }
+}
+
+static inline void *
+MapMemoryAt(void *desired, size_t length, int flags, int prot = PAGE_READWRITE)
+{
+    MOZ_ASSERT(false);
+    return nullptr;
+}
+
+static inline void *
+MapMemory(size_t length, int flags = 0)
+{
+    return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, length);
+}
+
+void *
+MapAlignedPages(size_t size, size_t alignment)
+{
+    MOZ_ASSERT(size >= alignment);
+    MOZ_ASSERT(size % alignment == 0);
+    MOZ_ASSERT(size % pageSize == 0);
+    MOZ_ASSERT(alignment % allocGranularity == 0);
+
+    void *p = MapAlignedPagesLastDitch(size, alignment);
+
+    /* Special case: If we want allocation alignment, no further work is needed. */
+    if (alignment == allocGranularity)
+        return p;
+
+    if (OffsetFromAligned(p, alignment) == 0)
+        return p;
+    
+    MOZ_ASSERT(OffsetFromAligned(p, alignment) == 0);
+    return p;
+}
+
+static void *
+MapAlignedPagesSlow(size_t size, size_t alignment)
+{
+    void* ret = nullptr;
+    while (true) {
+        ret = MapMemory(size + alignment - pageSize);
+        if (!ret)
+            break;
+        uintptr_t addr = uintptr_t(ret);
+        uintptr_t offset = OffsetFromAligned(ret, alignment);
+        UnmapPages(ret, size + alignment - pageSize);
+
+        void *head = nullptr;
+        if (offset)
+            head = MapMemory(alignment - offset);
+        ret = MapMemory(size);
+        if (head)
+            UnmapPages(head, alignment - offset);
+        if (OffsetFromAligned(ret, alignment) == 0)
+            break;
+        UnmapPages(ret, size);
+
+        void *end = reinterpret_cast<void *>(addr + size + alignment - pageSize);
+        uintptr_t tailSize = OffsetFromAligned(end, alignment);
+
+        void *tail = nullptr;
+        if (tailSize)
+            tail = MapMemory(tailSize);
+        ret = MapMemory(size);
+        if (tail)
+            UnmapPages(tail, tailSize);
+        if (OffsetFromAligned(ret, alignment) == 0)
+            break;
+        UnmapPages(ret, size);
+    }
+    return ret;
+}
+
+/*
+* Even though there aren't any |size + alignment - pageSize| byte chunks left,
+* the allocator may still be able to give us |size| byte chunks that are
+* either already aligned, or *can* be aligned by allocating in the nearest
+* aligned location. Since we can't tell the allocator to give us a different
+* address each time, we temporarily hold onto the unaligned part of each chunk
+* until the allocator gives us a chunk that either is, or can be aligned.
+*/
+static void *MapAlignedPagesLastDitch(size_t size, size_t alignment)
+{
+    void* p = MapMemory(size + alignment - pageSize);
+
+    /* Special case: If we want allocation alignment, no further work is needed. */
+    if (alignment == allocGranularity)
+        return p;
+    if (OffsetFromAligned(p, alignment) == 0)
+        return p;
+
+    p = reinterpret_cast<void*>(uintptr_t(p) + alignment - OffsetFromAligned(p, alignment));
+    return p;
+}
+
+/*
+* On Windows, map and unmap calls must be matched, so we deallocate the
+* unaligned chunk, then reallocate the unaligned part to block off the
+* old address and force the allocator to give us a new one.
+*/
+static void
+GetNewChunk(void **aAddress, void **aRetainedAddr, size_t *aRetainedSize, size_t size,
+size_t alignment)
+{
+    void *address = *aAddress;
+    void *retainedAddr = nullptr;
+    size_t retainedSize = 0;
+    do {
+        if (!address)
+            address = MapMemory(size, MEM_COMMIT | MEM_RESERVE);
+        size_t offset = OffsetFromAligned(address, alignment);
+        if (!offset)
+            break;
+        UnmapPages(address, size);
+        retainedSize = alignment - offset;
+        retainedAddr = MapMemoryAt(address, retainedSize, MEM_RESERVE);
+        address = MapMemory(size, MEM_COMMIT | MEM_RESERVE);
+        /* If retainedAddr is null here, we raced with another thread. */
+    } while (!retainedAddr);
+    *aAddress = address;
+    *aRetainedAddr = retainedAddr;
+    *aRetainedSize = retainedSize;
+}
+
+void
+UnmapPages(void *p, size_t size)
+{
+    MOZ_ALWAYS_TRUE(HeapFree(GetProcessHeap(), 0, p));
+}
+
+bool
+MarkPagesUnused(void *p, size_t size)
+{
+    MOZ_ASSERT(OffsetFromAligned(p, pageSize) == 0);
+    return true;
+}
+
+bool
+MarkPagesInUse(void *p, size_t size)
+{
+    MOZ_ASSERT(OffsetFromAligned(p, pageSize) == 0);
+    return true;
+}
+
+size_t
+GetPageFaultCount()
+{
+    return 0;
+}
+
+void *
+AllocateMappedContent(int fd, size_t offset, size_t length, size_t alignment)
+{
+    // TODO: Bug 988813 - Support memory mapped array buffer for Windows platform.
+    return nullptr;
+}
+
+// Deallocate mapped memory for object.
+void
+DeallocateMappedContent(void *p, size_t length)
+{
+    // TODO: Bug 988813 - Support memory mapped array buffer for Windows platform.
+}
+
+#elif defined(XP_WIN)
 
 void
 InitMemorySubsystem()

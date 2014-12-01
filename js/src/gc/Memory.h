@@ -7,6 +7,24 @@
 #ifndef gc_Memory_h
 #define gc_Memory_h
 
+#ifdef WP8
+
+#define PAGE_EXECUTE_READ       0x20
+#define PAGE_EXECUTE_READWRITE  0x40
+
+typedef struct _PROCESS_MEMORY_COUNTERS {
+  DWORD PageFaultCount;
+} PROCESS_MEMORY_COUNTERS;
+
+VOID    GetSystemInfo(LPSYSTEM_INFO sinfo);
+BOOL    GetVersionEx(LPOSVERSIONINFO lpVersionInformation);
+BOOL    VerifyVersionInfo(LPOSVERSIONINFOEX lpVersionInformation, DWORD dwTypeMask, DWORDLONG dwlConditionMask);
+LPVOID  VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
+BOOL    VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
+BOOL    VirtualProtect(LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect);
+
+#endif
+
 #include <stddef.h>
 
 struct JSRuntime;

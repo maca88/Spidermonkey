@@ -432,6 +432,11 @@ class MOZ_NONHEAP_CLASS Handle : public js::HandleBase<T>
         ptr = handle.address();
     }
 
+    // Only for fast port to new version
+    MOZ_IMPLICIT Handle(const JSObject* obj) {
+        ptr = reinterpret_cast<const T*>(obj);
+    }
+
     /*
      * Take care when calling this method!
      *

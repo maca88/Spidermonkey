@@ -21,6 +21,7 @@
 #include <stdint.h>
 
 #include "js-config.h"
+#include "mozilla/Char16.h"
 
 struct JSContext;
 class JSFunction;

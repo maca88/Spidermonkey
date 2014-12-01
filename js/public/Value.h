@@ -1988,6 +1988,93 @@ extern JS_PUBLIC_DATA(const jsval) JSVAL_FALSE;
 extern JS_PUBLIC_DATA(const jsval) JSVAL_TRUE;
 extern JS_PUBLIC_DATA(const jsval) JSVAL_VOID;
 
+// Only for fast port to new version
+static inline bool
+JSVAL_IS_NULL(jsval v)
+{
+    return JSVAL_IS_NULL_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_VOID(jsval v)
+{
+    return JSVAL_IS_UNDEFINED_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_INT(jsval v)
+{
+    return JSVAL_IS_INT32_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline int32_t
+JSVAL_TO_INT(jsval v)
+{
+    MOZ_ASSERT(JSVAL_IS_INT(v));
+    return JSVAL_TO_INT32_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_DOUBLE(jsval v)
+{
+    return JSVAL_IS_DOUBLE_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline double
+JSVAL_TO_DOUBLE(jsval v)
+{
+    jsval_layout l;
+    MOZ_ASSERT(JSVAL_IS_DOUBLE(v));
+    l = JSVAL_TO_IMPL(v);
+    return l.asDouble;
+}
+
+static inline bool
+JSVAL_IS_NUMBER(jsval v)
+{
+    return JSVAL_IS_NUMBER_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_STRING(jsval v)
+{
+    return JSVAL_IS_STRING_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline JSString *
+JSVAL_TO_STRING(jsval v)
+{
+    MOZ_ASSERT(JSVAL_IS_STRING(v));
+    return JSVAL_TO_STRING_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline JSObject *
+JSVAL_TO_OBJECT(jsval v)
+{
+    MOZ_ASSERT(JSVAL_IS_OBJECT_OR_NULL_IMPL(JSVAL_TO_IMPL(v)));
+    return JSVAL_TO_OBJECT_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_BOOLEAN(jsval v)
+{
+    return JSVAL_IS_BOOLEAN_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_TO_BOOLEAN(jsval v)
+{
+    MOZ_ASSERT(JSVAL_IS_BOOLEAN(v));
+    return JSVAL_TO_BOOLEAN_IMPL(JSVAL_TO_IMPL(v));
+}
+
+static inline bool
+JSVAL_IS_PRIMITIVE(jsval v)
+{
+    return JSVAL_IS_PRIMITIVE_IMPL(JSVAL_TO_IMPL(v));
+}
+// Only for fast port to new version
+
 namespace JS {
 
 extern JS_PUBLIC_DATA(const HandleValue) NullHandleValue;

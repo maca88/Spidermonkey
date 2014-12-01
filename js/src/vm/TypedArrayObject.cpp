@@ -914,7 +914,7 @@ class TypedArrayObjectTemplate : public TypedArrayObject
 
         double d;
         MOZ_ASSERT(v.isString() || v.isObject());
-        if (!(v.isString() ? StringToNumber(cx, v.toString(), &d) : ToNumber(cx, v, &d)))
+        if (!(v.isString() ? StringToNumber(cx, v.toString(), &d) : ToNumber(cx, HandleValue::fromMarkedLocation(&v), &d)))
             return false;
 
         *result = doubleToNative(d);

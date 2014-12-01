@@ -274,6 +274,8 @@ ClearAllBitArrayElements(size_t *array, size_t length)
 
 }  /* namespace js */
 
+char* getenv(const char*);
+
 static inline void *
 Poison(void *ptr, int value, size_t num)
 {

@@ -10,6 +10,7 @@
 #include "mozilla/Attributes.h"
 #include <stdint.h>
 #include <windows.h>
+#include "gc/Memory.h"
 
 namespace mozilla {
 
@@ -36,11 +37,12 @@ IsWindowsVersionOrLater(uint32_t aVersion)
   info.wServicePackMinor = aVersion & 0xFF;
 
   DWORDLONG conditionMask = 0;
+#ifndef WP8
   VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
   VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
   VER_SET_CONDITION(conditionMask, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
   VER_SET_CONDITION(conditionMask, VER_SERVICEPACKMINOR, VER_GREATER_EQUAL);
-
+#endif
   if (VerifyVersionInfo(&info,
                         VER_MAJORVERSION | VER_MINORVERSION |
                         VER_SERVICEPACKMAJOR | VER_SERVICEPACKMINOR,
@@ -73,8 +75,9 @@ IsWindowsBuildOrLater(uint32_t aBuild)
   info.dwBuildNumber = aBuild;
 
   DWORDLONG conditionMask = 0;
+#ifndef WP8
   VER_SET_CONDITION(conditionMask, VER_BUILDNUMBER, VER_GREATER_EQUAL);
-
+#endif
   if (VerifyVersionInfo(&info, VER_BUILDNUMBER, conditionMask)) {
     minBuild = aBuild;
     return true;

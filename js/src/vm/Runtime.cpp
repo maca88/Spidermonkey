@@ -64,6 +64,10 @@ using JS::DoubleNaNValue;
 /* static */ size_t JSRuntime::liveRuntimesCount;
 #endif
 
+#ifdef WP8
+char* getenv(const char*) { return nullptr; }
+#endif
+
 const JSSecurityCallbacks js::NullSecurityCallbacks = { };
 
 PerThreadData::PerThreadData(JSRuntime *runtime)

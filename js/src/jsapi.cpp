@@ -93,6 +93,10 @@
 #include "vm/ObjectImpl-inl.h"
 #include "vm/String-inl.h"
 
+#ifdef WP8
+#define MOZILLA_VERSION "33.1.1"
+#endif
+
 using namespace js;
 using namespace js::gc;
 using namespace js::types;
@@ -5301,6 +5305,14 @@ JS_PUBLIC_API(size_t)
 JS_GetStringLength(JSString *str)
 {
     return str->length();
+}
+
+JS_PUBLIC_API(const jschar *)
+JS_GetStringCharsZ(JSContext *cx, JSString *str)
+{
+    size_t dummy;
+    JS::AutoCheckCannotGC checkGC(cx->runtime());
+    return JS_GetTwoByteStringCharsAndLength(cx, checkGC, str, &dummy);
 }
 
 JS_PUBLIC_API(bool)

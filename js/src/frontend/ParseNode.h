@@ -1361,6 +1361,13 @@ struct Definition : public ParseNode
         return pn_cookie.isFree();
     }
 
+#ifdef WP8
+    #ifdef CONST
+        #undef CONST
+        #pragma message("!!! WE SHOULD REMOVE DEFINITION OF CONST " __FILE__)
+    #endif
+#endif
+
     enum Kind { MISSING = 0, VAR, CONST, LET, ARG, NAMED_LAMBDA, PLACEHOLDER };
 
     bool canHaveInitializer() { return int(kind()) <= int(ARG); }

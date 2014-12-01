@@ -389,6 +389,8 @@ CallArgsFromSp(unsigned argc, Value *sp)
  */
 
 #define JS_THIS_OBJECT(cx,vp)   (JS_THIS(cx,vp).toObjectOrNull())
+#define JS_ARGV(cx,vp)          ((vp) + 2)
+#define JS_SET_RVAL(cx,vp,v)    (*(vp) = (v))
 
 /*
  * Note: if this method returns null, an error has occurred and must be

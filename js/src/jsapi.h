@@ -9,6 +9,7 @@
 #ifndef jsapi_h
 #define jsapi_h
 
+#include "mozilla/Char16.h"
 #include "mozilla/FloatingPoint.h"
 #include "mozilla/MemoryReporting.h"
 #include "mozilla/Range.h"
@@ -4226,6 +4227,9 @@ JS_GetLatin1InternedStringChars(const JS::AutoCheckCannotGC &nogc, JSString *str
 
 extern JS_PUBLIC_API(const jschar *)
 JS_GetTwoByteInternedStringChars(const JS::AutoCheckCannotGC &nogc, JSString *str);
+
+extern JS_PUBLIC_API(const jschar *)
+JS_GetStringCharsZ(JSContext *cx, JSString *str);
 
 extern JS_PUBLIC_API(JSFlatString *)
 JS_FlattenString(JSContext *cx, JSString *str);

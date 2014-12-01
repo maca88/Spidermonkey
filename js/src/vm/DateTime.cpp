@@ -61,11 +61,13 @@ UTCToLocalStandardOffsetSeconds()
     using js::SecondsPerHour;
     using js::SecondsPerMinute;
 
+#ifndef WP8
 #if defined(XP_WIN)
     // Windows doesn't follow POSIX: updates to the TZ environment variable are
     // not reflected immediately on that platform as they are on other systems
     // without this call.
     _tzset();
+#endif
 #endif
 
     // Get the current time.
@@ -174,11 +176,13 @@ js::DateTimeInfo::computeDSTOffsetMilliseconds(int64_t utcSeconds)
     MOZ_ASSERT(utcSeconds >= 0);
     MOZ_ASSERT(utcSeconds <= MaxUnixTimeT);
 
+#ifndef WP8
 #if defined(XP_WIN)
     // Windows does not follow POSIX. Updates to the TZ environment variable
     // are not reflected immediately on that platform as they are on UNIX
     // systems without this call.
     _tzset();
+#endif
 #endif
 
     struct tm tm;

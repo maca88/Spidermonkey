@@ -105,13 +105,17 @@ NowCalibrate()
 
     // By wrapping a timeBegin/EndPeriod pair of calls around this loop,
     // the loop seems to take much less time (1 ms vs 15ms) on Vista.
+#ifndef WP8
     timeBeginPeriod(1);
+#endif
     FILETIME ft, ftStart;
     GetSystemTimeAsFileTime(&ftStart);
     do {
         GetSystemTimeAsFileTime(&ft);
     } while (memcmp(&ftStart, &ft, sizeof(ft)) == 0);
+#ifndef WP8
     timeEndPeriod(1);
+#endif
 
     LARGE_INTEGER now;
     QueryPerformanceCounter(&now);
@@ -144,11 +148,13 @@ PRMJ_NowInit()
     InitializeCriticalSectionAndSpinCount(&calibration.data_lock, DataLockSpinCount);
 #endif
 
+#ifndef WP8
     // Windows 8 has a new API function we can use.
     if (HMODULE h = GetModuleHandle("kernel32.dll")) {
         pGetSystemTimePreciseAsFileTime =
             (void (WINAPI *)(LPFILETIME))GetProcAddress(h, "GetSystemTimePreciseAsFileTime");
     }
+#endif
 }
 
 #ifdef JS_THREADSAFE
