@@ -21,7 +21,7 @@
 
 #include "js/TypeDecls.h"
 
-#if defined(JSGC_USE_EXACT_ROOTING) || defined(JS_DEBUG)
+#if defined(JSGC_USE_EXACT_ROOTING)
 # define JSGC_TRACK_EXACT_ROOTS
 #endif
 

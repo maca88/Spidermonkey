@@ -72,9 +72,7 @@ class JS_PUBLIC_API(AutoCheckRequestDepth)
 JS_PUBLIC_API(void)
 AssertArgumentsAreSane(JSContext *cx, JS::HandleValue v);
 #else
-inline void AssertArgumentsAreSane(JSContext *cx, JS::HandleValue v) {
-    /* Do nothing */
-}
+void AssertArgumentsAreSane(JSContext *cx, JS::HandleValue v);
 #endif /* JS_DEBUG */
 
 /* AutoValueArray roots an internal fixed-size array of Values. */
@@ -4227,9 +4225,6 @@ JS_GetLatin1InternedStringChars(const JS::AutoCheckCannotGC &nogc, JSString *str
 
 extern JS_PUBLIC_API(const jschar *)
 JS_GetTwoByteInternedStringChars(const JS::AutoCheckCannotGC &nogc, JSString *str);
-
-extern JS_PUBLIC_API(const jschar *)
-JS_GetStringCharsZ(JSContext *cx, JSString *str);
 
 extern JS_PUBLIC_API(JSFlatString *)
 JS_FlattenString(JSContext *cx, JSString *str);

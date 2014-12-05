@@ -5307,14 +5307,6 @@ JS_GetStringLength(JSString *str)
     return str->length();
 }
 
-JS_PUBLIC_API(const jschar *)
-JS_GetStringCharsZ(JSContext *cx, JSString *str)
-{
-    size_t dummy;
-    JS::AutoCheckCannotGC checkGC(cx->runtime());
-    return JS_GetTwoByteStringCharsAndLength(cx, checkGC, str, &dummy);
-}
-
 JS_PUBLIC_API(bool)
 JS_StringIsFlat(JSString *str)
 {
@@ -6537,7 +6529,7 @@ AutoGCRooter::AutoGCRooter(ContextFriendFields *cx, ptrdiff_t tag)
     *stackTop = this;
 }
 
-#ifdef DEBUG
+#ifdef JS_DEBUG
 JS_PUBLIC_API(void)
 JS::AssertArgumentsAreSane(JSContext *cx, HandleValue value)
 {
@@ -6545,7 +6537,11 @@ JS::AssertArgumentsAreSane(JSContext *cx, HandleValue value)
     CHECK_REQUEST(cx);
     assertSameCompartment(cx, value);
 }
-#endif /* DEBUG */
+#else
+void JS::AssertArgumentsAreSane(JSContext *cx, JS::HandleValue v) {
+    /* Do nothing */
+}
+#endif /* JS_DEBUG */
 
 JS_PUBLIC_API(void *)
 JS_EncodeScript(JSContext *cx, HandleScript scriptArg, uint32_t *lengthp)

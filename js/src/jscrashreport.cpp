@@ -59,6 +59,9 @@ GetStack(uint64_t *stack, uint64_t *stack_len, CrashRegisters *regs, char *buffe
     regs->ip = vip;
     regs->sp = vsp;
     regs->bp = vbp;
+#elif defined(_M_ARM)
+#pragma message("!!! POSSIBLY SHOULD BEEN RESOLVED LATER " __FILE__ " : " __FUNCTION__)
+    return false;
 #else
     CONTEXT context;
     RtlCaptureContext(&context);

@@ -68,6 +68,9 @@
 #elif _MSC_VER < 1600
 #define WTF_COMPILER_MSVC9_OR_LOWER 1
 #endif
+#if defined(_M_ARM)
+#define WTF_CPU_ARM_TRADITIONAL 1
+#endif
 #endif
 
 /* WTF_COMPILER_RVCT  - ARM RealView Compilation Tools */
@@ -238,6 +241,7 @@
     || defined(i386)     \
     || defined(_M_IX86)  \
     || defined(_X86_)    \
+    || defined(_M_ARM)    \
     || defined(__THW_INTEL)
 #define WTF_CPU_X86 1
 #endif
