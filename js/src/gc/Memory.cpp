@@ -14,6 +14,7 @@
 #if defined(WP8)
 
 #include "jswin.h"
+#include "mozilla/RefPtr.h"
 
 #elif defined(XP_WIN)
 
@@ -130,6 +131,9 @@ TestMapAlignedPagesLastDitch(size_t size, size_t alignment)
 
 #if defined(WP8)
 
+typedef HashMap<uintptr_t, uintptr_t, DefaultHasher<uintptr_t>, SystemAllocPolicy> MemoryHashMap;
+mozilla::UniquePtr<MemoryHashMap> MemoryMap;
+
 void
 InitMemorySubsystem()
 {
@@ -138,6 +142,8 @@ InitMemorySubsystem()
         GetSystemInfo(&sysinfo);
         pageSize = sysinfo.dwPageSize;
         allocGranularity = sysinfo.dwAllocationGranularity;
+        MemoryMap.reset(new MemoryHashMap());
+        MemoryMap->init();
     }
 }
 
@@ -178,39 +184,7 @@ MapAlignedPages(size_t size, size_t alignment)
 static void *
 MapAlignedPagesSlow(size_t size, size_t alignment)
 {
-    void* ret = nullptr;
-    while (true) {
-        ret = MapMemory(size + alignment - pageSize);
-        if (!ret)
-            break;
-        uintptr_t addr = uintptr_t(ret);
-        uintptr_t offset = OffsetFromAligned(ret, alignment);
-        UnmapPages(ret, size + alignment - pageSize);
-
-        void *head = nullptr;
-        if (offset)
-            head = MapMemory(alignment - offset);
-        ret = MapMemory(size);
-        if (head)
-            UnmapPages(head, alignment - offset);
-        if (OffsetFromAligned(ret, alignment) == 0)
-            break;
-        UnmapPages(ret, size);
-
-        void *end = reinterpret_cast<void *>(addr + size + alignment - pageSize);
-        uintptr_t tailSize = OffsetFromAligned(end, alignment);
-
-        void *tail = nullptr;
-        if (tailSize)
-            tail = MapMemory(tailSize);
-        ret = MapMemory(size);
-        if (tail)
-            UnmapPages(tail, tailSize);
-        if (OffsetFromAligned(ret, alignment) == 0)
-            break;
-        UnmapPages(ret, size);
-    }
-    return ret;
+    return MapAlignedPagesLastDitch(size, alignment);
 }
 
 /*
@@ -221,7 +195,8 @@ MapAlignedPagesSlow(size_t size, size_t alignment)
 * address each time, we temporarily hold onto the unaligned part of each chunk
 * until the allocator gives us a chunk that either is, or can be aligned.
 */
-static void *MapAlignedPagesLastDitch(size_t size, size_t alignment)
+static void*
+MapAlignedPagesLastDitch(size_t size, size_t alignment)
 {
     void* p = MapMemory(size + alignment - pageSize);
 
@@ -231,8 +206,13 @@ static void *MapAlignedPagesLastDitch(size_t size, size_t alignment)
     if (OffsetFromAligned(p, alignment) == 0)
         return p;
 
-    p = reinterpret_cast<void*>(uintptr_t(p) + alignment - OffsetFromAligned(p, alignment));
-    return p;
+    void* ptr = reinterpret_cast<void*>(uintptr_t(p) + alignment - OffsetFromAligned(p, alignment));
+
+    // We should remember mapping between aligned and unaligned pointers
+    MemoryHashMap::AddPtr finder = MemoryMap->lookupForAdd(uintptr_t(ptr));
+    MemoryMap->add(finder, uintptr_t(ptr), uintptr_t(p));
+
+    return ptr;
 }
 
 /*
@@ -267,6 +247,11 @@ size_t alignment)
 void
 UnmapPages(void *p, size_t size)
 {
+    // If we got aligned memory, we should find unaligned pointer to free correct memory
+    if (MemoryHashMap::Ptr finder = MemoryMap->lookup(uintptr_t(p))) {
+        p = (void*)(*finder).value();
+        MemoryMap->remove(finder);
+    }
     MOZ_ALWAYS_TRUE(HeapFree(GetProcessHeap(), 0, p));
 }
 
