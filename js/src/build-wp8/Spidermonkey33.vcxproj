@@ -26,13 +26,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110_wp80</PlatformToolset>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v110_wp80</PlatformToolset>
@@ -51,11 +51,14 @@
     <IntDir>$(Platform).$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetName>mozjs</TargetName>
+    <TargetName>mozjs-33</TargetName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
-      <PreprocessorDefinitions>STATIC_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;JS_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -65,22 +68,20 @@
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>zlib\$(Platform)</AdditionalLibraryDirectories>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
-      <PreprocessorDefinitions>STATIC_JS_API;WP8;WINRT;XP_WIN;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -89,18 +90,27 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>zlib\$(Platform)</AdditionalLibraryDirectories>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
     <PreBuildEvent>
       <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
 xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
 xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
     </PreBuildEvent>
+    <Lib>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\builtin\Eval.h" />
