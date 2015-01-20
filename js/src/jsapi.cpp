@@ -6537,10 +6537,6 @@ JS::AssertArgumentsAreSane(JSContext *cx, HandleValue value)
     CHECK_REQUEST(cx);
     assertSameCompartment(cx, value);
 }
-#else
-void JS::AssertArgumentsAreSane(JSContext *cx, JS::HandleValue v) {
-    /* Do nothing */
-}
 #endif /* JS_DEBUG */
 
 JS_PUBLIC_API(void *)
