@@ -91,7 +91,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>..;zlib;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
