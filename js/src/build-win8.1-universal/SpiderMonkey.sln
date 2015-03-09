@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SpiderMonkey", "SpiderMonkey", "{ED5C6EFA-5B22-4545-8C99-B8300616F9A2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpiderMonkey.Shared", "SpiderMonkey\SpiderMonkey.Shared\SpiderMonkey.Shared.vcxitems", "{330B9CDB-0F05-4C94-B129-5E51ADC496C8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpiderMonkey.Windows", "SpiderMonkey\SpiderMonkey.Windows\SpiderMonkey.Windows.vcxproj", "{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpiderMonkey.WindowsPhone", "SpiderMonkey\SpiderMonkey.WindowsPhone\SpiderMonkey.WindowsPhone.vcxproj", "{8AE15097-68C3-43AF-9106-E2F94881E72E}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SpiderMonkey\SpiderMonkey.Shared\SpiderMonkey.Shared.vcxitems*{9e8f849c-a16a-4a38-95e3-b8e90c0f9b6b}*SharedItemsImports = 4
+		SpiderMonkey\SpiderMonkey.Shared\SpiderMonkey.Shared.vcxitems*{8ae15097-68c3-43af-9106-e2f94881e72e}*SharedItemsImports = 4
+		SpiderMonkey\SpiderMonkey.Shared\SpiderMonkey.Shared.vcxitems*{330b9cdb-0f05-4c94-b129-5e51adc496c8}*SharedItemsImports = 9
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|ARM = Release|ARM
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|ARM.ActiveCfg = Debug|ARM
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|ARM.Build.0 = Debug|ARM
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|Win32.Build.0 = Debug|Win32
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|x64.ActiveCfg = Debug|x64
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Debug|x64.Build.0 = Debug|x64
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|ARM.ActiveCfg = Release|ARM
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|ARM.Build.0 = Release|ARM
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|Win32.ActiveCfg = Release|Win32
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|Win32.Build.0 = Release|Win32
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|x64.ActiveCfg = Release|x64
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B}.Release|x64.Build.0 = Release|x64
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Debug|ARM.Build.0 = Debug|ARM
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Debug|Win32.Build.0 = Debug|Win32
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Debug|x64.ActiveCfg = Debug|Win32
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Release|ARM.ActiveCfg = Release|ARM
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Release|ARM.Build.0 = Release|ARM
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Release|Win32.ActiveCfg = Release|Win32
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Release|Win32.Build.0 = Release|Win32
+		{8AE15097-68C3-43AF-9106-E2F94881E72E}.Release|x64.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{330B9CDB-0F05-4C94-B129-5E51ADC496C8} = {ED5C6EFA-5B22-4545-8C99-B8300616F9A2}
+		{9E8F849C-A16A-4A38-95E3-B8E90C0F9B6B} = {ED5C6EFA-5B22-4545-8C99-B8300616F9A2}
+		{8AE15097-68C3-43AF-9106-E2F94881E72E} = {ED5C6EFA-5B22-4545-8C99-B8300616F9A2}
+	EndGlobalSection
+EndGlobal

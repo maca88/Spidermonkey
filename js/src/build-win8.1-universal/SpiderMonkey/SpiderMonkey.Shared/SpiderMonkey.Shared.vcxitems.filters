@@ -1,0 +1,807 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)targetver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Eval.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Intl.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\MapObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Object.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Profilers.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\RegExp.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\TestingFunctions.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\TypedObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\TypedObjectConstants.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\BitArray.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\FixedSizeHash.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\IdValuePair.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\InlineMap.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\LifoAlloc.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\PriorityQueue.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\Sort.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\ds\SplayTree.h">
+      <Filter>source\ds</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\BytecodeCompiler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\BytecodeEmitter.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\FoldConstants.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\FullParseHandler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\NameFunctions.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseMaps.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseMaps-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseNode.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseNode-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\Parser.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\Parser-inl.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\SharedContext.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\SourceNotes.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\SyntaxParseHandler.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\frontend\TokenStream.h">
+      <Filter>source\frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Barrier.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\FindSCCs.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\ForkJoinNursery.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\ForkJoinNursery-inl.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\GCInternals.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\GCRuntime.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\GCTrace.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\GCTraceFormat.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Heap.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Marking.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Memory.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Nursery.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Nursery-inl.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Rooting.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Statistics.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\StoreBuffer.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Tracer.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\gc\Zone.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\Compression.h">
+      <Filter>source\mfbt</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\FloatingPoint.h">
+      <Filter>source\mfbt</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\HashFunctions.h">
+      <Filter>source\mfbt</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\SHA1.h">
+      <Filter>source\mfbt</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\decimal\Decimal.h">
+      <Filter>source\mfbt\decimal</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\bignum.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\bignum-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\cached-powers.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\diy-fp.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\double-conversion.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\fast-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\fixed-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\strtod.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArgumentsObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArgumentsObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArrayBufferObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArrayObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArrayObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\BooleanObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\BooleanObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\CommonPropertyNames.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Compression.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\DateObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\DateTime.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Debugger.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Debugger-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\DebuggerMemory.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ErrorObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ErrorObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ForkJoin.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\GeneratorObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\GlobalObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\HelperThreads.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Interpreter.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Interpreter-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Keywords.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\MallocProvider.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\MatchPairs.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Monitor.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\NumberObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\NumberObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\NumericConversions.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ObjectImpl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ObjectImpl-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Opcodes.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\PIC.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\PosixNSPR.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Probes.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Probes-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\PropDesc.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ProxyObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\RegExpObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\RegExpStatics.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\RegExpStaticsObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Runtime.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Runtime-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\SavedStacks.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ScopeObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ScopeObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\SelfHosting.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Shape.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Shape-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\SharedArrayObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\SPSProfiler.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Stack.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Stack-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\StopIterationObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\String.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\StringBuffer.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\String-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\StringObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\StringObject-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Symbol.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Symbol-inl.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\ThreadPool.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\TypedArrayObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Unicode.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\WeakMapObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\WrapperObject.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Xdr.h">
+      <Filter>source\vm</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Eval.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Intl.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\MapObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Object.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\Profilers.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\RegExp.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\TestingFunctions.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\TypedObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\ds\LifoAlloc.cpp">
+      <Filter>source\ds</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\BytecodeCompiler.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\BytecodeEmitter.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\FoldConstants.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\NameFunctions.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseMaps.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\ParseNode.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\Parser.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\frontend\TokenStream.cpp">
+      <Filter>source\frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Barrier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\ForkJoinNursery.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\GCTrace.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Iteration.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Marking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Memory.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Nursery.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\RootMarking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Statistics.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\StoreBuffer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Tracer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Verifier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\gc\Zone.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\Compression.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\FloatingPoint.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\HashFunctions.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\SHA1.cpp">
+      <Filter>source\mfbt</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\decimal\Decimal.cpp">
+      <Filter>source\mfbt\decimal</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\bignum.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\bignum-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\cached-powers.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\diy-fp.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\double-conversion.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\fast-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\fixed-dtoa.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\..\mfbt\double-conversion\strtod.cc">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArgumentsObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ArrayBufferObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\CallNonGenericMethod.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\CharacterEncoding.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\CompressionVM.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\DateTime.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Debugger.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\DebuggerMemory.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ErrorObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ForkJoin.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\GlobalObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\HelperThreads.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Id.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Interpreter.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\MemoryMetrics.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Monitor.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ObjectImpl.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\OldDebugAPI.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\PIC.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\PosixNSPR.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Probes.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\PropertyKey.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ProxyObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\RegExpObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\RegExpStatics.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Runtime.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\SavedStacks.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ScopeObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\SelfHosting.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Shape.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\SharedArrayObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\SPSProfiler.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Stack.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\String.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\StringBuffer.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\StructuredClone.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Symbol.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\ThreadPool.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\TypedArrayObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Unicode.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Value.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\WeakMapPtr.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\Xdr.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsalloc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsarray.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsatom.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsbool.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jscntxt.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jscompartment.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jscrashreport.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsdate.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsdtoa.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsexn.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsfriendapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsfun.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsgc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsinfer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsiter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jskwgen.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsmath.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsnativestack.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsnum.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsobj.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\json.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsonparser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsopcode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsprf.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jspropertytree.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsproxy.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsreflect.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsscript.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsstr.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsutil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jswatchpoint.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsweakmap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jswrapper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\prmjtime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{6de2f2f8-b6bb-43ed-a4c8-77b854cf4742}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\builtin">
+      <UniqueIdentifier>{3f606f5e-2c42-407c-af38-a40a47dc5615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\ds">
+      <UniqueIdentifier>{c1c0519f-cde0-458a-a3a2-e3a939c6655f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\frontend">
+      <UniqueIdentifier>{7c6e1a9a-50c3-48d3-a835-640b5f0a9af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\gc">
+      <UniqueIdentifier>{5cfa219e-c99a-407a-80a9-62f4e7e49f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt">
+      <UniqueIdentifier>{42618f90-48b1-40a7-8cfa-c8dcd8eb1b43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\vm">
+      <UniqueIdentifier>{35ca4afc-cf94-406d-b856-9bd485612858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt\decimal">
+      <UniqueIdentifier>{b611d27f-2918-49d0-9f16-cf16521fe78d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mfbt\double-conversion">
+      <UniqueIdentifier>{b766a16e-b536-4cec-91e0-3a8e45268d39}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_opcode_doc.py">
+      <Filter>source\vm</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_unicode.py">
+      <Filter>source\vm</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)..\..\..\vm\UnicodeData.txt">
+      <Filter>source\vm</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
