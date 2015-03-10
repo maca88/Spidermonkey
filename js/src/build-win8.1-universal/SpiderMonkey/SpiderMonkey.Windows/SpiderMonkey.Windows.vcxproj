@@ -120,7 +120,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -140,7 +140,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -160,7 +160,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -180,7 +180,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -200,7 +200,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -220,7 +220,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

@@ -393,6 +393,33 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\vm\Xdr.h">
       <Filter>source\vm</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpAST.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpBytecode.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpEngine.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpMacroAssembler.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpParser.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpStack.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\SymbolObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\builtin\SIMD.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\assembler\jit\ExecutableAllocator.h">
+      <Filter>source\assembler\jit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
@@ -761,6 +788,39 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\prmjtime.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\vm\UbiNode.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpAST.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpEngine.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpInterpreter.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpMacroAssembler.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpParser.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\irregexp\RegExpStack.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\SymbolObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\builtin\SIMD.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\assembler\jit\ExecutableAllocator.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\assembler\jit\ExecutableAllocatorWin.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="source">
@@ -789,6 +849,15 @@
     </Filter>
     <Filter Include="source\mfbt\double-conversion">
       <UniqueIdentifier>{b766a16e-b536-4cec-91e0-3a8e45268d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\irregexp">
+      <UniqueIdentifier>{43f85a17-5881-4bb7-9a5b-63628611aec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assembler">
+      <UniqueIdentifier>{eda83a2f-c559-450a-9037-413311c14de4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assembler\jit">
+      <UniqueIdentifier>{9139defc-f972-4e14-ae7d-b77086cbb505}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

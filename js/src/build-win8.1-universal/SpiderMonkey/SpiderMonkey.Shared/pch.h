@@ -7,3 +7,6 @@
 #endif
 
 #include <windows.h>
+
+#include "mozilla/Char16.h"
+
