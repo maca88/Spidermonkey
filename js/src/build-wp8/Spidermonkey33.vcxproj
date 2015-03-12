@@ -64,7 +64,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>zlib\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\cocos2d-x-3rd-party-libs-bin\wp8-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
@@ -75,17 +75,17 @@
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>zlib\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\cocos2d-x-3rd-party-libs-bin\wp8-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command>xcopy   ..\..\public\*.h   $(IntDir)\js   /Y /I /Q
+xcopy   ..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
     <ClCompile>
-      <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WP8;WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -94,8 +94,10 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command
       <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <CallingConvention>Cdecl</CallingConvention>
-      <DisableSpecificWarnings>4661;4351;4291;</DisableSpecificWarnings>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</MinimalRebuild>
+      <MinimalRebuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</MinimalRebuild>
     </ClCompile>
     <Lib>
       <SubSystem>Console</SubSystem>
