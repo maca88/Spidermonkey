@@ -64,7 +64,7 @@ using JS::DoubleNaNValue;
 /* static */ size_t JSRuntime::liveRuntimesCount;
 #endif
 
-#ifdef WP8
+#ifdef WINRT
 char* getenv(const char*) { return nullptr; }
 #endif
 

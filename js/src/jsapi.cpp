@@ -93,7 +93,7 @@
 #include "vm/ObjectImpl-inl.h"
 #include "vm/String-inl.h"
 
-#ifdef WP8
+#ifdef WINRT
 #define MOZILLA_VERSION "33.1.1"
 #endif
 

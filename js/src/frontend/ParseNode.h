@@ -1361,10 +1361,9 @@ struct Definition : public ParseNode
         return pn_cookie.isFree();
     }
 
-#ifdef WP8
+#if defined(WINRT)
     #ifdef CONST
         #undef CONST
-        #pragma message("!!! WE SHOULD REMOVE DEFINITION OF CONST " __FILE__)
     #endif
 #endif
 

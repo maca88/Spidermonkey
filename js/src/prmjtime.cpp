@@ -105,7 +105,7 @@ NowCalibrate()
 
     // By wrapping a timeBegin/EndPeriod pair of calls around this loop,
     // the loop seems to take much less time (1 ms vs 15ms) on Vista.
-#ifndef WP8
+#ifndef WINRT
     timeBeginPeriod(1);
 #endif
     FILETIME ft, ftStart;
@@ -113,7 +113,7 @@ NowCalibrate()
     do {
         GetSystemTimeAsFileTime(&ft);
     } while (memcmp(&ftStart, &ft, sizeof(ft)) == 0);
-#ifndef WP8
+#ifndef WINRT
     timeEndPeriod(1);
 #endif
 
@@ -148,7 +148,7 @@ PRMJ_NowInit()
     InitializeCriticalSectionAndSpinCount(&calibration.data_lock, DataLockSpinCount);
 #endif
 
-#ifndef WP8
+#ifndef WINRT
     // Windows 8 has a new API function we can use.
     if (HMODULE h = GetModuleHandle("kernel32.dll")) {
         pGetSystemTimePreciseAsFileTime =

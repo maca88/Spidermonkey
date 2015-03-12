@@ -160,7 +160,7 @@ IsTypedArrayIndex(jsid id, uint64_t *indexp)
     if (JSID_IS_INT(id)) {
         int32_t i = JSID_TO_INT(id);
         JS_ASSERT(i >= 0);
-        *indexp = (double)i;
+        *indexp = (uint64_t)i;
         return true;
     }
 

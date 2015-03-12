@@ -11,7 +11,7 @@
 #include "js/HeapAPI.h"
 #include "vm/Runtime.h"
 
-#if defined(WP8)
+#if defined(WINRT)
 
 #include "jswin.h"
 #include "mozilla/RefPtr.h"
@@ -38,7 +38,7 @@
 
 #endif
 
-#if defined(WP8)
+#if defined(WINRT)
 
 VOID GetSystemInfo(LPSYSTEM_INFO sinfo)
 {
@@ -46,30 +46,48 @@ VOID GetSystemInfo(LPSYSTEM_INFO sinfo)
 }
 BOOL GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
 {
-#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
-	if (lpVersionInformation)
-		lpVersionInformation->dwMajorVersion = 6;
-	return TRUE;
+    // Windows 8 has the version 6.2.9200
+    // Windows 8.1 has the version 6.3.9600
+
+#ifdef WP8
+    if (lpVersionInformation)
+    {
+        lpVersionInformation->dwMajorVersion = 6;
+        lpVersionInformation->dwMinorVersion = 2;
+        lpVersionInformation->dwBuildNumber = 9200;
+    }
+#else
+    if (lpVersionInformation)
+    {
+        lpVersionInformation->dwMajorVersion = 6;
+        lpVersionInformation->dwMinorVersion = 3;
+        lpVersionInformation->dwBuildNumber = 9600;
+    }
+#endif
+    return TRUE;
+
 }
+
 BOOL VerifyVersionInfo(LPOSVERSIONINFOEX /*lpVersionInformation*/, DWORD /*dwTypeMask*/, DWORDLONG /*dwlConditionMask*/)
 {
-#pragma message("!!! POSSIBLY WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
     return TRUE;
 }
+
 LPVOID VirtualAlloc(LPVOID /*lpAddress*/, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
 {
 	return HeapAlloc(GetProcessHeap(), flAllocationType, dwSize);
 }
+
 BOOL VirtualFree(LPVOID lpAddress, SIZE_T /*dwSize*/, DWORD dwFreeType)
 {
 	return HeapFree(GetProcessHeap(), dwFreeType, lpAddress);
 }
+
 BOOL VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtect*/, PDWORD /*lpflOldProtect*/)
 {
 #pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
 	return TRUE;
 }
-
 #endif
 
 namespace js {
@@ -129,7 +147,7 @@ TestMapAlignedPagesLastDitch(size_t size, size_t alignment)
     return MapAlignedPagesLastDitch(size, alignment);
 }
 
-#if defined(WP8)
+#if defined(WINRT)
 
 typedef HashMap<uintptr_t, uintptr_t, DefaultHasher<uintptr_t>, SystemAllocPolicy> MemoryHashMap;
 mozilla::UniquePtr<MemoryHashMap> MemoryMap;

@@ -37,7 +37,7 @@ IsWindowsVersionOrLater(uint32_t aVersion)
   info.wServicePackMinor = aVersion & 0xFF;
 
   DWORDLONG conditionMask = 0;
-#ifndef WP8
+#ifndef WINRT
   VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
   VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
   VER_SET_CONDITION(conditionMask, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
@@ -75,7 +75,7 @@ IsWindowsBuildOrLater(uint32_t aBuild)
   info.dwBuildNumber = aBuild;
 
   DWORDLONG conditionMask = 0;
-#ifndef WP8
+#ifndef WINRT
   VER_SET_CONDITION(conditionMask, VER_BUILDNUMBER, VER_GREATER_EQUAL);
 #endif
   if (VerifyVersionInfo(&info, VER_BUILDNUMBER, conditionMask)) {

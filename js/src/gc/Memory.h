@@ -7,7 +7,7 @@
 #ifndef gc_Memory_h
 #define gc_Memory_h
 
-#ifdef WP8
+#ifdef WINRT
 
 #define PAGE_EXECUTE_READ       0x20
 #define PAGE_EXECUTE_READWRITE  0x40
