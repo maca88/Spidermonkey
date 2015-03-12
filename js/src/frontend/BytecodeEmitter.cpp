@@ -2123,10 +2123,10 @@ EmitFinishIteratorResult(ExclusiveContext *cx, BytecodeEmitter *bce, bool done)
 {
     jsatomid value_id;
     if (!bce->makeAtomIndex(cx->names().value, &value_id))
-        return UINT_MAX;
+        return (bool)UINT_MAX;
     jsatomid done_id;
     if (!bce->makeAtomIndex(cx->names().done, &done_id))
-        return UINT_MAX;
+        return (bool)UINT_MAX;
 
     if (!EmitIndex32(cx, JSOP_INITPROP, value_id, bce))
         return false;

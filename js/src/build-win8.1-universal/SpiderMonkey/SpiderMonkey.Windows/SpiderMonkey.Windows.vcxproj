@@ -120,7 +120,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -130,9 +130,9 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,7 +140,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -153,9 +153,9 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <LinkTimeCodeGeneration />
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm'">
@@ -163,7 +163,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -173,9 +173,9 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm'">
@@ -183,7 +183,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -196,9 +196,9 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <LinkTimeCodeGeneration />
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -206,7 +206,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -216,9 +216,9 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -226,7 +226,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalIncludeDirectories>..;..\..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -239,9 +239,9 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</C
       <LinkTimeCodeGeneration />
     </Link>
     <PreBuildEvent>
-      <Command>xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /I
-xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S
-xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S</Command>
+      <Command> xcopy   ..\..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

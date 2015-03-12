@@ -15,10 +15,12 @@
 #define IS_UINT32(x) ((x) >>> 0 === (x))
 
 // Assertions.
+#ifndef WINRT
 #ifdef DEBUG
 #define assert(b, info) if (!(b)) AssertionFailed(info)
 #else
 #define assert(b, info) // Elided assertion.
+#endif
 #endif
 
 // Unforgeable versions of ARRAY.push(ELEMENT) and ARRAY.slice.
