@@ -34,9 +34,11 @@
 #  ifdef __cplusplus
 extern "C" {
 #  endif
-__declspec(dllimport) int __stdcall
-TerminateProcess(void* hProcess, unsigned int uExitCode);
-__declspec(dllimport) void* __stdcall GetCurrentProcess(void);
+#   ifndef WINRT
+      __declspec(dllimport) int __stdcall
+      TerminateProcess(void* hProcess, unsigned int uExitCode);
+      __declspec(dllimport) void* __stdcall GetCurrentProcess(void);
+#   endif
 #  ifdef __cplusplus
 }
 #  endif
@@ -194,7 +196,17 @@ MOZ_ReportCrash(const char* aStr, const char* aFilename, int aLine)
 
 __declspec(noreturn) __inline void MOZ_NoReturn() {}
 
+
+
 #  ifdef __cplusplus
+#   ifdef WINRT
+#    define MOZ_REALLY_CRASH() \
+       do { \
+         ::__debugbreak(); \
+         *((volatile int*) NULL) = 123; \
+         ::MOZ_NoReturn(); \
+       } while (0)
+  #else
 #    define MOZ_REALLY_CRASH() \
        do { \
          ::__debugbreak(); \
@@ -202,6 +214,7 @@ __declspec(noreturn) __inline void MOZ_NoReturn() {}
          ::TerminateProcess(::GetCurrentProcess(), 3); \
          ::MOZ_NoReturn(); \
        } while (0)
+#endif
 #  else
 #    define MOZ_REALLY_CRASH() \
        do { \

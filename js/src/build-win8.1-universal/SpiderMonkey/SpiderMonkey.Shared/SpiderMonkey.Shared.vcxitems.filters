@@ -731,9 +731,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsiter.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jskwgen.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsmath.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -859,14 +856,6 @@
     <Filter Include="source\assembler\jit">
       <UniqueIdentifier>{9139defc-f972-4e14-ae7d-b77086cbb505}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_opcode_doc.py">
-      <Filter>source\vm</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_unicode.py">
-      <Filter>source\vm</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="$(MSBuildThisFileDirectory)..\..\..\vm\UnicodeData.txt">

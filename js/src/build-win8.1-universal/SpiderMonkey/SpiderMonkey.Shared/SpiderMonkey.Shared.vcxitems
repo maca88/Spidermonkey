@@ -226,7 +226,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsgc.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsinfer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsiter.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jskwgen.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsmath.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsnativestack.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\jsnum.cpp" />
@@ -295,10 +294,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectCapability Include="SourceItemsFromImports" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_opcode_doc.py" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\..\vm\make_unicode.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="$(MSBuildThisFileDirectory)..\..\..\vm\UnicodeData.txt" />
