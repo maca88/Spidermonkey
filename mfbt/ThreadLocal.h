@@ -9,7 +9,9 @@
 #ifndef mozilla_ThreadLocal_h
 #define mozilla_ThreadLocal_h
 
-#if defined(XP_WIN)
+#if defined (WP8)
+#include "ThreadEmulation/ThreadEmulation.h"
+#elif defined(XP_WIN)
 // This file will get included in any file that wants to add a profiler mark.
 // In order to not bring <windows.h> together we could include windef.h and
 // winbase.h which are sufficient to get the prototypes for the Tls* functions.
