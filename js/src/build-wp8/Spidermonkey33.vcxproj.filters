@@ -1,97 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
-    <ClCompile Include="..\jsalloc.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsapi.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsarray.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsatom.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsbool.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jscntxt.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jscompartment.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jscrashreport.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsdate.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsdtoa.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsexn.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsfriendapi.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsfun.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsinfer.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsiter.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jskwgen.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsmath.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsnum.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsobj.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\json.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsopcode.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsprf.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jspropertytree.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsreflect.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsscript.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsstr.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsutil.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jswatchpoint.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsweakmap.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\prmjtime.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\vm\ArgumentsObject.cpp">
       <Filter>source\vm</Filter>
     </ClCompile>
@@ -182,27 +91,6 @@
     <ClCompile Include="..\ds\LifoAlloc.cpp">
       <Filter>source\ds</Filter>
     </ClCompile>
-    <ClCompile Include="..\builtin\Eval.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\Intl.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\MapObject.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\Object.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\Profilers.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\RegExp.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\TypedObject.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
     <ClCompile Include="..\frontend\BytecodeCompiler.cpp">
       <Filter>source\frontend</Filter>
     </ClCompile>
@@ -227,47 +115,8 @@
     <ClCompile Include="..\frontend\TokenStream.cpp">
       <Filter>source\frontend</Filter>
     </ClCompile>
-    <ClCompile Include="..\gc\Barrier.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Iteration.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Marking.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\RootMarking.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\StoreBuffer.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Tracer.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Verifier.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Zone.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Statistics.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsgc.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\vm\Runtime.cpp">
       <Filter>source\vm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gc\Memory.cpp">
-      <Filter>source\gc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\builtin\TestingFunctions.cpp">
-      <Filter>source\builtin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\jsnativestack.cpp">
-      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\mfbt\Compression.cpp">
       <Filter>source\mfbt</Filter>
@@ -283,6 +132,78 @@
     </ClCompile>
     <ClCompile Include="..\..\..\mfbt\decimal\Decimal.cpp">
       <Filter>source\mfbt\decimal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Eval.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Intl.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\MapObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Object.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\Profilers.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\RegExp.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\TestingFunctions.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\TypedObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Barrier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Iteration.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Marking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Memory.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\RootMarking.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Statistics.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\StoreBuffer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Tracer.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Verifier.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gc\Zone.cpp">
+      <Filter>source\gc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpAST.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpEngine.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpInterpreter.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpMacroAssembler.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpParser.cpp">
+      <Filter>source\irregexp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\irregexp\RegExpStack.cpp">
+      <Filter>source\irregexp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\mfbt\double-conversion\bignum.cc">
       <Filter>source\mfbt\double-conversion</Filter>
@@ -308,41 +229,165 @@
     <ClCompile Include="..\..\..\mfbt\double-conversion\strtod.cc">
       <Filter>source\mfbt\double-conversion</Filter>
     </ClCompile>
-    <ClCompile Include="..\assembler\jit\ExecutableAllocator.cpp" />
-    <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp" />
-    <ClCompile Include="..\builtin\SIMD.cpp" />
-    <ClCompile Include="..\builtin\SymbolObject.cpp" />
-    <ClCompile Include="..\devtools\sharkctl.cpp" />
-    <ClCompile Include="..\gc\ForkJoinNursery.cpp" />
-    <ClCompile Include="..\gc\GCTrace.cpp" />
-    <ClCompile Include="..\gc\Nursery.cpp" />
-    <ClCompile Include="..\irregexp\RegExpAST.cpp" />
-    <ClCompile Include="..\irregexp\RegExpEngine.cpp" />
-    <ClCompile Include="..\irregexp\RegExpInterpreter.cpp" />
-    <ClCompile Include="..\irregexp\RegExpMacroAssembler.cpp" />
-    <ClCompile Include="..\irregexp\RegExpParser.cpp" />
-    <ClCompile Include="..\irregexp\RegExpStack.cpp" />
-    <ClCompile Include="..\jsonparser.cpp" />
-    <ClCompile Include="..\jsproxy.cpp" />
-    <ClCompile Include="..\jswrapper.cpp" />
-    <ClCompile Include="..\perf\jsperf.cpp" />
-    <ClCompile Include="..\perf\pm_stub.cpp" />
-    <ClCompile Include="..\vm\ArrayBufferObject.cpp" />
-    <ClCompile Include="..\vm\CompressionVM.cpp" />
-    <ClCompile Include="..\vm\DebuggerMemory.cpp" />
-    <ClCompile Include="..\vm\HelperThreads.cpp" />
-    <ClCompile Include="..\vm\ObjectImpl.cpp" />
-    <ClCompile Include="..\vm\OldDebugAPI.cpp" />
-    <ClCompile Include="..\vm\PIC.cpp" />
-    <ClCompile Include="..\vm\PropertyKey.cpp" />
-    <ClCompile Include="..\vm\SavedStacks.cpp" />
-    <ClCompile Include="..\vm\SharedArrayObject.cpp" />
-    <ClCompile Include="..\vm\Symbol.cpp" />
-    <ClCompile Include="..\vm\UbiNode.cpp" />
-    <ClCompile Include="..\vm\WeakMapPtr.cpp" />
+    <ClCompile Include="..\vm\ArrayBufferObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\CompressionVM.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\DebuggerMemory.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\HelperThreads.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\ObjectImpl.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\OldDebugAPI.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\PIC.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\PosixNSPR.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\PropertyKey.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\SavedStacks.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\SharedArrayObject.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\Symbol.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\UbiNode.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vm\WeakMapPtr.cpp">
+      <Filter>source\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsalloc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsarray.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsatom.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsbool.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscntxt.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscompartment.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jscrashreport.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsdate.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsdtoa.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsexn.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsfriendapi.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsfun.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsgc.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsinfer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsiter.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsmath.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsnativestack.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsnum.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsobj.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\json.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsonparser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsopcode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsprf.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jspropertytree.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsproxy.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsreflect.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsscript.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsstr.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsutil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jswatchpoint.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jsweakmap.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jswrapper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\prmjtime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\builtin\SIMD.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\builtin\SymbolObject.cpp">
+      <Filter>source\builtin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\assembler\jit\ExecutableAllocator.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\assembler\jit\ExecutableAllocatorWin.cpp">
+      <Filter>source\assembler\jit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
     <ClInclude Include="..\vm\ArgumentsObject.h">
       <Filter>source\vm</Filter>
     </ClInclude>
@@ -520,30 +565,6 @@
     <ClInclude Include="..\ds\SplayTree.h">
       <Filter>source\ds</Filter>
     </ClInclude>
-    <ClInclude Include="..\builtin\Eval.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\Intl.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\MapObject.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\Object.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\Profilers.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\RegExp.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\TypedObject.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
-    <ClInclude Include="..\builtin\TypedObjectConstants.h">
-      <Filter>source\builtin</Filter>
-    </ClInclude>
     <ClInclude Include="..\frontend\BytecodeCompiler.h">
       <Filter>source\frontend</Filter>
     </ClInclude>
@@ -589,16 +610,64 @@
     <ClInclude Include="..\frontend\TokenStream.h">
       <Filter>source\frontend</Filter>
     </ClInclude>
-    <ClInclude Include="..\gc\Barrier.h">
-      <Filter>source\gc</Filter>
+    <ClInclude Include="..\assembler\jit\ExecutableAllocator.h">
+      <Filter>source\assembler\jit</Filter>
     </ClInclude>
-    <ClInclude Include="..\gc\Barrier-inl.h">
+    <ClInclude Include="..\builtin\Eval.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Intl.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\MapObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Object.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\Profilers.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\RegExp.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\SIMD.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\SymbolObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TestingFunctions.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TypedObject.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\builtin\TypedObjectConstants.h">
+      <Filter>source\builtin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Barrier.h">
       <Filter>source\gc</Filter>
     </ClInclude>
     <ClInclude Include="..\gc\FindSCCs.h">
       <Filter>source\gc</Filter>
     </ClInclude>
+    <ClInclude Include="..\gc\ForkJoinNursery.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\ForkJoinNursery-inl.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
     <ClInclude Include="..\gc\GCInternals.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\GCRuntime.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\GCTrace.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\GCTraceFormat.h">
       <Filter>source\gc</Filter>
     </ClInclude>
     <ClInclude Include="..\gc\Heap.h">
@@ -607,21 +676,82 @@
     <ClInclude Include="..\gc\Marking.h">
       <Filter>source\gc</Filter>
     </ClInclude>
+    <ClInclude Include="..\gc\Memory.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Nursery.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
     <ClInclude Include="..\gc\Nursery-inl.h">
       <Filter>source\gc</Filter>
     </ClInclude>
     <ClInclude Include="..\gc\Rooting.h">
       <Filter>source\gc</Filter>
     </ClInclude>
+    <ClInclude Include="..\gc\Statistics.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
     <ClInclude Include="..\gc\StoreBuffer.h">
+      <Filter>source\gc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gc\Tracer.h">
       <Filter>source\gc</Filter>
     </ClInclude>
     <ClInclude Include="..\gc\Zone.h">
       <Filter>source\gc</Filter>
     </ClInclude>
-    <ClInclude Include="..\gc\Statistics.h">
-      <Filter>source\gc</Filter>
+    <ClInclude Include="..\irregexp\RegExpAST.h">
+      <Filter>source\irregexp</Filter>
     </ClInclude>
+    <ClInclude Include="..\irregexp\RegExpBytecode.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irregexp\RegExpEngine.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irregexp\RegExpMacroAssembler.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irregexp\RegExpParser.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\irregexp\RegExpStack.h">
+      <Filter>source\irregexp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\decimal\Decimal.h">
+      <Filter>source\mfbt\decimal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\bignum.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\bignum-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\cached-powers.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\diy-fp.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\double-conversion.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\fast-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\fixed-dtoa.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\ieee.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\strtod.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\mfbt\double-conversion\utils.h">
+      <Filter>source\mfbt\double-conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="headers">
@@ -656,6 +786,12 @@
     </Filter>
     <Filter Include="source\mfbt\double-conversion">
       <UniqueIdentifier>{ab2db863-9998-4b7e-b05d-293ca6021f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\assembler\jit">
+      <UniqueIdentifier>{87193cd5-5679-485c-a5d3-727f984df230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\irregexp">
+      <UniqueIdentifier>{16daad0d-bb36-49b7-b311-93190cdf2ed8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

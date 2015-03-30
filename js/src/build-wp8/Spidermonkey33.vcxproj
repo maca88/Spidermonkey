@@ -105,14 +105,35 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
     </Lib>
+    <Link>
+      <LinkTimeCodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" />
+    </Link>
+    <Link>
+      <LinkTimeCodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\mfbt\decimal\Decimal.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\bignum-dtoa.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\bignum.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\cached-powers.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\diy-fp.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\double-conversion.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\fast-dtoa.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\fixed-dtoa.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\ieee.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\strtod.h" />
+    <ClInclude Include="..\..\..\mfbt\double-conversion\utils.h" />
+    <ClInclude Include="..\assembler\jit\ExecutableAllocator.h" />
     <ClInclude Include="..\builtin\Eval.h" />
     <ClInclude Include="..\builtin\Intl.h" />
     <ClInclude Include="..\builtin\MapObject.h" />
     <ClInclude Include="..\builtin\Object.h" />
     <ClInclude Include="..\builtin\Profilers.h" />
     <ClInclude Include="..\builtin\RegExp.h" />
+    <ClInclude Include="..\builtin\SIMD.h" />
+    <ClInclude Include="..\builtin\SymbolObject.h" />
+    <ClInclude Include="..\builtin\TestingFunctions.h" />
     <ClInclude Include="..\builtin\TypedObject.h" />
     <ClInclude Include="..\builtin\TypedObjectConstants.h" />
     <ClInclude Include="..\ds\BitArray.h" />
@@ -138,17 +159,30 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClInclude Include="..\frontend\SourceNotes.h" />
     <ClInclude Include="..\frontend\SyntaxParseHandler.h" />
     <ClInclude Include="..\frontend\TokenStream.h" />
-    <ClInclude Include="..\gc\Barrier-inl.h" />
     <ClInclude Include="..\gc\Barrier.h" />
     <ClInclude Include="..\gc\FindSCCs.h" />
+    <ClInclude Include="..\gc\ForkJoinNursery-inl.h" />
+    <ClInclude Include="..\gc\ForkJoinNursery.h" />
     <ClInclude Include="..\gc\GCInternals.h" />
+    <ClInclude Include="..\gc\GCRuntime.h" />
+    <ClInclude Include="..\gc\GCTrace.h" />
+    <ClInclude Include="..\gc\GCTraceFormat.h" />
     <ClInclude Include="..\gc\Heap.h" />
     <ClInclude Include="..\gc\Marking.h" />
+    <ClInclude Include="..\gc\Memory.h" />
     <ClInclude Include="..\gc\Nursery-inl.h" />
+    <ClInclude Include="..\gc\Nursery.h" />
     <ClInclude Include="..\gc\Rooting.h" />
     <ClInclude Include="..\gc\Statistics.h" />
     <ClInclude Include="..\gc\StoreBuffer.h" />
+    <ClInclude Include="..\gc\Tracer.h" />
     <ClInclude Include="..\gc\Zone.h" />
+    <ClInclude Include="..\irregexp\RegExpAST.h" />
+    <ClInclude Include="..\irregexp\RegExpBytecode.h" />
+    <ClInclude Include="..\irregexp\RegExpEngine.h" />
+    <ClInclude Include="..\irregexp\RegExpMacroAssembler.h" />
+    <ClInclude Include="..\irregexp\RegExpParser.h" />
+    <ClInclude Include="..\irregexp\RegExpStack.h" />
     <ClInclude Include="..\vm\ArgumentsObject-inl.h" />
     <ClInclude Include="..\vm\ArgumentsObject.h" />
     <ClInclude Include="..\vm\ArrayObject-inl.h" />
@@ -228,7 +262,6 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\builtin\SymbolObject.cpp" />
     <ClCompile Include="..\builtin\TestingFunctions.cpp" />
     <ClCompile Include="..\builtin\TypedObject.cpp" />
-    <ClCompile Include="..\devtools\sharkctl.cpp" />
     <ClCompile Include="..\ds\LifoAlloc.cpp" />
     <ClCompile Include="..\frontend\BytecodeCompiler.cpp" />
     <ClCompile Include="..\frontend\BytecodeEmitter.cpp" />
@@ -239,12 +272,9 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\frontend\Parser.cpp" />
     <ClCompile Include="..\frontend\TokenStream.cpp" />
     <ClCompile Include="..\gc\Barrier.cpp" />
-    <ClCompile Include="..\gc\ForkJoinNursery.cpp" />
-    <ClCompile Include="..\gc\GCTrace.cpp" />
     <ClCompile Include="..\gc\Iteration.cpp" />
     <ClCompile Include="..\gc\Marking.cpp" />
     <ClCompile Include="..\gc\Memory.cpp" />
-    <ClCompile Include="..\gc\Nursery.cpp" />
     <ClCompile Include="..\gc\RootMarking.cpp" />
     <ClCompile Include="..\gc\Statistics.cpp" />
     <ClCompile Include="..\gc\StoreBuffer.cpp" />
@@ -273,7 +303,6 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\jsgc.cpp" />
     <ClCompile Include="..\jsinfer.cpp" />
     <ClCompile Include="..\jsiter.cpp" />
-    <ClCompile Include="..\jskwgen.cpp" />
     <ClCompile Include="..\jsmath.cpp" />
     <ClCompile Include="..\jsnativestack.cpp" />
     <ClCompile Include="..\jsnum.cpp" />
@@ -291,8 +320,6 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\jswatchpoint.cpp" />
     <ClCompile Include="..\jsweakmap.cpp" />
     <ClCompile Include="..\jswrapper.cpp" />
-    <ClCompile Include="..\perf\jsperf.cpp" />
-    <ClCompile Include="..\perf\pm_stub.cpp" />
     <ClCompile Include="..\prmjtime.cpp" />
     <ClCompile Include="..\vm\ArgumentsObject.cpp" />
     <ClCompile Include="..\vm\ArrayBufferObject.cpp" />
@@ -313,18 +340,19 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\vm\ObjectImpl.cpp" />
     <ClCompile Include="..\vm\OldDebugAPI.cpp" />
     <ClCompile Include="..\vm\PIC.cpp" />
+    <ClCompile Include="..\vm\PosixNSPR.cpp" />
     <ClCompile Include="..\vm\Probes.cpp" />
     <ClCompile Include="..\vm\PropertyKey.cpp" />
     <ClCompile Include="..\vm\ProxyObject.cpp" />
     <ClCompile Include="..\vm\RegExpObject.cpp" />
     <ClCompile Include="..\vm\RegExpStatics.cpp" />
     <ClCompile Include="..\vm\Runtime.cpp" />
-    <ClCompile Include="..\vm\SPSProfiler.cpp" />
     <ClCompile Include="..\vm\SavedStacks.cpp" />
+    <ClCompile Include="..\vm\SharedArrayObject.cpp" />
+    <ClCompile Include="..\vm\SPSProfiler.cpp" />
     <ClCompile Include="..\vm\ScopeObject.cpp" />
     <ClCompile Include="..\vm\SelfHosting.cpp" />
     <ClCompile Include="..\vm\Shape.cpp" />
-    <ClCompile Include="..\vm\SharedArrayObject.cpp" />
     <ClCompile Include="..\vm\Stack.cpp" />
     <ClCompile Include="..\vm\String.cpp" />
     <ClCompile Include="..\vm\StringBuffer.cpp" />
@@ -338,7 +366,10 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
     <ClCompile Include="..\vm\WeakMapPtr.cpp" />
     <ClCompile Include="..\vm\Xdr.cpp" />
     <ClCompile Include="pch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
