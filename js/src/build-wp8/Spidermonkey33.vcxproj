@@ -91,7 +91,7 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>..;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;$(ProjectDir);$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <CallingConvention>Cdecl</CallingConvention>
       <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;</DisableSpecificWarnings>
@@ -383,6 +383,11 @@ xcopy   ..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Comm
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\vm\UnicodeData.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ThreadEmulation\ThreadEmulation.vcxproj">
+      <Project>{e68912eb-4e21-4884-b911-3a3aaf97fb94}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsPhone\v$(TargetPlatformVersion)\Microsoft.Cpp.WindowsPhone.$(TargetPlatformVersion).targets" />

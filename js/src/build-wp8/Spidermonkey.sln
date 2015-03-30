@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spidermonkey33", "Spidermonkey33.vcxproj", "{D176776E-BD8C-42BF-BEC9-9D7E81ACD99A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThreadEmulation", "ThreadEmulation\ThreadEmulation.vcxproj", "{E68912EB-4E21-4884-B911-3A3AAF97FB94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -21,6 +23,14 @@ Global
 		{D176776E-BD8C-42BF-BEC9-9D7E81ACD99A}.Release|ARM.Build.0 = Release|ARM
 		{D176776E-BD8C-42BF-BEC9-9D7E81ACD99A}.Release|Win32.ActiveCfg = Release|Win32
 		{D176776E-BD8C-42BF-BEC9-9D7E81ACD99A}.Release|Win32.Build.0 = Release|Win32
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Debug|ARM.Build.0 = Debug|ARM
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Debug|Win32.Build.0 = Debug|Win32
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Release|ARM.ActiveCfg = Release|ARM
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Release|ARM.Build.0 = Release|ARM
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Release|Win32.ActiveCfg = Release|Win32
+		{E68912EB-4E21-4884-B911-3A3AAF97FB94}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
