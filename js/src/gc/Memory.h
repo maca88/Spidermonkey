@@ -7,8 +7,9 @@
 #ifndef gc_Memory_h
 #define gc_Memory_h
 
-#ifdef WINRT
+#if defined(WINRT)
 
+#if  _MSC_VER < 1900
 #define PAGE_EXECUTE_READ       0x20
 #define PAGE_EXECUTE_READWRITE  0x40
 
@@ -18,12 +19,16 @@ typedef struct _PROCESS_MEMORY_COUNTERS {
 
 VOID    GetSystemInfo(LPSYSTEM_INFO sinfo);
 BOOL    GetVersionEx(LPOSVERSIONINFO lpVersionInformation);
-BOOL    VerifyVersionInfo(LPOSVERSIONINFOEX lpVersionInformation, DWORD dwTypeMask, DWORDLONG dwlConditionMask);
 LPVOID  VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
 BOOL    VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
 BOOL    VirtualProtect(LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect);
+#endif
+
+inline BOOL    VerifyVersionInfo(LPOSVERSIONINFOEX lpVersionInformation, DWORD dwTypeMask, DWORDLONG dwlConditionMask) { return true; };
+
 
 #endif
+
 
 #include <stddef.h>
 

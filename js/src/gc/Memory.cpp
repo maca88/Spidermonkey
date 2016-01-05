@@ -40,6 +40,7 @@
 
 #if defined(WINRT)
 
+#if  _MSC_VER < 1900
 VOID GetSystemInfo(LPSYSTEM_INFO sinfo)
 {
 	return GetNativeSystemInfo(sinfo);
@@ -68,11 +69,6 @@ BOOL GetVersionEx(LPOSVERSIONINFO lpVersionInformation)
 
 }
 
-BOOL VerifyVersionInfo(LPOSVERSIONINFOEX /*lpVersionInformation*/, DWORD /*dwTypeMask*/, DWORDLONG /*dwlConditionMask*/)
-{
-    return TRUE;
-}
-
 LPVOID VirtualAlloc(LPVOID /*lpAddress*/, SIZE_T dwSize, DWORD flAllocationType, DWORD /*flProtect*/)
 {
 	return HeapAlloc(GetProcessHeap(), flAllocationType, dwSize);
@@ -88,6 +84,7 @@ BOOL VirtualProtect(LPVOID /*lpAddress*/, SIZE_T /*dwSize*/, DWORD /*flNewProtec
 #pragma message("!!! WE SHOULD RESOLVE THIS ISSUE LATER " __FILE__ " : " __FUNCTION__)
 	return TRUE;
 }
+#endif
 #endif
 
 namespace js {
