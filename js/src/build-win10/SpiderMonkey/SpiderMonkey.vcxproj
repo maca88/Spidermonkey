@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\mfbt\Compression.cpp" />
+    <ClCompile Include="..\..\..\..\mfbt\decimal\Decimal.cpp" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\bignum-dtoa.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\bignum.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\cached-powers.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\diy-fp.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\double-conversion.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\fast-dtoa.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\fixed-dtoa.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\double-conversion\strtod.cc" />
+    <ClCompile Include="..\..\..\..\mfbt\FloatingPoint.cpp" />
+    <ClCompile Include="..\..\..\..\mfbt\HashFunctions.cpp" />
+    <ClCompile Include="..\..\..\..\mfbt\SHA1.cpp" />
+    <ClCompile Include="..\..\assembler\jit\ExecutableAllocator.cpp" />
+    <ClCompile Include="..\..\assembler\jit\ExecutableAllocatorWin.cpp" />
+    <ClCompile Include="..\..\builtin\Eval.cpp" />
+    <ClCompile Include="..\..\builtin\Intl.cpp" />
+    <ClCompile Include="..\..\builtin\MapObject.cpp" />
+    <ClCompile Include="..\..\builtin\Object.cpp" />
+    <ClCompile Include="..\..\builtin\Profilers.cpp" />
+    <ClCompile Include="..\..\builtin\RegExp.cpp" />
+    <ClCompile Include="..\..\builtin\SIMD.cpp" />
+    <ClCompile Include="..\..\builtin\SymbolObject.cpp" />
+    <ClCompile Include="..\..\builtin\TestingFunctions.cpp" />
+    <ClCompile Include="..\..\builtin\TypedObject.cpp" />
+    <ClCompile Include="..\..\ds\LifoAlloc.cpp" />
+    <ClCompile Include="..\..\frontend\BytecodeCompiler.cpp" />
+    <ClCompile Include="..\..\frontend\BytecodeEmitter.cpp" />
+    <ClCompile Include="..\..\frontend\FoldConstants.cpp" />
+    <ClCompile Include="..\..\frontend\NameFunctions.cpp" />
+    <ClCompile Include="..\..\frontend\ParseMaps.cpp" />
+    <ClCompile Include="..\..\frontend\ParseNode.cpp" />
+    <ClCompile Include="..\..\frontend\Parser.cpp" />
+    <ClCompile Include="..\..\frontend\TokenStream.cpp" />
+    <ClCompile Include="..\..\gc\Barrier.cpp" />
+    <ClCompile Include="..\..\gc\ForkJoinNursery.cpp" />
+    <ClCompile Include="..\..\gc\GCTrace.cpp" />
+    <ClCompile Include="..\..\gc\Iteration.cpp" />
+    <ClCompile Include="..\..\gc\Marking.cpp" />
+    <ClCompile Include="..\..\gc\Memory.cpp" />
+    <ClCompile Include="..\..\gc\Nursery.cpp" />
+    <ClCompile Include="..\..\gc\RootMarking.cpp" />
+    <ClCompile Include="..\..\gc\Statistics.cpp" />
+    <ClCompile Include="..\..\gc\StoreBuffer.cpp" />
+    <ClCompile Include="..\..\gc\Tracer.cpp" />
+    <ClCompile Include="..\..\gc\Verifier.cpp" />
+    <ClCompile Include="..\..\gc\Zone.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpAST.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpEngine.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpInterpreter.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpMacroAssembler.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpParser.cpp" />
+    <ClCompile Include="..\..\irregexp\RegExpStack.cpp" />
+    <ClCompile Include="..\..\jsalloc.cpp" />
+    <ClCompile Include="..\..\jsapi.cpp" />
+    <ClCompile Include="..\..\jsarray.cpp" />
+    <ClCompile Include="..\..\jsatom.cpp" />
+    <ClCompile Include="..\..\jsbool.cpp" />
+    <ClCompile Include="..\..\jscntxt.cpp" />
+    <ClCompile Include="..\..\jscompartment.cpp" />
+    <ClCompile Include="..\..\jscrashreport.cpp" />
+    <ClCompile Include="..\..\jsdate.cpp" />
+    <ClCompile Include="..\..\jsdtoa.cpp" />
+    <ClCompile Include="..\..\jsexn.cpp" />
+    <ClCompile Include="..\..\jsfriendapi.cpp" />
+    <ClCompile Include="..\..\jsfun.cpp" />
+    <ClCompile Include="..\..\jsgc.cpp" />
+    <ClCompile Include="..\..\jsinfer.cpp" />
+    <ClCompile Include="..\..\jsiter.cpp" />
+    <ClCompile Include="..\..\jsmath.cpp" />
+    <ClCompile Include="..\..\jsnativestack.cpp" />
+    <ClCompile Include="..\..\jsnum.cpp" />
+    <ClCompile Include="..\..\jsobj.cpp" />
+    <ClCompile Include="..\..\json.cpp" />
+    <ClCompile Include="..\..\jsonparser.cpp" />
+    <ClCompile Include="..\..\jsopcode.cpp" />
+    <ClCompile Include="..\..\jsprf.cpp" />
+    <ClCompile Include="..\..\jspropertytree.cpp" />
+    <ClCompile Include="..\..\jsproxy.cpp" />
+    <ClCompile Include="..\..\jsreflect.cpp" />
+    <ClCompile Include="..\..\jsscript.cpp" />
+    <ClCompile Include="..\..\jsstr.cpp" />
+    <ClCompile Include="..\..\jsutil.cpp" />
+    <ClCompile Include="..\..\jswatchpoint.cpp" />
+    <ClCompile Include="..\..\jsweakmap.cpp" />
+    <ClCompile Include="..\..\jswrapper.cpp" />
+    <ClCompile Include="..\..\prmjtime.cpp" />
+    <ClCompile Include="..\..\vm\ArgumentsObject.cpp" />
+    <ClCompile Include="..\..\vm\ArrayBufferObject.cpp" />
+    <ClCompile Include="..\..\vm\CallNonGenericMethod.cpp" />
+    <ClCompile Include="..\..\vm\CharacterEncoding.cpp" />
+    <ClCompile Include="..\..\vm\CompressionVM.cpp" />
+    <ClCompile Include="..\..\vm\DateTime.cpp" />
+    <ClCompile Include="..\..\vm\Debugger.cpp" />
+    <ClCompile Include="..\..\vm\DebuggerMemory.cpp" />
+    <ClCompile Include="..\..\vm\ErrorObject.cpp" />
+    <ClCompile Include="..\..\vm\ForkJoin.cpp" />
+    <ClCompile Include="..\..\vm\GlobalObject.cpp" />
+    <ClCompile Include="..\..\vm\HelperThreads.cpp" />
+    <ClCompile Include="..\..\vm\Id.cpp" />
+    <ClCompile Include="..\..\vm\Interpreter.cpp" />
+    <ClCompile Include="..\..\vm\MemoryMetrics.cpp" />
+    <ClCompile Include="..\..\vm\Monitor.cpp" />
+    <ClCompile Include="..\..\vm\ObjectImpl.cpp" />
+    <ClCompile Include="..\..\vm\OldDebugAPI.cpp" />
+    <ClCompile Include="..\..\vm\PIC.cpp" />
+    <ClCompile Include="..\..\vm\PosixNSPR.cpp" />
+    <ClCompile Include="..\..\vm\Probes.cpp" />
+    <ClCompile Include="..\..\vm\PropertyKey.cpp" />
+    <ClCompile Include="..\..\vm\ProxyObject.cpp" />
+    <ClCompile Include="..\..\vm\RegExpObject.cpp" />
+    <ClCompile Include="..\..\vm\RegExpStatics.cpp" />
+    <ClCompile Include="..\..\vm\Runtime.cpp" />
+    <ClCompile Include="..\..\vm\SavedStacks.cpp" />
+    <ClCompile Include="..\..\vm\ScopeObject.cpp" />
+    <ClCompile Include="..\..\vm\SelfHosting.cpp" />
+    <ClCompile Include="..\..\vm\Shape.cpp" />
+    <ClCompile Include="..\..\vm\SharedArrayObject.cpp" />
+    <ClCompile Include="..\..\vm\SPSProfiler.cpp" />
+    <ClCompile Include="..\..\vm\Stack.cpp" />
+    <ClCompile Include="..\..\vm\String.cpp" />
+    <ClCompile Include="..\..\vm\StringBuffer.cpp" />
+    <ClCompile Include="..\..\vm\StructuredClone.cpp" />
+    <ClCompile Include="..\..\vm\Symbol.cpp" />
+    <ClCompile Include="..\..\vm\ThreadPool.cpp" />
+    <ClCompile Include="..\..\vm\TypedArrayObject.cpp" />
+    <ClCompile Include="..\..\vm\UbiNode.cpp" />
+    <ClCompile Include="..\..\vm\Unicode.cpp" />
+    <ClCompile Include="..\..\vm\Value.cpp" />
+    <ClCompile Include="..\..\vm\WeakMapPtr.cpp" />
+    <ClCompile Include="..\..\vm\Xdr.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\mfbt\Compression.h" />
+    <ClInclude Include="..\..\..\..\mfbt\decimal\Decimal.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\bignum-dtoa.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\bignum.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\cached-powers.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\diy-fp.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\double-conversion.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\fast-dtoa.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\fixed-dtoa.h" />
+    <ClInclude Include="..\..\..\..\mfbt\double-conversion\strtod.h" />
+    <ClInclude Include="..\..\..\..\mfbt\FloatingPoint.h" />
+    <ClInclude Include="..\..\..\..\mfbt\HashFunctions.h" />
+    <ClInclude Include="..\..\..\..\mfbt\SHA1.h" />
+    <ClInclude Include="..\..\assembler\jit\ExecutableAllocator.h" />
+    <ClInclude Include="..\..\ds\BitArray.h" />
+    <ClInclude Include="..\..\ds\FixedSizeHash.h" />
+    <ClInclude Include="..\..\ds\IdValuePair.h" />
+    <ClInclude Include="..\..\ds\InlineMap.h" />
+    <ClInclude Include="..\..\ds\LifoAlloc.h" />
+    <ClInclude Include="..\..\ds\PriorityQueue.h" />
+    <ClInclude Include="..\..\ds\Sort.h" />
+    <ClInclude Include="..\..\ds\SplayTree.h" />
+    <ClInclude Include="..\..\frontend\BytecodeCompiler.h" />
+    <ClInclude Include="..\..\frontend\BytecodeEmitter.h" />
+    <ClInclude Include="..\..\frontend\FoldConstants.h" />
+    <ClInclude Include="..\..\frontend\FullParseHandler.h" />
+    <ClInclude Include="..\..\frontend\NameFunctions.h" />
+    <ClInclude Include="..\..\frontend\ParseMaps-inl.h" />
+    <ClInclude Include="..\..\frontend\ParseMaps.h" />
+    <ClInclude Include="..\..\frontend\ParseNode-inl.h" />
+    <ClInclude Include="..\..\frontend\ParseNode.h" />
+    <ClInclude Include="..\..\frontend\Parser-inl.h" />
+    <ClInclude Include="..\..\frontend\Parser.h" />
+    <ClInclude Include="..\..\frontend\SharedContext.h" />
+    <ClInclude Include="..\..\frontend\SourceNotes.h" />
+    <ClInclude Include="..\..\frontend\SyntaxParseHandler.h" />
+    <ClInclude Include="..\..\frontend\TokenStream.h" />
+    <ClInclude Include="..\..\gc\Barrier.h" />
+    <ClInclude Include="..\..\gc\FindSCCs.h" />
+    <ClInclude Include="..\..\gc\ForkJoinNursery-inl.h" />
+    <ClInclude Include="..\..\gc\ForkJoinNursery.h" />
+    <ClInclude Include="..\..\gc\GCInternals.h" />
+    <ClInclude Include="..\..\gc\GCRuntime.h" />
+    <ClInclude Include="..\..\gc\GCTrace.h" />
+    <ClInclude Include="..\..\gc\GCTraceFormat.h" />
+    <ClInclude Include="..\..\gc\Heap.h" />
+    <ClInclude Include="..\..\gc\Marking.h" />
+    <ClInclude Include="..\..\gc\Memory.h" />
+    <ClInclude Include="..\..\gc\Nursery-inl.h" />
+    <ClInclude Include="..\..\gc\Nursery.h" />
+    <ClInclude Include="..\..\gc\Rooting.h" />
+    <ClInclude Include="..\..\gc\Statistics.h" />
+    <ClInclude Include="..\..\gc\StoreBuffer.h" />
+    <ClInclude Include="..\..\gc\Tracer.h" />
+    <ClInclude Include="..\..\gc\Zone.h" />
+    <ClInclude Include="..\..\irregexp\RegExpAST.h" />
+    <ClInclude Include="..\..\irregexp\RegExpBytecode.h" />
+    <ClInclude Include="..\..\irregexp\RegExpEngine.h" />
+    <ClInclude Include="..\..\irregexp\RegExpMacroAssembler.h" />
+    <ClInclude Include="..\..\irregexp\RegExpParser.h" />
+    <ClInclude Include="..\..\irregexp\RegExpStack.h" />
+    <ClInclude Include="..\..\vm\ArgumentsObject-inl.h" />
+    <ClInclude Include="..\..\vm\ArgumentsObject.h" />
+    <ClInclude Include="..\..\vm\ArrayBufferObject.h" />
+    <ClInclude Include="..\..\vm\ArrayObject-inl.h" />
+    <ClInclude Include="..\..\vm\ArrayObject.h" />
+    <ClInclude Include="..\..\vm\BooleanObject-inl.h" />
+    <ClInclude Include="..\..\vm\BooleanObject.h" />
+    <ClInclude Include="..\..\vm\CommonPropertyNames.h" />
+    <ClInclude Include="..\..\vm\Compression.h" />
+    <ClInclude Include="..\..\vm\DateObject.h" />
+    <ClInclude Include="..\..\vm\DateTime.h" />
+    <ClInclude Include="..\..\vm\Debugger-inl.h" />
+    <ClInclude Include="..\..\vm\Debugger.h" />
+    <ClInclude Include="..\..\vm\DebuggerMemory.h" />
+    <ClInclude Include="..\..\vm\ErrorObject-inl.h" />
+    <ClInclude Include="..\..\vm\ErrorObject.h" />
+    <ClInclude Include="..\..\vm\ForkJoin.h" />
+    <ClInclude Include="..\..\vm\GeneratorObject.h" />
+    <ClInclude Include="..\..\vm\GlobalObject.h" />
+    <ClInclude Include="..\..\vm\HelperThreads.h" />
+    <ClInclude Include="..\..\vm\Interpreter-inl.h" />
+    <ClInclude Include="..\..\vm\Interpreter.h" />
+    <ClInclude Include="..\..\vm\Keywords.h" />
+    <ClInclude Include="..\..\vm\MallocProvider.h" />
+    <ClInclude Include="..\..\vm\MatchPairs.h" />
+    <ClInclude Include="..\..\vm\Monitor.h" />
+    <ClInclude Include="..\..\vm\NumberObject-inl.h" />
+    <ClInclude Include="..\..\vm\NumberObject.h" />
+    <ClInclude Include="..\..\vm\NumericConversions.h" />
+    <ClInclude Include="..\..\vm\ObjectImpl-inl.h" />
+    <ClInclude Include="..\..\vm\ObjectImpl.h" />
+    <ClInclude Include="..\..\vm\Opcodes.h" />
+    <ClInclude Include="..\..\vm\PIC.h" />
+    <ClInclude Include="..\..\vm\PosixNSPR.h" />
+    <ClInclude Include="..\..\vm\Probes-inl.h" />
+    <ClInclude Include="..\..\vm\Probes.h" />
+    <ClInclude Include="..\..\vm\PropDesc.h" />
+    <ClInclude Include="..\..\vm\ProxyObject.h" />
+    <ClInclude Include="..\..\vm\RegExpObject.h" />
+    <ClInclude Include="..\..\vm\RegExpStatics.h" />
+    <ClInclude Include="..\..\vm\RegExpStaticsObject.h" />
+    <ClInclude Include="..\..\vm\Runtime-inl.h" />
+    <ClInclude Include="..\..\vm\Runtime.h" />
+    <ClInclude Include="..\..\vm\SavedStacks.h" />
+    <ClInclude Include="..\..\vm\ScopeObject-inl.h" />
+    <ClInclude Include="..\..\vm\ScopeObject.h" />
+    <ClInclude Include="..\..\vm\SelfHosting.h" />
+    <ClInclude Include="..\..\vm\Shape-inl.h" />
+    <ClInclude Include="..\..\vm\Shape.h" />
+    <ClInclude Include="..\..\vm\SharedArrayObject.h" />
+    <ClInclude Include="..\..\vm\SPSProfiler.h" />
+    <ClInclude Include="..\..\vm\Stack-inl.h" />
+    <ClInclude Include="..\..\vm\Stack.h" />
+    <ClInclude Include="..\..\vm\StopIterationObject.h" />
+    <ClInclude Include="..\..\vm\String-inl.h" />
+    <ClInclude Include="..\..\vm\String.h" />
+    <ClInclude Include="..\..\vm\StringBuffer.h" />
+    <ClInclude Include="..\..\vm\StringObject-inl.h" />
+    <ClInclude Include="..\..\vm\StringObject.h" />
+    <ClInclude Include="..\..\vm\Symbol-inl.h" />
+    <ClInclude Include="..\..\vm\Symbol.h" />
+    <ClInclude Include="..\..\vm\ThreadPool.h" />
+    <ClInclude Include="..\..\vm\TypedArrayObject.h" />
+    <ClInclude Include="..\..\vm\Unicode.h" />
+    <ClInclude Include="..\..\vm\WeakMapObject.h" />
+    <ClInclude Include="..\..\vm\WrapperObject.h" />
+    <ClInclude Include="..\..\vm\Xdr.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\vm\UnicodeData.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{d0f34b98-3e33-461b-a4d0-190bfd3a6012}</ProjectGuid>
+    <Keyword>DynamicLibrary</Keyword>
+    <ProjectName>SpiderMonkey</ProjectName>
+    <RootNamespace>SpiderMonkey</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.10240.0</WindowsTargetPlatformMinVersion>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <AdditionalIncludeDirectories>..;..\..\;$(IntDir);$(IntDir)\intl;$(IntDir)\mozilla\double-conversion;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WINRT;XP_WIN;EXPORT_JS_API;_CRT_RAND_S;JS_DEFAULT_JITREPORT_GRANULARITY=3;ENABLE_ASSEMBLER;IMPL_MFBT;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;HAVE_LOG2;HAVE_LOG1P;HAVE_ATANH;HAVE_TRUNC;HAVE_CBRT;HAVE_EXPM1;HAVE_ACOSH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <DisableSpecificWarnings>4661;4351;4291;4800;4251;4703;4700;4146;4396;4244;4333;4805;4804;4723;4267;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
+xcopy   ..\..\..\..\mfbt\*.h   $(IntDir)\mozilla   /Y /I /S /Q
+xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
