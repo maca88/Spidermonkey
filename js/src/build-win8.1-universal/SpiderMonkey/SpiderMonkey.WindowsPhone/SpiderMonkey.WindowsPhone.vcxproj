@@ -99,7 +99,7 @@
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
@@ -124,7 +124,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <LinkTimeCodeGeneration />
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
@@ -146,7 +146,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
@@ -171,7 +171,7 @@ xcopy   ..\..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <LinkTimeCodeGeneration />
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\wp_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>

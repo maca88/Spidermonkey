@@ -412,7 +412,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
@@ -434,7 +434,7 @@ xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</C
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
@@ -456,7 +456,7 @@ xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</C
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
@@ -478,7 +478,7 @@ xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</C
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
@@ -500,7 +500,7 @@ xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</C
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
@@ -522,7 +522,7 @@ xcopy   ..\..\..\..\intl\icu\source\common\*.h   $(IntDir)\intl   /Y /I /S /Q</C
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies>Kernel32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\..\cocos2d-x-3rd-party-libs-bin\winrt_8.1-specific\zlib\prebuilt\$(Platform)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command> xcopy   ..\..\..\public\*.h   $(IntDir)\js   /Y /Q /I
